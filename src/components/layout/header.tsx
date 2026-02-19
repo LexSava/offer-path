@@ -1,5 +1,6 @@
-import Link from "next/link";
-import { Container } from "./container";
+import Link from 'next/link';
+import { Container } from './container';
+import { LoginButton } from '../ui';
 
 export function Header() {
   return (
@@ -11,6 +12,7 @@ export function Header() {
               OfferPath
             </span>
           </Link>
+          <LoginButton />
         </div>
       </Container>
     </header>

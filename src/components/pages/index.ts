@@ -1,1 +1,1 @@
-export { HomePageHero } from "./home-page-hero";
+export { HomePageHero } from './home-page-hero';

@@ -1,5 +1,5 @@
-import { Container } from "@/components/layout";
-import { HomePageHero } from "@/components/pages";
+import { Container } from '@/components/layout';
+import { HomePageHero } from '@/components/pages';
 
 export default function Home() {
   return (

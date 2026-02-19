@@ -1,18 +1,17 @@
-@import "tailwindcss";
-
+@import 'tailwindcss';
 
 :root {
   /* Backgrounds */
-  --bg-primary: #F8F9F6;
-  --bg-secondary: #FFFDFD;
+  --bg-primary: #f8f9f6;
+  --bg-secondary: #fffdfd;
 
   /* Text */
-  --text-primary: #1A1814;
-  --text-secondary: #0E0606;
-  --text-muted: #A6A5A1;
+  --text-primary: #1a1814;
+  --text-secondary: #0e0606;
+  --text-muted: #a6a5a1;
 
   /* Accent / Highlights */
-  --accent: #EC543C;
+  --accent: #ec543c;
 }
 
 /* ------------------------------------------------------------
@@ -20,8 +19,8 @@
 ------------------------------------------------------------ */
 @theme inline {
   /* Fonts */
-  --font-logo: "Doto", sans-serif;
-  --font-sans: "Montserrat", sans-serif;
+  --font-logo: 'Doto', sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
 
   /* Semantic colors for Tailwind */
   --color-background: var(--bg-primary);
@@ -45,5 +44,5 @@ body {
 
 .font-logo {
   font-family: var(--font-logo);
-  font-variation-settings: "ROND" 0;
+  font-variation-settings: 'ROND' 0;
 }

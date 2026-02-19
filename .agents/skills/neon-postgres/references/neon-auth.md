@@ -29,7 +29,7 @@ npm install @neondatabase/neon-js@latest
 **1. Server auth instance** (`lib/auth/server.ts`):
 
 ```typescript
-import { createNeonAuth } from "@neondatabase/auth/next/server";
+import { createNeonAuth } from '@neondatabase/auth/next/server';
 
 export const auth = createNeonAuth({
   baseUrl: process.env.NEON_AUTH_BASE_URL!,
@@ -42,29 +42,29 @@ export const auth = createNeonAuth({
 **2. API route handler** (`app/api/auth/[...path]/route.ts`):
 
 ```typescript
-import { auth } from "@/lib/auth/server";
+import { auth } from '@/lib/auth/server';
 export const { GET, POST } = auth.handler();
 ```
 
 **3. Middleware** (`middleware.ts`):
 
 ```typescript
-import { auth } from "@/lib/auth/server";
+import { auth } from '@/lib/auth/server';
 
 export default auth.middleware({
-  loginUrl: "/auth/sign-in",
+  loginUrl: '/auth/sign-in',
 });
 
 export const config = {
-  matcher: ["/account/:path*"],
+  matcher: ['/account/:path*'],
 };
 ```
 
 **4. Client** (`lib/auth/client.ts`):
 
 ```typescript
-"use client";
-import { createAuthClient } from "@neondatabase/auth/next";
+'use client';
+import { createAuthClient } from '@neondatabase/auth/next';
 export const authClient = createAuthClient();
 ```
 
@@ -102,7 +102,7 @@ Generate a cookie secret: `openssl rand -base64 32`
 **1. Auth client** (`lib/auth.ts`):
 
 ```typescript
-import { createAuthClient } from "@neondatabase/neon-js/auth";
+import { createAuthClient } from '@neondatabase/neon-js/auth';
 
 export const authClient = createAuthClient(import.meta.env.VITE_NEON_AUTH_URL);
 ```
@@ -110,7 +110,7 @@ export const authClient = createAuthClient(import.meta.env.VITE_NEON_AUTH_URL);
 If you need `useSession()` in custom components, pass an adapter:
 
 ```typescript
-import { BetterAuthReactAdapter } from "@neondatabase/neon-js/auth/react";
+import { BetterAuthReactAdapter } from '@neondatabase/neon-js/auth/react';
 
 const authClient = createAuthClient(import.meta.env.VITE_NEON_AUTH_URL, {
   adapter: BetterAuthReactAdapter(),
@@ -157,20 +157,20 @@ The CSS import path depends on which package you installed:
 
 ```typescript
 // Next.js (@neondatabase/auth)
-import "@neondatabase/auth/ui/css";
+import '@neondatabase/auth/ui/css';
 
 // React SPA (@neondatabase/neon-js)
-import "@neondatabase/neon-js/ui/css";
+import '@neondatabase/neon-js/ui/css';
 ```
 
 ```css
 /* With Tailwind v4 — Next.js */
-@import "tailwindcss";
-@import "@neondatabase/auth/ui/tailwind";
+@import 'tailwindcss';
+@import '@neondatabase/auth/ui/tailwind';
 
 /* With Tailwind v4 — React SPA */
-@import "tailwindcss";
-@import "@neondatabase/neon-js/ui/tailwind";
+@import 'tailwindcss';
+@import '@neondatabase/neon-js/ui/tailwind';
 ```
 
 ### Provider Setup
@@ -181,8 +181,8 @@ In Next.js, add `suppressHydrationWarning` to the `<html>` tag in your root layo
 
 ```tsx
 // app/layout.tsx
-import { NeonAuthUIProvider, UserButton } from "@neondatabase/auth/react";
-import { authClient } from "@/lib/auth/client";
+import { NeonAuthUIProvider, UserButton } from '@neondatabase/auth/react';
+import { authClient } from '@/lib/auth/client';
 
 export default function RootLayout({ children }) {
   return (
@@ -190,7 +190,7 @@ export default function RootLayout({ children }) {
       <body>
         <NeonAuthUIProvider
           authClient={authClient}
-          social={{ providers: ["google", "github", "vercel"] }} // optional
+          social={{ providers: ['google', 'github', 'vercel'] }} // optional
         >
           {children}
         </NeonAuthUIProvider>
@@ -207,15 +207,11 @@ export default function RootLayout({ children }) {
 Create `app/auth/[path]/page.tsx`:
 
 ```tsx
-import { AuthView } from "@neondatabase/auth/react";
+import { AuthView } from '@neondatabase/auth/react';
 
 export const dynamicParams = false;
 
-export default async function AuthPage({
-  params,
-}: {
-  params: Promise<{ path: string }>;
-}) {
+export default async function AuthPage({ params }: { params: Promise<{ path: string }> }) {
   const { path } = await params;
   return <AuthView path={path} />;
 }
@@ -228,8 +224,8 @@ Auth paths: `sign-in`, `sign-up`, `forgot-password`, `reset-password`, `magic-li
 Create `app/account/[path]/page.tsx`:
 
 ```tsx
-import { AccountView } from "@neondatabase/auth/react";
-import { accountViewPaths } from "@neondatabase/auth/react/ui/server";
+import { AccountView } from '@neondatabase/auth/react';
+import { accountViewPaths } from '@neondatabase/auth/react/ui/server';
 
 export const dynamicParams = false;
 
@@ -237,11 +233,7 @@ export function generateStaticParams() {
   return Object.values(accountViewPaths).map((path) => ({ path }));
 }
 
-export default async function AccountPage({
-  params,
-}: {
-  params: Promise<{ path: string }>;
-}) {
+export default async function AccountPage({ params }: { params: Promise<{ path: string }> }) {
   const { path } = await params;
   return <AccountView path={path} />;
 }
@@ -299,16 +291,16 @@ if (error) {
 
 ```typescript
 // Server (Next.js)
-import { createNeonAuth } from "@neondatabase/auth/next/server";
+import { createNeonAuth } from '@neondatabase/auth/next/server';
 
 // Client (Next.js) -- includes React adapter automatically
-import { createAuthClient } from "@neondatabase/auth/next";
+import { createAuthClient } from '@neondatabase/auth/next';
 
 // Client (React SPA)
-import { createAuthClient } from "@neondatabase/neon-js/auth";
+import { createAuthClient } from '@neondatabase/neon-js/auth';
 
 // React adapter (only needed for useSession() in React SPA)
-import { BetterAuthReactAdapter } from "@neondatabase/neon-js/auth/react";
+import { BetterAuthReactAdapter } from '@neondatabase/neon-js/auth/react';
 
 // UI components
 import {
@@ -318,12 +310,12 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
-} from "@neondatabase/auth/react";
-import { accountViewPaths } from "@neondatabase/auth/react/ui/server";
+} from '@neondatabase/auth/react';
+import { accountViewPaths } from '@neondatabase/auth/react/ui/server';
 
 // CSS (choose one, never both; path matches your package)
-import "@neondatabase/auth/ui/css"; // Next.js
-import "@neondatabase/neon-js/ui/css"; // React SPA
+import '@neondatabase/auth/ui/css'; // Next.js
+import '@neondatabase/neon-js/ui/css'; // React SPA
 // or in CSS: @import "@neondatabase/auth/ui/tailwind";      (Next.js)
 // or in CSS: @import "@neondatabase/neon-js/ui/tailwind";   (React SPA)
 ```
@@ -343,7 +335,7 @@ export default async function Page() {
 }
 
 // CORRECT
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 export default async function Page() {
   const { data: session } = await auth.getSession();
 }
@@ -363,10 +355,10 @@ Must use subpath import and call as function:
 
 ```typescript
 // WRONG
-import { BetterAuthReactAdapter } from "@neondatabase/neon-js";
+import { BetterAuthReactAdapter } from '@neondatabase/neon-js';
 
 // CORRECT
-import { BetterAuthReactAdapter } from "@neondatabase/neon-js/auth/react";
+import { BetterAuthReactAdapter } from '@neondatabase/neon-js/auth/react';
 const client = createAuthClient(url, { adapter: BetterAuthReactAdapter() });
 ```
 

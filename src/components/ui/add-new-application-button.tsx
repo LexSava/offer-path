@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import React from 'react';
 
-export const AddNewApplicationButton = () => {
+import { useState } from 'react';
+
+export const AddNewApplicationButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
-    console.log("Opening modal...");
+    console.log('Opening modal...');
     setIsOpen(true);
   };
   const handleClose = () => setIsOpen(false);
