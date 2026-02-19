@@ -1,7 +1,10 @@
+import { Container } from "@/components/layout";
+import { HomePageHero } from "@/components/pages";
+
 export default function Home() {
   return (
-    <div className="">
-      <h1>OfferPath</h1>
-    </div>
+    <Container className="bg-background">
+      <HomePageHero />
+    </Container>
   );
 }
