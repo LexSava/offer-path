@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-
 import { useState } from 'react';
 
 export const AddNewApplicationButton: React.FC = () => {
@@ -17,7 +16,7 @@ export const AddNewApplicationButton: React.FC = () => {
     <div>
       <button
         onClick={handleOpen}
-        className="cursor-pointer rounded bg-primary px-4 py-2 text-white hover:bg-primary/90"
+        className="bg-primary hover:bg-primary/90 cursor-pointer rounded px-4 py-2 text-white"
       >
         Add New Application
       </button>
