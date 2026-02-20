@@ -34,3 +34,25 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Google Auth Setup (NextAuth + Prisma + Neon)
+
+1. Add these values in `.env`:
+	- `DATABASE_URL`
+	- `NEXTAUTH_URL`
+	- `NEXTAUTH_SECRET`
+	- `GOOGLE_CLIENT_ID`
+	- `GOOGLE_CLIENT_SECRET`
+2. In Google Cloud Console, set the redirect URI to:
+	- `http://localhost:3000/api/auth/callback/google`
+3. Run Prisma migrations:
+
+```bash
+npx prisma migrate dev
+```
+
+4. Start the app:
+
+```bash
+npm run dev
+```

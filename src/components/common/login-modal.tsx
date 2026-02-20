@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { signIn } from 'next-auth/react';
 
 type LoginModalProps = {
   isOpen: boolean;
@@ -8,6 +9,16 @@ type LoginModalProps = {
 };
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    await signIn('google', {
+      callbackUrl: '/',
+    });
+    setIsGoogleLoading(false);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -34,9 +45,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
           <button
             type="button"
+            onClick={handleGoogleLogin}
+            disabled={isGoogleLoading}
             className="bg-accent hover:bg-primary cursor-pointer rounded px-4 py-2 font-semibold text-white transition-colors"
           >
-            Log in with Google
+            {isGoogleLoading ? 'Redirecting...' : 'Log in with Google'}
           </button>
           <button
             type="button"

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Doto, Montserrat } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout';
+import { AuthProvider } from '@/components/common';
 
 const doto = Doto({
   subsets: ['latin'],
@@ -26,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${doto.variable} ${montserrat.variable} antialiased`}>
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
