@@ -1,16 +1,21 @@
 'use client';
 
 import React from 'react';
-import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useLoginModal } from '@/context';
 
 export const AddNewApplicationButton: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
+  const { openLoginModal } = useLoginModal();
 
   const handleOpen = () => {
-    console.log('Opening modal...');
-    setIsOpen(true);
+    if (!session?.user) {
+      openLoginModal();
+      return;
+    }
+
+    console.log('open modal create application');
   };
-  const handleClose = () => setIsOpen(false);
 
   return (
     <div>
