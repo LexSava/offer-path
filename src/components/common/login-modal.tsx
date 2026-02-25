@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { signIn } from 'next-auth/react';
+import { X } from 'lucide-react';
 
 type LoginModalProps = {
   isOpen: boolean;
@@ -35,7 +36,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           aria-label="Close modal"
           className="text-muted hover:text-primary absolute top-4 right-4 cursor-pointer text-xl leading-none transition-colors"
         >
-          ×
+          <X />
         </button>
 
         <div className="flex min-h-56 flex-col items-center justify-around gap-4 text-center">

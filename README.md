@@ -38,13 +38,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Google Auth Setup (NextAuth + Prisma + Neon)
 
 1. Add these values in `.env`:
-	- `DATABASE_URL`
-	- `NEXTAUTH_URL`
-	- `NEXTAUTH_SECRET`
-	- `GOOGLE_CLIENT_ID`
-	- `GOOGLE_CLIENT_SECRET`
+   - `DATABASE_URL`
+   - `NEXTAUTH_URL`
+   - `NEXTAUTH_SECRET`
+   - `GOOGLE_CLIENT_ID`
+   - `GOOGLE_CLIENT_SECRET`
 2. In Google Cloud Console, set the redirect URI to:
-	- `http://localhost:3000/api/auth/callback/google`
+   - `http://localhost:3000/api/auth/callback/google`
 3. Run Prisma migrations:
 
 ```bash
