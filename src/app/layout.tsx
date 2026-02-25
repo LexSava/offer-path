@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Doto, Montserrat } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout';
-import { AuthProvider } from '@/components/common';
+import { AuthProvider } from '@/components/providers';
 import { LoginModalProvider } from '@/contexts';
 
 const doto = Doto({
