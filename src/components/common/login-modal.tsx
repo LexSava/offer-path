@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { X } from 'lucide-react';
 
@@ -9,8 +9,8 @@ type LoginModalProps = {
   onClose: () => void;
 };
 
-export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
+export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);

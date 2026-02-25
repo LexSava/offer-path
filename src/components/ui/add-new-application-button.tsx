@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
 import { useSession } from 'next-auth/react';
 import { useLoginModal } from '@/contexts';
 
-export const AddNewApplicationButton: React.FC = () => {
+export const AddNewApplicationButton = () => {
   const { data: session } = useSession();
   const { openLoginModal } = useLoginModal();
 

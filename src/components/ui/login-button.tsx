@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { useLoginModal } from '@/contexts';
 
-export const LoginButton: React.FC = () => {
+export const LoginButton = () => {
   const { data: session, status } = useSession();
   const { openLoginModal } = useLoginModal();
   const isSignedIn = Boolean(session?.user);
