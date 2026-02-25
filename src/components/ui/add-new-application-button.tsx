@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import { useLoginModal } from '@/context';
+import { useLoginModal } from '@/contexts';
 
 export const AddNewApplicationButton: React.FC = () => {
   const { data: session } = useSession();

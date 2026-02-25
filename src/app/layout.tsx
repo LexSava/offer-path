@@ -3,7 +3,7 @@ import { Doto, Montserrat } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout';
 import { AuthProvider } from '@/components/common';
-import { LoginModalProvider } from '@/context';
+import { LoginModalProvider } from '@/contexts';
 
 const doto = Doto({
   subsets: ['latin'],
