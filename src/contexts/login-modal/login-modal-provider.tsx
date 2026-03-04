@@ -1,12 +1,9 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { LoginModal } from '@/components/common';
 import { LoginModalContext } from './login-modal-context';
-
-type LoginModalProviderProps = {
-  children: ReactNode;
-};
+import { LoginModalProviderProps } from '@/types';
 
 export function LoginModalProvider({ children }: LoginModalProviderProps) {
   const [isOpen, setIsOpen] = useState(false);

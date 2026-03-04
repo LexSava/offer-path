@@ -1,22 +1,14 @@
 'use client';
 
-import { type ReactNode } from 'react';
-import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
-
-interface AuthProviderProps {
-  children: ReactNode;
-  session?: Session | null;
-  refetchInterval?: number;
-  basePath?: string;
-}
+import { IAuthProviderProps } from '@/types';
 
 export function AuthProvider({
   children,
   session,
   refetchInterval = 300, // 5 minutes in seconds
   basePath = '/api/auth',
-}: AuthProviderProps) {
+}: IAuthProviderProps) {
   return (
     <SessionProvider
       session={session}

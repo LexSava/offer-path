@@ -4,13 +4,9 @@ import { useState, useRef } from 'react';
 import { signIn } from 'next-auth/react';
 import { X } from 'lucide-react';
 import { useCloseOnEscape } from '@/utils/use-close-on-escape';
+import { ILoginModalProps } from '@/types';
 
-interface LoginModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const isSubmittingRef = useRef(false);
 
