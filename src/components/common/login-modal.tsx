@@ -3,8 +3,8 @@
 import { useState, useRef } from 'react';
 import { signIn } from 'next-auth/react';
 import { X } from 'lucide-react';
-import { useCloseOnEscape } from '@/utils/use-close-on-escape';
 import { ILoginModalProps } from '@/types';
+import { useCloseOnEscape } from '@/utils';
 
 export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
   const [isLoading, setIsLoading] = useState(false);

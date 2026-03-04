@@ -1,8 +1,8 @@
 'use client';
 
 import { X } from 'lucide-react';
-import { useCloseOnEscape } from '@/utils/use-close-on-escape';
 import { ICreateApplicationModalProps } from '@/types';
+import { useCloseOnEscape } from '@/utils';
 
 export function CreateApplicationModal({ isOpen, onClose }: ICreateApplicationModalProps) {
   useCloseOnEscape({ isOpen, onClose });

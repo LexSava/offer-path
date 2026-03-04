@@ -1,16 +1,7 @@
 import { useEffect } from 'react';
+import { IUseCloseOnEscapeParams } from '@/types';
 
-interface UseCloseOnEscapeParams {
-  isOpen: boolean;
-  onClose: () => void;
-  enabled?: boolean;
-}
-
-export const useCloseOnEscape = ({
-  isOpen,
-  onClose,
-  enabled = true,
-}: UseCloseOnEscapeParams) => {
+export function useCloseOnEscape({ isOpen, onClose, enabled = true }: IUseCloseOnEscapeParams) {
   useEffect(() => {
     if (!isOpen || !enabled) return;
 
@@ -24,4 +15,4 @@ export const useCloseOnEscape = ({
 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, enabled, onClose]);
-};
+}
