@@ -1,2 +1,3 @@
-export * from './layout.interfaces';
-export * from './common.interfaces';
+export * from './layout.types';
+export * from './common.types';
+export * from './input.types';

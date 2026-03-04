@@ -1,4 +1,4 @@
-export type OppositionType = 'Frontend' | 'Fullstack' | 'Backend' | 'Other';
+export type SpecializationType = 'Frontend' | 'Fullstack' | 'Backend' | 'Other';
 
 export type GradeType = 'Junior' | 'Middle' | 'Middle+' | 'Senior' | 'Team Lead';
 
@@ -18,3 +18,22 @@ export type StatusType =
   | 'Technical Interview'
   | 'Offer'
   | 'Rejected';
+
+export interface IApplication {
+  id: string;
+  position: string;
+  specialization: SpecializationType;
+  grade: GradeType;
+  mainStack: StackType;
+  salary?: number;
+  currency?: CurrencyType;
+  period?: PeriodType;
+  contract: ContractType;
+  url?: string;
+  notes?: string;
+  status: StatusType;
+  isFavorite?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+}

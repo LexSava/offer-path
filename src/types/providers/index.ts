@@ -1,1 +1,1 @@
-export * from './auth-provider.interfaces';
+export * from './auth-provider.types';
