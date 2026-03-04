@@ -9,10 +9,8 @@ export function Header() {
     <header className="bg-surface sticky top-0 z-50">
       <Container className="py-4">
         <div className="flex items-center justify-between gap-6">
-          <Link href="/" className="group">
-            <span className="font-logo text-primary text-xl font-normal hover:font-bold">
-              OfferPath
-            </span>
+          <Link href="/" className="font-logo text-primary text-xl font-normal hover:font-bold">
+            OfferPath
           </Link>
           <LoginButton />
         </div>
