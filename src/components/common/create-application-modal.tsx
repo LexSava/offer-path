@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { Button } from '@/components/ui';
 import { ICreateApplicationModalProps } from '@/types';
 import { useCloseOnEscape } from '@/utils';
 
@@ -32,20 +33,8 @@ export function CreateApplicationModal({ isOpen, onClose }: ICreateApplicationMo
         </div>
 
         <div className="mt-auto flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="cursor-pointer rounded px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
-          >
-            Close
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="bg-primary hover:bg-primary/90 cursor-pointer rounded px-4 py-2 text-sm font-medium text-white transition-colors"
-          >
-            Submit
-          </button>
+          <Button text="Close" variant="secondary" onClick={onClose} />
+          <Button text="Submit" variant="primary" onClick={handleSubmit} />
         </div>
       </div>
     </div>

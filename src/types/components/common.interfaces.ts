@@ -3,6 +3,17 @@ export interface ICreateApplicationModalProps {
   onClose: () => void;
 }
 
+export type ButtonVariantType = 'primary' | 'secondary';
+
+export interface IButtonProps {
+  text: string;
+  variant: ButtonVariantType;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  className?: string;
+}
+
 export interface ILoginModalProps {
   isOpen: boolean;
   onClose: () => void;
