@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { LoginModalContext } from './login-modal-context';
 
-export const useLoginModal = () => {
+export function useLoginModal() {
   const context = useContext(LoginModalContext);
 
   if (!context) {
@@ -9,4 +9,4 @@ export const useLoginModal = () => {
   }
 
   return context;
-};
+}

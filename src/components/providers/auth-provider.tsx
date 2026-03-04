@@ -11,12 +11,12 @@ interface AuthProviderProps {
   basePath?: string;
 }
 
-export const AuthProvider = ({
+export function AuthProvider({
   children,
   session,
   refetchInterval = 300, // 5 minutes in seconds
   basePath = '/api/auth',
-}: AuthProviderProps) => {
+}: AuthProviderProps) {
   return (
     <SessionProvider
       session={session}
@@ -27,4 +27,4 @@ export const AuthProvider = ({
       {children}
     </SessionProvider>
   );
-};
+}

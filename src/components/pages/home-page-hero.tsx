@@ -1,3 +1,5 @@
+'use client';
+
 import { AddNewApplicationButton } from '../ui';
 
 export function HomePageHero() {

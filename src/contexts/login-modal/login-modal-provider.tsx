@@ -8,7 +8,7 @@ type LoginModalProviderProps = {
   children: ReactNode;
 };
 
-export const LoginModalProvider = ({ children }: LoginModalProviderProps) => {
+export function LoginModalProvider({ children }: LoginModalProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const openLoginModal = () => setIsOpen(true);
@@ -20,4 +20,4 @@ export const LoginModalProvider = ({ children }: LoginModalProviderProps) => {
       <LoginModal isOpen={isOpen} onClose={closeLoginModal} />
     </LoginModalContext.Provider>
   );
-};
+}

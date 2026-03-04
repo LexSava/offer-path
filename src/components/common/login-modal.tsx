@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { signIn } from 'next-auth/react';
 import { X } from 'lucide-react';
+import { useCloseOnEscape } from '@/utils/use-close-on-escape';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ interface LoginModalProps {
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const isSubmittingRef = useRef(false);
+
+  useCloseOnEscape({ isOpen, onClose, enabled: !isLoading });
 
   const handleGoogleLogin = async () => {
     if (isSubmittingRef.current) return;
@@ -29,19 +32,6 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !isLoading) {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, isLoading, onClose]);
 
   if (!isOpen) return null;
 

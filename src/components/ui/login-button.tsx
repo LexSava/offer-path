@@ -3,7 +3,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import { useLoginModal } from '@/contexts';
 
-export const LoginButton = () => {
+export function LoginButton() {
   const { data: session, status } = useSession();
   const { openLoginModal } = useLoginModal();
   const isSignedIn = Boolean(session?.user);
@@ -27,4 +27,4 @@ export const LoginButton = () => {
       {isSignedIn ? 'Logout' : 'Login'}
     </button>
   );
-};
+}
