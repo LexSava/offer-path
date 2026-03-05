@@ -20,7 +20,7 @@ export function LoginButton() {
   return (
     <button
       type="button"
-      className="bg-accent hover:bg-primary cursor-pointer rounded px-4 py-2 font-semibold text-white transition-colors"
+      className="bg-accent hover:bg-primary cursor-pointer px-4 py-2 font-semibold text-white shadow-sm transition-colors"
       onClick={handleClick}
       disabled={status === 'loading'}
     >

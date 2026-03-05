@@ -40,7 +40,7 @@ export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
       onClick={!isLoading ? onClose : undefined}
     >
       <div
-        className="bg-surface border-muted/30 relative w-full max-w-md rounded-xl border p-6 shadow-lg"
+        className="bg-surface border-muted/30 relative w-full max-w-md border p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -63,7 +63,7 @@ export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
             onClick={handleGoogleLogin}
             disabled={isLoading}
             aria-busy={isLoading}
-            className="bg-accent hover:bg-primary cursor-pointer rounded px-4 py-2 font-semibold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-70"
+            className="bg-accent hover:bg-primary cursor-pointer px-4 py-2 font-semibold text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isLoading ? 'Redirecting...' : 'Log in with Google'}
           </button>
@@ -72,7 +72,7 @@ export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="border-muted text-primary hover:bg-background cursor-pointer rounded border px-4 py-2 font-medium transition-colors"
+            className="border-muted text-primary hover:bg-background cursor-pointer border px-4 py-2 font-medium shadow-sm transition-colors"
           >
             Close
           </button>

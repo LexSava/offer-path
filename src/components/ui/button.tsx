@@ -3,9 +3,9 @@ import { cn } from '@/utils';
 
 const variantClassMap = {
   primary:
-    'bg-primary hover:bg-primary/90 cursor-pointer rounded px-4 py-2 text-sm font-medium text-white transition-colors',
+    'bg-primary hover:bg-primary/90 cursor-pointer px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors',
   secondary:
-    'cursor-pointer rounded px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100',
+    'cursor-pointer border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-100',
 } as const;
 
 export function Button({

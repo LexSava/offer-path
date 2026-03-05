@@ -15,7 +15,7 @@ export function Input({ label, error, registration, id, className, ...props }: I
         {...registration}
         {...props}
         className={cn(
-          'w-full rounded border px-3 py-2 text-sm transition-colors outline-none',
+          'w-full border px-3 py-2 text-sm transition-colors outline-none',
           error ? 'border-red-500 focus:border-red-500' : 'focus:border-primary border-gray-300',
           className,
         )}
