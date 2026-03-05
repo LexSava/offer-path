@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { ApplicationCard, BackLink } from '@/components/common';
 import { Container } from '@/components/layout';
 import { AddNewApplicationButton } from '@/components/ui';
@@ -8,6 +9,7 @@ import { useApplications } from '@/contexts';
 
 export default function ApplicationsPage() {
   const { applications, isLoading } = useApplications();
+  const router = useRouter();
 
   useEffect(() => {
     console.log('Applications page data:', applications);
@@ -37,7 +39,10 @@ export default function ApplicationsPage() {
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {applications.map((application) => (
             <li key={application.id} className="h-full">
-              <ApplicationCard application={application} />
+              <ApplicationCard
+                application={application}
+                onClick={() => router.push(`/applications/${application.id}`)}
+              />
             </li>
           ))}
         </ul>

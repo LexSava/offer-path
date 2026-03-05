@@ -3,15 +3,8 @@
 import { Bookmark } from 'lucide-react';
 import { useOptimistic, useTransition } from 'react';
 import { useApplications, useTooltip } from '@/contexts';
-import type { IFavoriteApplicationButtonProps } from '@/types';
+import type { IFavoriteApplicationButtonProps, IUpdateFavoriteResponse } from '@/types';
 import { cn } from '@/utils';
-
-interface IUpdateFavoriteResponse {
-  data?: {
-    id: string;
-    isFavorite: boolean;
-  };
-}
 
 export function FavoriteApplicationButton({
   applicationId,
@@ -78,7 +71,10 @@ export function FavoriteApplicationButton({
   return (
     <button
       type="button"
-      onClick={handleToggleFavorite}
+      onClick={(event) => {
+        event.stopPropagation();
+        handleToggleFavorite();
+      }}
       disabled={isPending}
       aria-label={optimisticIsFavorite ? 'Remove from favorites' : 'Add to favorites'}
       className={cn(

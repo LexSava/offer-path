@@ -30,6 +30,8 @@ export interface ITooltipProps {
 
 export interface IApplicationCardProps {
   application: IApplication;
+  onClick?: () => void;
+  className?: string;
 }
 
 export interface IApplicationCardDetailProps {
@@ -46,4 +48,11 @@ export interface IFavoriteApplicationButtonProps {
   applicationId: string;
   isFavorite: boolean;
   className?: string;
+}
+
+export interface IUpdateFavoriteResponse {
+  data?: {
+    id: string;
+    isFavorite: boolean;
+  };
 }
