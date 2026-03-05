@@ -53,7 +53,7 @@ export function Textarea({
       <div className="flex w-full items-end justify-between">
         {error ? <p className="text-xs text-red-600">{error}</p> : <span />}
 
-        {typeof maxCharacters === 'number' ? (
+        {typeof maxCharacters === 'number' && !props.readOnly && !props.disabled ? (
           <p className="text-xs text-gray-500">
             {currentLength} / {maxCharacters}
           </p>

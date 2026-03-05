@@ -93,4 +93,5 @@ export const createApplicationRequestSchema = createApplicationValidationSchema.
 
 export type CreateApplicationFormInputValues = z.input<typeof createApplicationValidationSchema>;
 export type CreateApplicationFormValues = z.infer<typeof createApplicationValidationSchema>;
+export type CreateApplicationRequestInputValues = z.input<typeof createApplicationRequestSchema>;
 export type CreateApplicationRequestValues = z.infer<typeof createApplicationRequestSchema>;

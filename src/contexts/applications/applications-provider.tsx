@@ -95,6 +95,23 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
     [persistApplications],
   );
 
+  const updateApplicationFromApi = useCallback(
+    (application: IApplicationResponseDto) => {
+      const normalized = toApplicationFromApi(application);
+
+      setApplications((previousApplications) => {
+        const nextApplications = previousApplications.map((existingApplication) =>
+          existingApplication.id === normalized.id ? normalized : existingApplication,
+        );
+
+        persistApplications(nextApplications);
+
+        return nextApplications;
+      });
+    },
+    [persistApplications],
+  );
+
   const setApplicationFavoriteState = useCallback(
     (applicationId: string, isFavorite: boolean) => {
       setApplications((previousApplications) => {
@@ -186,9 +203,16 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
       applications,
       isLoading,
       addApplicationFromApi,
+      updateApplicationFromApi,
       setApplicationFavoriteState,
     }),
-    [addApplicationFromApi, applications, isLoading, setApplicationFavoriteState],
+    [
+      addApplicationFromApi,
+      applications,
+      isLoading,
+      setApplicationFavoriteState,
+      updateApplicationFromApi,
+    ],
   );
 
   return (

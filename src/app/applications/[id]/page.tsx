@@ -1,50 +1,55 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Pencil } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { BackLink, FavoriteApplicationButton } from '@/components/common';
+import { useForm } from 'react-hook-form';
+import { FavoriteApplicationButton } from '@/components/common';
 import { Container } from '@/components/layout';
-import { useApplications } from '@/contexts';
+import { Button } from '@/components/ui';
+import { useApplications, useTooltip } from '@/contexts';
+import {
+  createApplicationRequestSchema,
+  type CreateApplicationRequestInputValues,
+  type CreateApplicationRequestValues,
+} from '@/forms/create-application/create-application-validation';
 import type {
   IApplication,
   IApplicationDetailApiResponse,
-  IApplicationDetailItemProps,
-  IApplicationResponseDto,
+  IApplicationUpdateErrorResponse,
+  IApplicationUpdateSuccessResponse,
 } from '@/types';
-import { cn, formatDate } from '@/utils';
-
-function ApplicationDetailItem({ label, value, fullWidth = false }: IApplicationDetailItemProps) {
-  return (
-    <p className={cn('text-secondary', fullWidth && 'sm:col-span-2')}>
-      <span className="text-muted">{label}:</span> {value}
-    </p>
-  );
-}
-
-function toApplicationFromApi(application: IApplicationResponseDto): IApplication {
-  return {
-    ...application,
-    isFavorite: Boolean(application.isFavorite),
-    createdAt: new Date(application.createdAt),
-    updatedAt: new Date(application.updatedAt),
-  };
-}
-
-function formatCompensation(application: IApplication) {
-  if (!application.salary || !application.currency || !application.period) {
-    return 'Not specified';
-  }
-
-  return `${application.salary} ${application.currency} / ${application.period}`;
-}
+import { ApplicationDetailFormFields } from './application-detail-form-fields';
+import { toApplicationFromApi, toFormValues } from './application-detail.utils';
+import { PageTitleHeader } from '@/components/pages';
 
 export default function ApplicationDetailPage() {
   const params = useParams<{ id: string }>();
   const applicationId = params.id;
-  const { applications, setApplicationFavoriteState } = useApplications();
+
+  const { applications, setApplicationFavoriteState, updateApplicationFromApi } = useApplications();
+  const { showTooltip } = useTooltip();
 
   const [localApplication, setLocalApplication] = useState<IApplication | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [initialEditValues, setInitialEditValues] = useState<CreateApplicationRequestValues | null>(
+    null,
+  );
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateApplicationRequestInputValues, unknown, CreateApplicationRequestValues>({
+    resolver: zodResolver(createApplicationRequestSchema),
+    mode: 'onSubmit',
+  });
 
   const contextApplication = useMemo(
     () => applications.find((application) => application.id === applicationId) ?? null,
@@ -94,6 +99,14 @@ export default function ApplicationDetailPage() {
   }, [applicationId, contextApplication, setApplicationFavoriteState]);
 
   useEffect(() => {
+    if (!resolvedApplication || isEditing) {
+      return;
+    }
+
+    reset(toFormValues(resolvedApplication));
+  }, [isEditing, reset, resolvedApplication]);
+
+  useEffect(() => {
     if (!resolvedApplication) {
       return;
     }
@@ -101,14 +114,96 @@ export default function ApplicationDetailPage() {
     console.log('Application detail data:', resolvedApplication);
   }, [resolvedApplication]);
 
+  const handleStartEdit = () => {
+    if (!resolvedApplication) {
+      return;
+    }
+
+    const values = toFormValues(resolvedApplication);
+    setInitialEditValues(values);
+    reset(values);
+    setSubmitError(null);
+    clearErrors();
+    setIsEditing(true);
+  };
+
+  const handleCloseEdit = () => {
+    if (initialEditValues) {
+      reset(initialEditValues);
+    } else if (resolvedApplication) {
+      reset(toFormValues(resolvedApplication));
+    }
+
+    setSubmitError(null);
+    clearErrors();
+    setIsEditing(false);
+  };
+
+  const onSubmit = async (values: CreateApplicationRequestValues) => {
+    if (!resolvedApplication) {
+      return;
+    }
+
+    setSubmitError(null);
+
+    const response = await fetch(`/api/applications/${resolvedApplication.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (!response.ok) {
+      const errorResponse = (await response
+        .json()
+        .catch(() => null)) as IApplicationUpdateErrorResponse | null;
+
+      if (errorResponse?.fieldErrors) {
+        Object.entries(errorResponse.fieldErrors).forEach(([field, fieldError]) => {
+          const message = fieldError?.[0];
+
+          if (!message) {
+            return;
+          }
+
+          setError(field as keyof CreateApplicationRequestValues, {
+            type: 'server',
+            message,
+          });
+        });
+      }
+
+      setSubmitError(errorResponse?.message ?? 'Failed to update application');
+      return;
+    }
+
+    const payload = (await response.json()) as IApplicationUpdateSuccessResponse;
+
+    if (!payload.data) {
+      setSubmitError('Updated application data is missing');
+      return;
+    }
+
+    const normalized = toApplicationFromApi(payload.data);
+
+    setLocalApplication(normalized);
+    updateApplicationFromApi(payload.data);
+    setApplicationFavoriteState(normalized.id, normalized.isFavorite);
+    setInitialEditValues(toFormValues(normalized));
+    reset(toFormValues(normalized));
+    setIsEditing(false);
+    showTooltip('Application updated successfully', { variant: 'success' });
+  };
+
   return (
     <Container className="bg-background flex flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <BackLink url="/applications" text="Back to My applications" />{' '}
-          <span className="font-3xl hidden font-thin sm:block"> | </span>
-          <h1 className="font-logo text-primary text-3xl font-medium">Applications Detail</h1>
-        </div>
+        <PageTitleHeader
+          backLinkUrl="/applications"
+          backLinkText="Back to My applications"
+          title="Applications Detail"
+        />
       </div>
 
       {isLoading ? <p className="text-muted">Loading application detail...</p> : null}
@@ -118,7 +213,10 @@ export default function ApplicationDetailPage() {
       ) : null}
 
       {resolvedApplication ? (
-        <section className="bg-surface flex flex-col gap-4 border border-gray-200 p-5 shadow-sm">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-surface flex flex-col gap-4 border border-gray-200 p-5 shadow-sm"
+        >
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-2">
               <h1 className="font-logo text-primary text-3xl font-medium">
@@ -127,42 +225,51 @@ export default function ApplicationDetailPage() {
               <p className="text-secondary text-lg">{resolvedApplication.specialization}</p>
             </div>
 
-            <FavoriteApplicationButton
-              applicationId={resolvedApplication.id}
-              isFavorite={resolvedApplication.isFavorite}
-            />
+            <div className="flex items-center gap-2">
+              <FavoriteApplicationButton
+                applicationId={resolvedApplication.id}
+                isFavorite={resolvedApplication.isFavorite}
+              />
+
+              {!isEditing ? (
+                <button
+                  type="button"
+                  onClick={handleStartEdit}
+                  className="hover:bg-surface text-secondary flex items-center gap-1 border border-gray-300 px-3 py-2 text-sm font-medium transition-colors"
+                >
+                  <Pencil size={16} />
+                  Edit
+                </button>
+              ) : null}
+            </div>
           </div>
 
-          <div className="flex flex-col gap-3 text-lg">
-            <ApplicationDetailItem label="Grade" value={resolvedApplication.grade} />
-            <ApplicationDetailItem label="Main stack" value={resolvedApplication.mainStack} />
-            <ApplicationDetailItem label="Status" value={resolvedApplication.status} />
-            <ApplicationDetailItem label="Contract" value={resolvedApplication.contract} />
-            <ApplicationDetailItem
-              label="Compensation"
-              value={formatCompensation(resolvedApplication)}
-              fullWidth
-            />
-            <ApplicationDetailItem
-              label="URL"
-              value={resolvedApplication.url || 'Not specified'}
-              fullWidth
-            />
-            <ApplicationDetailItem
-              label="Notes"
-              value={resolvedApplication.notes || 'Not specified'}
-              fullWidth
-            />
-            <ApplicationDetailItem
-              label="Created"
-              value={formatDate(resolvedApplication.createdAt)}
-            />
-            <ApplicationDetailItem
-              label="Updated"
-              value={formatDate(resolvedApplication.updatedAt)}
-            />
-          </div>
-        </section>
+          <ApplicationDetailFormFields
+            resolvedApplication={resolvedApplication}
+            isEditing={isEditing}
+            register={register}
+            errors={errors}
+          />
+
+          {submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}
+
+          {isEditing ? (
+            <div className="flex items-center justify-end gap-3">
+              <Button
+                text="Close"
+                variant="secondary"
+                onClick={handleCloseEdit}
+                disabled={isSubmitting}
+              />
+              <Button
+                text={isSubmitting ? 'Submitting...' : 'Submit'}
+                variant="primary"
+                type="submit"
+                disabled={isSubmitting}
+              />
+            </div>
+          ) : null}
+        </form>
       ) : null}
     </Container>
   );

@@ -56,3 +56,9 @@ export interface IUpdateFavoriteResponse {
     isFavorite: boolean;
   };
 }
+
+export interface IPageTitleHeaderProps {
+  backLinkUrl: string;
+  backLinkText: string;
+  title: string;
+}
