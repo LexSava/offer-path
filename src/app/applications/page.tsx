@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { ApplicationCard } from '@/components/common';
 import { Container } from '@/components/layout';
 import { useApplications } from '@/contexts';
 
@@ -13,7 +14,7 @@ export default function ApplicationsPage() {
 
   return (
     <Container className="bg-background flex flex-col gap-4">
-      <h1 className="font-logo text-3xl font-medium text-primary">My Applications</h1>
+      <h1 className="font-logo text-primary text-3xl font-medium">My Applications</h1>
 
       {isLoading ? <p className="text-muted">Loading applications...</p> : null}
 
@@ -22,10 +23,10 @@ export default function ApplicationsPage() {
       ) : null}
 
       {!isLoading && applications.length > 0 ? (
-        <ul className="flex flex-col gap-2">
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {applications.map((application) => (
-            <li key={application.id} className="text-secondary text-sm">
-              {application.position} • {application.specialization} • {application.status}
+            <li key={application.id} className="h-full">
+              <ApplicationCard application={application} />
             </li>
           ))}
         </ul>

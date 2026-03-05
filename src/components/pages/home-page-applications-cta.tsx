@@ -16,7 +16,7 @@ export function HomePageApplicationsCta() {
       : 'You do not have applications yet. Create your first one and keep progress in one place.';
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <section className="flex flex-col items-center gap-3">
       <h2 className="font-logo text-secondary text-2xl font-medium">Applications List</h2>
       <p className="text-muted max-w-xl text-sm">{applicationsInfoText}</p>
       <Button
@@ -24,6 +24,6 @@ export function HomePageApplicationsCta() {
         variant="primary"
         onClick={() => router.push('/applications')}
       />
-    </div>
+    </section>
   );
 }

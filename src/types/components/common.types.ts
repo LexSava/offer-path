@@ -1,3 +1,5 @@
+import type { IApplication } from '@/types/models/application.types';
+
 export interface ICreateApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,4 +26,8 @@ export interface ITooltipProps {
   isVisible: boolean;
   variant: 'success' | 'error';
   onClose: () => void;
+}
+
+export interface IApplicationCardProps {
+  application: IApplication;
 }
