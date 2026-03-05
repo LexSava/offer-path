@@ -32,6 +32,11 @@ export interface IApplicationCardProps {
   application: IApplication;
 }
 
+export interface IApplicationCardDetailProps {
+  label: string;
+  value: string;
+}
+
 export interface IBackLinkProps {
   url: string;
   text: string;

@@ -1,5 +1,15 @@
-import type { IApplicationCardProps } from '@/types';
+import type { IApplicationCardDetailProps, IApplicationCardProps } from '@/types';
 import { FavoriteApplicationButton } from '../favorite-application-button/favorite-application-button';
+
+function ApplicationCardDetail({ label, value }: IApplicationCardDetailProps) {
+  return (
+    <div className="flex items-start gap-2">
+      <p className="text-primary overflow-hidden text-ellipsis whitespace-nowrap">
+        {label}: <span className="text-secondary font-semibold">{value}</span>
+      </p>
+    </div>
+  );
+}
 
 function getCompensationLabel(application: IApplicationCardProps['application']) {
   const { salary, currency, period } = application;
@@ -32,29 +42,10 @@ export function ApplicationCard({ application }: IApplicationCardProps) {
       </div>
 
       <div className="flex flex-col gap-3 text-sm">
-        <div className="flex items-start gap-2">
-          <p className="text-primary">
-            Grade: <span className="text-secondary font-semibold">{application.grade}</span>
-          </p>
-        </div>
-        <div className="flex items-start gap-2">
-          <p className="text-primary">
-            Status: <span className="text-secondary font-semibold">{application.status}</span>
-          </p>
-        </div>
-        <div className="flex items-start gap-2">
-          <p className="text-primary">
-            Contract: <span className="text-secondary font-semibold">{application.contract}</span>
-          </p>
-        </div>
-        <div className="flex items-start gap-2 sm:col-span-2">
-          <p className="text-primary overflow-hidden text-ellipsis whitespace-nowrap">
-            Compensation:{' '}
-            <span className="text-secondary font-semibold">
-              {getCompensationLabel(application)}
-            </span>
-          </p>
-        </div>
+        <ApplicationCardDetail label="Grade" value={application.grade} />
+        <ApplicationCardDetail label="Status" value={application.status} />
+        <ApplicationCardDetail label="Contract" value={application.contract} />
+        <ApplicationCardDetail label="Compensation" value={getCompensationLabel(application)} />
       </div>
 
       <div className="flex items-end justify-between gap-6">
