@@ -12,7 +12,7 @@ export function CreateApplicationModal({ isOpen, onClose }: ICreateApplicationMo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 opacity-100 transition-opacity duration-300">
-      <div className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
+      <div className="relative flex max-h-[90vh] w-full max-w-3/5 flex-col overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
         <button
           type="button"
           onClick={onClose}
@@ -23,7 +23,7 @@ export function CreateApplicationModal({ isOpen, onClose }: ICreateApplicationMo
         </button>
 
         <div className="mb-8 pr-8">
-          <h2 className="text-xl font-semibold text-gray-900">Create Application</h2>
+          <h3 className="font-logo text-2xl font-medium text-primary">Create Application</h3>
           <p className="mt-2 text-sm text-gray-600">Application</p>
         </div>
 
