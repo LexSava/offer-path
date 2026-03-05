@@ -11,6 +11,7 @@ import {
   createApplicationValidationSchema,
   type CreateApplicationFormInputValues,
   type CreateApplicationFormValues,
+  type CreateApplicationRequestValues,
 } from './create-application-validation';
 import {
   contractOptions,
@@ -21,17 +22,26 @@ import {
   stackOptions,
   statusOptions,
 } from '@/constants/application-options.constants';
+import { useTooltip } from '@/contexts';
 import { ICreateApplicationFormProps } from '@/types';
 import { createApplicationFormDefaultValues } from '@/constants';
 
+interface ICreateApplicationErrorResponse {
+  message: string;
+  fieldErrors?: Partial<Record<keyof CreateApplicationRequestValues, string[]>>;
+}
+
 export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFormProps) {
   const { data: session } = useSession();
+  const { showTooltip } = useTooltip();
 
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CreateApplicationFormInputValues, unknown, CreateApplicationFormValues>({
     resolver: zodResolver(createApplicationValidationSchema),
     mode: 'onSubmit',
@@ -44,27 +54,69 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
     }
   }, [isOpen, reset]);
 
-  const onSubmit = (values: CreateApplicationFormValues) => {
-    const createdAt = new Date().toISOString();
-    const authorizedUser = session?.user;
+  const onSubmit = async (values: CreateApplicationFormValues) => {
+    if (!session?.user?.id) {
+      setError('root', {
+        type: 'manual',
+        message: 'Please sign in to create an application',
+      });
 
-    if (!authorizedUser?.id || !authorizedUser?.email) {
-      console.error('Authorized user is missing id or email in session');
       return;
     }
 
-    const payload = {
-      ...values,
-      createdAt,
-      updatedAt: createdAt,
-      isFavorite: false,
-      userId: authorizedUser.id,
-      email: authorizedUser.email,
+    clearErrors('root');
+
+    const payload: CreateApplicationRequestValues = {
+      position: values.position,
+      specialization: values.specialization,
+      grade: values.grade,
+      mainStack: values.mainStack,
+      salary: values.salary,
+      currency: values.currency,
+      period: values.period,
+      contract: values.contract,
+      url: values.url,
+      notes: values.notes,
+      status: values.status,
     };
 
-    console.log(payload);
+    const response = await fetch('/api/applications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorResponse = (await response
+        .json()
+        .catch(() => null)) as ICreateApplicationErrorResponse | null;
+
+      if (errorResponse?.fieldErrors) {
+        Object.entries(errorResponse.fieldErrors).forEach(([field, fieldError]) => {
+          const message = fieldError?.[0];
+
+          if (!message) return;
+
+          setError(field as keyof CreateApplicationRequestValues, {
+            type: 'server',
+            message,
+          });
+        });
+      }
+
+      setError('root', {
+        type: 'server',
+        message: errorResponse?.message ?? 'Failed to create application',
+      });
+
+      return;
+    }
+
     reset(createApplicationFormDefaultValues);
     onClose();
+    showTooltip('Application created successfully', { variant: 'success' });
   };
 
   return (
@@ -147,9 +199,16 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
         error={errors.status?.message}
       />
 
+      {errors.root?.message ? <p className="text-sm text-red-600">{errors.root.message}</p> : null}
+
       <div className="mt-2 flex items-center justify-end gap-3">
-        <Button text="Close" variant="secondary" onClick={onClose} />
-        <Button text="Submit" variant="primary" type="submit" />
+        <Button text="Close" variant="secondary" onClick={onClose} disabled={isSubmitting} />
+        <Button
+          text={isSubmitting ? 'Submitting...' : 'Submit'}
+          variant="primary"
+          type="submit"
+          disabled={isSubmitting}
+        />
       </div>
     </form>
   );

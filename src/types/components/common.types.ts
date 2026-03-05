@@ -18,3 +18,10 @@ export interface ILoginModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+export interface ITooltipProps {
+  message: string;
+  isVisible: boolean;
+  variant: 'success' | 'error';
+  onClose: () => void;
+}

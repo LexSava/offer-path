@@ -23,7 +23,7 @@ export function CreateApplicationModal({ isOpen, onClose }: ICreateApplicationMo
         </button>
 
         <div className="mb-8 pr-8">
-          <h3 className="font-logo text-2xl font-medium text-primary">Create Application</h3>
+          <h3 className="font-logo text-primary text-2xl font-medium">Create Application</h3>
           <p className="mt-2 text-sm text-gray-600">Application</p>
         </div>
 

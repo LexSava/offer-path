@@ -12,6 +12,7 @@ import {
   gradeOptions,
   periodOptions,
   specializationOptions,
+  stackOptions,
   statusOptions,
 } from '@/constants/application-options.constants';
 
@@ -52,12 +53,16 @@ const requiredPeriod = z
   .refine((value) => value !== '', { message: 'Please choose period' })
   .transform((value) => value as PeriodType);
 
+const requiredMainStack = z
+  .union([z.enum(stackOptions), z.literal('')])
+  .refine((value) => value !== '', { message: 'Please choose a technology' });
+
 export const createApplicationValidationSchema = z.object({
   id: z.string().optional(),
   position: z.string().min(1, 'Position is required'),
   specialization: requiredSpecialization,
   grade: requiredGrade,
-  mainStack: z.string().min(1, 'Please choose a technology'),
+  mainStack: requiredMainStack,
   salary: requiredDigitsString,
   currency: requiredCurrency,
   period: requiredPeriod,
@@ -72,5 +77,20 @@ export const createApplicationValidationSchema = z.object({
   email: z.string().optional(),
 });
 
+export const createApplicationRequestSchema = createApplicationValidationSchema.pick({
+  position: true,
+  specialization: true,
+  grade: true,
+  mainStack: true,
+  salary: true,
+  currency: true,
+  period: true,
+  contract: true,
+  url: true,
+  notes: true,
+  status: true,
+});
+
 export type CreateApplicationFormInputValues = z.input<typeof createApplicationValidationSchema>;
 export type CreateApplicationFormValues = z.infer<typeof createApplicationValidationSchema>;
+export type CreateApplicationRequestValues = z.infer<typeof createApplicationRequestSchema>;
