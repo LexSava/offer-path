@@ -1,6 +1,7 @@
 'use client';
 
 import { AddNewApplicationButton } from '../ui';
+import { HomePageApplicationsCta } from './home-page-applications-cta';
 
 export function HomePageHero() {
   return (
@@ -12,6 +13,7 @@ export function HomePageHero() {
         manage their status, and get insights on your application history.
       </p>
       <AddNewApplicationButton />
+      <HomePageApplicationsCta />
     </section>
   );
 }
