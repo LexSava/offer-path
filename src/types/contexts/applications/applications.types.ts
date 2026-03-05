@@ -10,6 +10,7 @@ export interface IApplicationsContextValue {
   applications: IApplication[];
   isLoading: boolean;
   addApplicationFromApi: (application: IApplicationResponseDto) => void;
+  setApplicationFavoriteState: (applicationId: string, isFavorite: boolean) => void;
 }
 
 export interface IApplicationsProviderProps {

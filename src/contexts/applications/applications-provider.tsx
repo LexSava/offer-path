@@ -10,6 +10,7 @@ const CACHE_KEY_PREFIX = 'applications-cache';
 function toApplicationFromApi(application: IApplicationResponseDto): IApplication {
   return {
     ...application,
+    isFavorite: Boolean(application.isFavorite),
     createdAt: new Date(application.createdAt),
     updatedAt: new Date(application.updatedAt),
   };
@@ -39,6 +40,9 @@ function isApplicationDto(value: unknown): value is IApplicationResponseDto {
     typeof candidate.contract === 'string' &&
     typeof candidate.status === 'string' &&
     typeof candidate.userId === 'string' &&
+    (candidate.isFavorite === null ||
+      typeof candidate.isFavorite === 'boolean' ||
+      typeof candidate.isFavorite === 'undefined') &&
     typeof candidate.createdAt === 'string' &&
     typeof candidate.updatedAt === 'string'
   );
@@ -84,6 +88,21 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
 
         persistApplications(nextApplications);
         console.log('Applications cache updated:', nextApplications);
+
+        return nextApplications;
+      });
+    },
+    [persistApplications],
+  );
+
+  const setApplicationFavoriteState = useCallback(
+    (applicationId: string, isFavorite: boolean) => {
+      setApplications((previousApplications) => {
+        const nextApplications = previousApplications.map((application) =>
+          application.id === applicationId ? { ...application, isFavorite } : application,
+        );
+
+        persistApplications(nextApplications);
 
         return nextApplications;
       });
@@ -167,8 +186,9 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
       applications,
       isLoading,
       addApplicationFromApi,
+      setApplicationFavoriteState,
     }),
-    [addApplicationFromApi, applications, isLoading],
+    [addApplicationFromApi, applications, isLoading, setApplicationFavoriteState],
   );
 
   return (

@@ -1,4 +1,5 @@
 import type { IApplicationCardProps } from '@/types';
+import { FavoriteApplicationButton } from '../favorite-application-button/favorite-application-button';
 
 function getCompensationLabel(application: IApplicationCardProps['application']) {
   const { salary, currency, period } = application;
@@ -56,9 +57,16 @@ export function ApplicationCard({ application }: IApplicationCardProps) {
         </div>
       </div>
 
-      <p className="text-secondary mt-auto text-xs">
-        Updated: {getFormattedUpdatedDate(application.updatedAt)}
-      </p>
+      <div className="flex items-end justify-between gap-6">
+        <p className="text-secondary mt-auto text-xs">
+          Updated: {getFormattedUpdatedDate(application.updatedAt)}
+        </p>
+
+        <FavoriteApplicationButton
+          applicationId={application.id}
+          isFavorite={application.isFavorite}
+        />
+      </div>
 
       <span className="bg-accent pointer-events-none absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 transition-transform duration-200 group-hover:scale-x-100" />
     </article>

@@ -11,6 +11,10 @@ interface ICreateApplicationErrorResponse {
 }
 
 const toNullableString = (value?: string) => (value && value.trim().length > 0 ? value : null);
+const normalizeIsFavorite = <T extends { isFavorite: boolean | null }>(application: T) => ({
+  ...application,
+  isFavorite: Boolean(application.isFavorite),
+});
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -35,7 +39,7 @@ export async function GET() {
 
     return NextResponse.json({
       message: 'Applications fetched successfully',
-      data: applications,
+      data: applications.map(normalizeIsFavorite),
     });
   } catch (error) {
     console.error('Failed to fetch applications:', error);
@@ -75,13 +79,14 @@ export async function POST(request: Request) {
         url: toNullableString(values.url),
         notes: toNullableString(values.notes),
         status: values.status,
+        isFavorite: false,
         userId,
       },
     });
 
     return NextResponse.json({
       message: 'Application created successfully',
-      data: createdApplication,
+      data: normalizeIsFavorite(createdApplication),
     });
   } catch (error) {
     if (error instanceof ZodError) {

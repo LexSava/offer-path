@@ -36,3 +36,9 @@ export interface IBackLinkProps {
   url: string;
   text: string;
 }
+
+export interface IFavoriteApplicationButtonProps {
+  applicationId: string;
+  isFavorite: boolean;
+  className?: string;
+}

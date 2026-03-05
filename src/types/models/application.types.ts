@@ -32,7 +32,7 @@ export interface IApplication {
   url?: string;
   notes?: string;
   status: StatusType;
-  isFavorite?: boolean;
+  isFavorite: boolean;
   createdAt: Date;
   updatedAt: Date;
   userId: string;
