@@ -31,3 +31,8 @@ export interface ITooltipProps {
 export interface IApplicationCardProps {
   application: IApplication;
 }
+
+export interface IBackLinkProps {
+  url: string;
+  text: string;
+}

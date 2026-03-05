@@ -12,7 +12,7 @@ export function CreateApplicationModal({ isOpen, onClose }: ICreateApplicationMo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 opacity-100 transition-opacity duration-300">
-      <div className="relative flex max-h-[90vh] w-full max-w-3/5 flex-col overflow-y-auto bg-white p-6 shadow-2xl">
+      <div className="relative flex max-h-[90vh] w-full max-w-[90%] flex-col overflow-y-auto bg-white p-6 shadow-2xl md:max-w-3/5">
         <button
           type="button"
           onClick={onClose}
