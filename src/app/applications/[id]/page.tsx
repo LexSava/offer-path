@@ -45,7 +45,7 @@ export default function ApplicationDetailPage() {
     reset,
     setError,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<CreateApplicationRequestInputValues, unknown, CreateApplicationRequestValues>({
     resolver: zodResolver(createApplicationRequestSchema),
     mode: 'onSubmit',
@@ -141,6 +141,11 @@ export default function ApplicationDetailPage() {
 
   const onSubmit = async (values: CreateApplicationRequestValues) => {
     if (!resolvedApplication) {
+      return;
+    }
+
+    if (!isDirty) {
+      showTooltip('No changes detected', { variant: 'success' });
       return;
     }
 
