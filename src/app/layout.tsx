@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import './globals.css';
 import { Header } from '@/components/layout';
 import { AuthProvider } from '@/components/providers';
-import { LoginModalProvider, TooltipProvider } from '@/contexts';
+import { ApplicationsProvider, LoginModalProvider, TooltipProvider } from '@/contexts';
 import { authOptions } from '@/lib/auth';
 
 const doto = Doto({
@@ -33,12 +33,14 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${doto.variable} ${montserrat.variable} antialiased`}>
         <AuthProvider session={session}>
-          <TooltipProvider>
-            <LoginModalProvider>
-              <Header />
-              {children}
-            </LoginModalProvider>
-          </TooltipProvider>
+          <ApplicationsProvider>
+            <TooltipProvider>
+              <LoginModalProvider>
+                <Header />
+                {children}
+              </LoginModalProvider>
+            </TooltipProvider>
+          </ApplicationsProvider>
         </AuthProvider>
       </body>
     </html>

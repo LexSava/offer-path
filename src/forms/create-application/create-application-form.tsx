@@ -22,8 +22,8 @@ import {
   stackOptions,
   statusOptions,
 } from '@/constants/application-options.constants';
-import { useTooltip } from '@/contexts';
-import { ICreateApplicationFormProps } from '@/types';
+import { useApplications, useTooltip } from '@/contexts';
+import type { IApplicationResponseDto, ICreateApplicationFormProps } from '@/types';
 import { createApplicationFormDefaultValues } from '@/constants';
 
 interface ICreateApplicationErrorResponse {
@@ -31,9 +31,15 @@ interface ICreateApplicationErrorResponse {
   fieldErrors?: Partial<Record<keyof CreateApplicationRequestValues, string[]>>;
 }
 
+interface ICreateApplicationSuccessResponse {
+  message: string;
+  data: IApplicationResponseDto;
+}
+
 export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFormProps) {
   const { data: session } = useSession();
   const { showTooltip } = useTooltip();
+  const { addApplicationFromApi } = useApplications();
 
   const {
     register,
@@ -113,6 +119,9 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
 
       return;
     }
+
+    const successResponse = (await response.json()) as ICreateApplicationSuccessResponse;
+    addApplicationFromApi(successResponse.data);
 
     reset(createApplicationFormDefaultValues);
     onClose();

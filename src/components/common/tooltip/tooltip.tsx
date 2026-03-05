@@ -15,7 +15,7 @@ export function Tooltip({ message, isVisible, variant, onClose }: ITooltipProps)
       role="status"
       aria-live="polite"
       className={cn(
-        'bg-surface pointer-events-none fixed top-10 right-5 z-[100] max-w-sm translate-y-0 border px-4 py-3 shadow-sm transition-all duration-200',
+        'bg-surface pointer-events-none fixed top-10 right-5 z-100 max-w-sm translate-y-0 border px-4 py-3 shadow-sm transition-all duration-200',
         variantClassMap[variant],
         isVisible ? 'opacity-100' : 'pointer-events-none -translate-y-2 opacity-0',
       )}

@@ -12,6 +12,41 @@ interface ICreateApplicationErrorResponse {
 
 const toNullableString = (value?: string) => (value && value.trim().length > 0 ? value : null);
 
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return NextResponse.json<ICreateApplicationErrorResponse>(
+      { message: 'Unauthorized' },
+      { status: 401 },
+    );
+  }
+
+  try {
+    const applications = await prisma.application.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return NextResponse.json({
+      message: 'Applications fetched successfully',
+      data: applications,
+    });
+  } catch (error) {
+    console.error('Failed to fetch applications:', error);
+
+    return NextResponse.json<ICreateApplicationErrorResponse>(
+      { message: 'Failed to fetch applications' },
+      { status: 500 },
+    );
+  }
+}
+
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
@@ -41,10 +76,6 @@ export async function POST(request: Request) {
         notes: toNullableString(values.notes),
         status: values.status,
         userId,
-      },
-      select: {
-        id: true,
-        createdAt: true,
       },
     });
 
