@@ -22,13 +22,6 @@ export function AddNewApplicationButton() {
 
   return (
     <div>
-      {/* <button
-        onClick={handleOpen}
-        className="bg-primary hover:bg-primary/90 cursor-pointer rounded px-4 py-2 text-white"
-      >
-        Add New Application
-      </button> */}
-
       <Button text="Add New Application" variant="primary" onClick={handleOpen} />
 
       <CreateApplicationModal
