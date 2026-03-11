@@ -3,11 +3,7 @@ import { cn } from '@/utils';
 import type { IHighlightMatchProps } from '@/types';
 import { getMatchRanges } from './highlight-match.utils';
 
-export function HighlightMatch({
-  text,
-  query,
-  highlightClassName,
-}: IHighlightMatchProps) {
+export function HighlightMatch({ text, query, highlightClassName }: IHighlightMatchProps) {
   const matchRanges = getMatchRanges(text, query ?? '');
 
   if (matchRanges.length === 0) {
@@ -19,7 +15,9 @@ export function HighlightMatch({
 
   matchRanges.forEach((range, index) => {
     if (cursor < range.start) {
-      parts.push(<Fragment key={`text-${index}-${cursor}`}>{text.slice(cursor, range.start)}</Fragment>);
+      parts.push(
+        <Fragment key={`text-${index}-${cursor}`}>{text.slice(cursor, range.start)}</Fragment>,
+      );
     }
 
     parts.push(

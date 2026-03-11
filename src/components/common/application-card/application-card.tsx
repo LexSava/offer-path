@@ -1,43 +1,9 @@
-import type { IApplicationCardDetailProps, IApplicationCardProps } from '@/types';
+import type { IApplicationCardProps } from '@/types';
 import { cn, formatDate } from '@/utils';
 import { FavoriteApplicationButton } from '../favorite-application-button/favorite-application-button';
 import { HighlightMatch } from '../highlight-match/highlight-match';
-
-function ApplicationCardDetail({ label, value }: IApplicationCardDetailProps) {
-  return (
-    <div className="flex items-start gap-2">
-      <p className="text-primary overflow-hidden text-ellipsis whitespace-nowrap">
-        {label}: <span className="text-secondary font-semibold">{value}</span>
-      </p>
-    </div>
-  );
-}
-
-function getCompensationLabel(application: IApplicationCardProps['application']) {
-  const { salary, currency, period } = application;
-
-  if (!salary || !currency || !period) {
-    return 'Not specified';
-  }
-
-  return `${salary} ${currency} / ${period}`;
-}
-
-function getApplicationDateMeta(application: IApplicationCardProps['application']) {
-  const isUpdated = application.updatedAt.getTime() !== application.createdAt.getTime();
-
-  if (isUpdated) {
-    return {
-      label: 'Updated',
-      value: application.updatedAt,
-    };
-  }
-
-  return {
-    label: 'Created',
-    value: application.createdAt,
-  };
-}
+import { ApplicationCardDetail } from './application-card-detail';
+import { getApplicationDateMeta, getCompensationLabel } from './application-card.utils';
 
 export function ApplicationCard({
   application,

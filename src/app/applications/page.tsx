@@ -48,10 +48,7 @@ export default function ApplicationsPage() {
         </div>
 
         <div className="w-full md:max-w-xs">
-          <ApplicationSortDropdown
-            value={selectedSortOption}
-            onChange={setSelectedSortOption}
-          />
+          <ApplicationSortDropdown value={selectedSortOption} onChange={setSelectedSortOption} />
         </div>
       </div>
 

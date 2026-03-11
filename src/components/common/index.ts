@@ -2,7 +2,7 @@ export { Input } from './input/input';
 export { Dropdown } from './dropdown/dropdown';
 export { Textarea } from './textarea/textarea';
 export { Tooltip } from './tooltip/tooltip';
-export { ApplicationCard } from './application-card/application-card';
+export { ApplicationCard } from './application-card';
 export { ApplicationSearchInput } from './application-search-input/application-search-input';
 export { ApplicationSortDropdown } from './application-sort-dropdown/application-sort-dropdown';
 export { BackLink } from './back-link/back-link';
