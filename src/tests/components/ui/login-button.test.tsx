@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
-import { LoginButton } from '@/components/ui/login-button';
+import { LoginButton } from '@/components/common/buttons/login-button';
 import { useLoginModal } from '@/contexts';
 import { signOut, useSession } from 'next-auth/react';
 
@@ -44,6 +44,10 @@ describe('LoginButton', () => {
     const button = screen.getByRole('button', { name: 'Login' });
     fireEvent.click(button);
 
+    expect(button.className).toContain('bg-accent');
+    expect(button.className).toContain('shadow-[3px_3px_0_rgba(0,0,0,0.15)]');
+    expect(button.className).toContain('hover:shadow-[4px_4px_0_rgba(0,0,0,0.2)]');
+    expect(button.querySelector('svg')).toBeInTheDocument();
     expect(openLoginModal).toHaveBeenCalledTimes(1);
     expect(mockedSignOut).not.toHaveBeenCalled();
   });
@@ -68,6 +72,7 @@ describe('LoginButton', () => {
     const button = screen.getByRole('button', { name: 'Logout' });
     fireEvent.click(button);
 
+    expect(button.querySelector('svg')).toBeInTheDocument();
     expect(mockedSignOut).toHaveBeenCalledWith({ callbackUrl: '/' });
   });
 
