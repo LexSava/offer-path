@@ -4,7 +4,7 @@ export interface IUseDebounceControls {
   cancel: () => void;
   flush: () => void;
 }
-
+//TODO: in the future we can use npm i @uidotdev/usehooks
 export function useDebounce<T>(value: T, delay = 300): [T, IUseDebounceControls] {
   const [debouncedValue, setDebouncedValue] = useState(value);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { X } from 'lucide-react';
 import { ILoginModalProps } from '@/types';
 import { useCloseOnEscape } from '@/utils';
+import { GoogleIcon } from '../icons';
 
 export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +34,7 @@ export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
 
   return (
     <div
-      className="bg-primary/40 fixed inset-0 z-60 flex items-center justify-center px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 opacity-100 transition-opacity duration-300"
       role="dialog"
       aria-modal="true"
       aria-labelledby="login-modal-title"
@@ -53,26 +54,32 @@ export function LoginModal({ isOpen, onClose }: ILoginModalProps) {
           <X />
         </button>
 
-        <div className="flex min-h-56 flex-col items-center justify-around gap-4 text-center">
-          <p id="login-modal-title" className="text-primary text-base font-medium">
-            You can log in using your Google account
-          </p>
+        <div className="flex min-h-56 flex-col items-center justify-center gap-12 text-center">
+          <div className="space-y-2">
+            <h3 id="login-modal-title" className="text-primary text-xl font-semibold">
+              Continue with Google
+            </h3>
+            <p className="text-secondary text-sm">
+              Log in using your Google account to continue tracking your applications.
+            </p>
+          </div>
 
           <button
             type="button"
             onClick={handleGoogleLogin}
             disabled={isLoading}
             aria-busy={isLoading}
-            className="bg-accent hover:bg-primary cursor-pointer px-4 py-2 font-semibold text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-70"
+            className="text-primary flex w-full max-w-70 cursor-pointer items-center justify-center gap-3 border border-gray-300 bg-white px-4 py-2.5 font-medium shadow-[0_2px_0_rgba(26,24,20,0.08)] transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_0_rgba(26,24,20,0.12)] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:shadow-[0_2px_0_rgba(26,24,20,0.08)]"
           >
-            {isLoading ? 'Redirecting...' : 'Log in with Google'}
+            <GoogleIcon />
+            <span>{isLoading ? 'Redirecting...' : 'Continue with Google'}</span>
           </button>
 
           <button
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="border-muted text-primary hover:bg-background cursor-pointer border px-4 py-2 font-medium shadow-sm transition-colors"
+            className="border-muted text-primary hover:bg-background cursor-pointer border px-5 py-2 font-medium shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60"
           >
             Close
           </button>

@@ -1,4 +1,5 @@
 export * from './buttons';
+export * from './icons';
 export * from './modals';
 export { ApplicationCard } from './application-card';
 export { ApplicationSearchInput } from './application-search-input/application-search-input';
