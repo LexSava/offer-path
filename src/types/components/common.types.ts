@@ -114,6 +114,12 @@ export interface IQuickActionButtonProps {
   onClick: () => void;
 }
 
+export interface IInfoSectionProps {
+  number: string;
+  title: string;
+  description: string;
+}
+
 export interface INormalizedTextWithIndexMap {
   value: string;
   indexMap: number[];
