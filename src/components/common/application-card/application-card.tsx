@@ -74,9 +74,9 @@ export function ApplicationCard({ application, onClick, className }: IApplicatio
 
       <div className="flex flex-col gap-3 text-sm">
         <ApplicationCardDetail label="Grade" value={application.grade} />
-        <ApplicationCardDetail label="Status" value={application.status} />
-        <ApplicationCardDetail label="Contract" value={application.contract} />
+        <ApplicationCardDetail label="Main stack" value={application.mainStack} />
         <ApplicationCardDetail label="Compensation" value={getCompensationLabel(application)} />
+        <ApplicationCardDetail label="Contract" value={application.contract} />
         <ApplicationCardDetail label="Status" value={application.status} />
       </div>
 
