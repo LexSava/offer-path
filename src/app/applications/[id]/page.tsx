@@ -243,13 +243,15 @@ export default function ApplicationDetailPage() {
                 isFavorite={resolvedApplication.isFavorite}
               />
 
-              <DeleteApplicationButton
-                applicationId={resolvedApplication.id}
-                onDeleted={() => {
-                  setIsRedirectingAfterDelete(true);
-                  router.replace('/applications');
-                }}
-              />
+              {!isEditing ? (
+                <DeleteApplicationButton
+                  applicationId={resolvedApplication.id}
+                  onDeleted={() => {
+                    setIsRedirectingAfterDelete(true);
+                    router.replace('/applications');
+                  }}
+                />
+              ) : null}
 
               {!isEditing ? (
                 <button
