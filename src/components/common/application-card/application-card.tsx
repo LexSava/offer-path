@@ -1,6 +1,7 @@
 import type { IApplicationCardDetailProps, IApplicationCardProps } from '@/types';
 import { cn, formatDate } from '@/utils';
 import { FavoriteApplicationButton } from '../favorite-application-button/favorite-application-button';
+import { HighlightMatch } from '../highlight-match/highlight-match';
 
 function ApplicationCardDetail({ label, value }: IApplicationCardDetailProps) {
   return (
@@ -38,7 +39,12 @@ function getApplicationDateMeta(application: IApplicationCardProps['application'
   };
 }
 
-export function ApplicationCard({ application, onClick, className }: IApplicationCardProps) {
+export function ApplicationCard({
+  application,
+  onClick,
+  className,
+  highlightQuery,
+}: IApplicationCardProps) {
   const applicationDateMeta = getApplicationDateMeta(application);
 
   return (
@@ -65,19 +71,31 @@ export function ApplicationCard({ application, onClick, className }: IApplicatio
     >
       <div className="flex flex-col gap-1">
         <h3 className="text-primary overflow-hidden text-lg leading-tight font-semibold text-ellipsis whitespace-nowrap">
-          {application.position}
+          <HighlightMatch text={application.position} query={highlightQuery} />
         </h3>
         <p className="text-secondary text-xs font-semibold tracking-wide uppercase">
-          {application.specialization}
+          <HighlightMatch text={application.specialization} query={highlightQuery} />
         </p>
       </div>
 
       <div className="flex flex-col gap-3 text-sm">
-        <ApplicationCardDetail label="Grade" value={application.grade} />
-        <ApplicationCardDetail label="Main stack" value={application.mainStack} />
+        <ApplicationCardDetail
+          label="Grade"
+          value={<HighlightMatch text={application.grade} query={highlightQuery} />}
+        />
+        <ApplicationCardDetail
+          label="Main stack"
+          value={<HighlightMatch text={application.mainStack} query={highlightQuery} />}
+        />
         <ApplicationCardDetail label="Compensation" value={getCompensationLabel(application)} />
-        <ApplicationCardDetail label="Contract" value={application.contract} />
-        <ApplicationCardDetail label="Status" value={application.status} />
+        <ApplicationCardDetail
+          label="Contract"
+          value={<HighlightMatch text={application.contract} query={highlightQuery} />}
+        />
+        <ApplicationCardDetail
+          label="Status"
+          value={<HighlightMatch text={application.status} query={highlightQuery} />}
+        />
       </div>
 
       <div className="flex items-end justify-between gap-6">

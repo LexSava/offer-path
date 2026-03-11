@@ -26,7 +26,7 @@ export function Dropdown({
         {...registration}
         {...props}
         className={cn(
-          'w-full appearance-none border bg-white py-2 pl-3 text-sm transition-colors outline-none',
+          'w-full appearance-none border py-2 pl-3 text-sm transition-colors outline-none',
           showChevron ? 'pr-8' : 'pr-3',
           error ? 'border-red-500 focus:border-red-500' : 'focus:border-primary border-gray-300',
           className,

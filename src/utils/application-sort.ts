@@ -1,4 +1,4 @@
-import { applicationsSortOptions, SortOption } from '@/constants';
+import { applicationsSortOptions, type SortOption } from '@/constants';
 import type { IApplication } from '@/types';
 
 export function isApplicationsSortOption(value: string): value is SortOption {
@@ -19,7 +19,7 @@ function compareApplicationsBySortOption(a: IApplication, b: IApplication, sortO
   }
 }
 
-export function getStableSortedApplications(applications: IApplication[], sortOption: SortOption) {
+export function sortApplications(applications: IApplication[], sortOption: SortOption) {
   return applications
     .map((application, index) => ({ application, index }))
     .sort((left, right) => {
@@ -37,3 +37,5 @@ export function getStableSortedApplications(applications: IApplication[], sortOp
     })
     .map(({ application }) => application);
 }
+
+export const getStableSortedApplications = sortApplications;

@@ -1,4 +1,6 @@
+import type { ReactNode } from 'react';
 import type { IApplication } from '@/types/models/application.types';
+import type { SortOption } from '@/constants';
 
 export interface ICreateApplicationModalProps {
   isOpen: boolean;
@@ -32,11 +34,12 @@ export interface IApplicationCardProps {
   application: IApplication;
   onClick?: () => void;
   className?: string;
+  highlightQuery?: string;
 }
 
 export interface IApplicationCardDetailProps {
   label: string;
-  value: string;
+  value: ReactNode;
 }
 
 export interface IBackLinkProps {
@@ -83,4 +86,30 @@ export interface IPageTitleHeaderProps {
   backLinkUrl: string;
   backLinkText: string;
   title: string;
+}
+
+export interface IApplicationSearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export interface IApplicationSortDropdownProps {
+  value: SortOption;
+  onChange: (value: SortOption) => void;
+}
+
+export interface IHighlightMatchProps {
+  text: string;
+  query?: string;
+  highlightClassName?: string;
+}
+
+export interface INormalizedTextWithIndexMap {
+  value: string;
+  indexMap: number[];
+}
+
+export interface IMatchRange {
+  start: number;
+  end: number;
 }

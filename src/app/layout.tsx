@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ReactNode } from 'react';
 import { Doto, Montserrat } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import './globals.css';
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
 
