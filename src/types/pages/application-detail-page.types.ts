@@ -1,5 +1,8 @@
 import type { FieldErrors, UseFormRegister } from 'react-hook-form';
-import type { CreateApplicationRequestInputValues, CreateApplicationRequestValues } from '@/forms/create-application/create-application-validation';
+import type {
+  CreateApplicationRequestInputValues,
+  CreateApplicationRequestValues,
+} from '@/forms/create-application/create-application-validation';
 import type { IApplicationResponseDto } from '@/types/contexts/applications/applications.types';
 import type { IApplication } from '@/types/models/application.types';
 

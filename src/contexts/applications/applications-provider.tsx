@@ -127,6 +127,21 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
     [persistApplications],
   );
 
+  const removeApplicationById = useCallback(
+    (applicationId: string) => {
+      setApplications((previousApplications) => {
+        const nextApplications = previousApplications.filter(
+          (application) => application.id !== applicationId,
+        );
+
+        persistApplications(nextApplications);
+
+        return nextApplications;
+      });
+    },
+    [persistApplications],
+  );
+
   useEffect(() => {
     if (status === 'loading') {
       return;
@@ -205,11 +220,13 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
       addApplicationFromApi,
       updateApplicationFromApi,
       setApplicationFavoriteState,
+      removeApplicationById,
     }),
     [
       addApplicationFromApi,
       applications,
       isLoading,
+      removeApplicationById,
       setApplicationFavoriteState,
       updateApplicationFromApi,
     ],

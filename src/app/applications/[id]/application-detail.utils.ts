@@ -1,7 +1,4 @@
-import type {
-  IApplication,
-  IApplicationResponseDto,
-} from '@/types';
+import type { IApplication, IApplicationResponseDto } from '@/types';
 import type { CreateApplicationRequestValues } from '@/forms/create-application/create-application-validation';
 
 export function toApplicationFromApi(application: IApplicationResponseDto): IApplication {

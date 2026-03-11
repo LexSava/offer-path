@@ -12,6 +12,7 @@ export interface IApplicationsContextValue {
   addApplicationFromApi: (application: IApplicationResponseDto) => void;
   updateApplicationFromApi: (application: IApplicationResponseDto) => void;
   setApplicationFavoriteState: (applicationId: string, isFavorite: boolean) => void;
+  removeApplicationById: (applicationId: string) => void;
 }
 
 export interface IApplicationsProviderProps {

@@ -145,3 +145,61 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  _request: Request,
+  context: {
+    params: Promise<{ id: string }>;
+  },
+) {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return NextResponse.json<IApplicationDetailErrorResponse>(
+      { message: 'Unauthorized' },
+      { status: 401 },
+    );
+  }
+
+  const { id } = await context.params;
+
+  try {
+    const existingApplication = await prisma.application.findFirst({
+      where: {
+        id,
+        userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!existingApplication) {
+      return NextResponse.json<IApplicationDetailErrorResponse>(
+        { message: 'Application not found' },
+        { status: 404 },
+      );
+    }
+
+    await prisma.application.delete({
+      where: {
+        id: existingApplication.id,
+      },
+    });
+
+    return NextResponse.json({
+      message: 'Application deleted successfully',
+      data: {
+        id: existingApplication.id,
+      },
+    });
+  } catch (error) {
+    console.error('Failed to delete application:', error);
+
+    return NextResponse.json<IApplicationDetailErrorResponse>(
+      { message: 'Failed to delete application' },
+      { status: 500 },
+    );
+  }
+}

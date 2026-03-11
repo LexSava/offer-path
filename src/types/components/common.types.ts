@@ -50,10 +50,32 @@ export interface IFavoriteApplicationButtonProps {
   className?: string;
 }
 
+export interface IDeleteApplicationButtonProps {
+  applicationId: string;
+  className?: string;
+  onDeleted?: () => void;
+}
+
+export interface IConfirmationModalProps {
+  isOpen: boolean;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  isSubmitting?: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
 export interface IUpdateFavoriteResponse {
   data?: {
     id: string;
     isFavorite: boolean;
+  };
+}
+
+export interface IDeleteApplicationResponse {
+  data?: {
+    id: string;
   };
 }
 

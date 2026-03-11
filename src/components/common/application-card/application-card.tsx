@@ -22,8 +22,25 @@ function getCompensationLabel(application: IApplicationCardProps['application'])
   return `${salary} ${currency} / ${period}`;
 }
 
+function getApplicationDateMeta(application: IApplicationCardProps['application']) {
+  const isUpdated = application.updatedAt.getTime() !== application.createdAt.getTime();
+
+  if (isUpdated) {
+    return {
+      label: 'Updated',
+      value: application.updatedAt,
+    };
+  }
+
+  return {
+    label: 'Created',
+    value: application.createdAt,
+  };
+}
 
 export function ApplicationCard({ application, onClick, className }: IApplicationCardProps) {
+  const applicationDateMeta = getApplicationDateMeta(application);
+
   return (
     <article
       className={cn(
@@ -64,7 +81,7 @@ export function ApplicationCard({ application, onClick, className }: IApplicatio
 
       <div className="flex items-end justify-between gap-6">
         <p className="text-secondary mt-auto text-xs">
-          Updated: {formatDate(application.updatedAt)}
+          {applicationDateMeta.label}: {formatDate(applicationDateMeta.value)}
         </p>
 
         <FavoriteApplicationButton

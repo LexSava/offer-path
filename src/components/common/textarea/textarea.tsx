@@ -44,7 +44,7 @@ export function Textarea({
         onChange={handleChange}
         maxLength={maxCharacters}
         className={cn(
-          'w-full border px-3 py-2 text-sm transition-colors outline-none min-h-10',
+          'min-h-10 w-full border px-3 py-2 text-sm transition-colors outline-none',
           props.readOnly || props.disabled ? 'resize-none' : 'resize-y',
           error ? 'border-red-500 focus:border-red-500' : 'focus:border-primary border-gray-300',
           className,

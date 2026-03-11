@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { FavoriteApplicationButton } from '@/components/common';
+import { DeleteApplicationButton, FavoriteApplicationButton } from '@/components/common';
 import { Container } from '@/components/layout';
 import { Button } from '@/components/ui';
 import { useApplications, useTooltip } from '@/contexts';
@@ -27,6 +27,7 @@ import { PageTitleHeader } from '@/components/pages';
 export default function ApplicationDetailPage() {
   const params = useParams<{ id: string }>();
   const applicationId = params.id;
+  const router = useRouter();
 
   const { applications, setApplicationFavoriteState, updateApplicationFromApi } = useApplications();
   const { showTooltip } = useTooltip();
@@ -34,6 +35,7 @@ export default function ApplicationDetailPage() {
   const [localApplication, setLocalApplication] = useState<IApplication | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isRedirectingAfterDelete, setIsRedirectingAfterDelete] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [initialEditValues, setInitialEditValues] = useState<CreateApplicationRequestValues | null>(
     null,
@@ -59,7 +61,7 @@ export default function ApplicationDetailPage() {
   const resolvedApplication = contextApplication ?? localApplication;
 
   useEffect(() => {
-    if (!applicationId || contextApplication) {
+    if (!applicationId || contextApplication || isRedirectingAfterDelete) {
       return;
     }
 
@@ -73,6 +75,11 @@ export default function ApplicationDetailPage() {
             'Content-Type': 'application/json',
           },
         });
+
+        if (response.status === 404) {
+          setLocalApplication(null);
+          return;
+        }
 
         if (!response.ok) {
           throw new Error(`Failed to fetch application detail: ${response.status}`);
@@ -96,7 +103,7 @@ export default function ApplicationDetailPage() {
     };
 
     void fetchApplicationDetail();
-  }, [applicationId, contextApplication, setApplicationFavoriteState]);
+  }, [applicationId, contextApplication, isRedirectingAfterDelete, setApplicationFavoriteState]);
 
   useEffect(() => {
     if (!resolvedApplication || isEditing) {
@@ -236,11 +243,19 @@ export default function ApplicationDetailPage() {
                 isFavorite={resolvedApplication.isFavorite}
               />
 
+              <DeleteApplicationButton
+                applicationId={resolvedApplication.id}
+                onDeleted={() => {
+                  setIsRedirectingAfterDelete(true);
+                  router.replace('/applications');
+                }}
+              />
+
               {!isEditing ? (
                 <button
                   type="button"
                   onClick={handleStartEdit}
-                  className="hover:bg-surface text-secondary flex items-center gap-1 border border-gray-300 px-3 py-2 text-sm font-medium transition-colors"
+                  className="text-secondary flex cursor-pointer items-center gap-1 border border-gray-300 px-3 py-2 text-sm font-medium transition-colors hover:border-gray-400 hover:bg-gray-100 hover:text-gray-900"
                 >
                   <Pencil size={16} />
                   Edit
