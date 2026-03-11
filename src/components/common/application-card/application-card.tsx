@@ -77,6 +77,7 @@ export function ApplicationCard({ application, onClick, className }: IApplicatio
         <ApplicationCardDetail label="Status" value={application.status} />
         <ApplicationCardDetail label="Contract" value={application.contract} />
         <ApplicationCardDetail label="Compensation" value={getCompensationLabel(application)} />
+        <ApplicationCardDetail label="Status" value={application.status} />
       </div>
 
       <div className="flex items-end justify-between gap-6">
