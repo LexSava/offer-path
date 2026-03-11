@@ -4,11 +4,12 @@ import { Trash2 } from 'lucide-react';
 import type { IDeleteApplicationButtonProps } from '@/types';
 import { cn } from '@/utils';
 import { ConfirmationModal } from '../../modals/confirmation-modal';
+
+import { useDeleteApplication } from './use-delete-application';
 import {
   DELETE_APPLICATION_BUTTON_CLASSNAME,
   DELETE_APPLICATION_CONFIRMATION_TEXT,
-} from './delete-application-button.constants';
-import { useDeleteApplication } from './use-delete-application';
+} from '@/constants';
 
 export function DeleteApplicationButton({
   applicationId,

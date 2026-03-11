@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useApplications, useTooltip } from '@/contexts';
 import type { IDeleteApplicationButtonProps, IDeleteApplicationResponse } from '@/types';
-import {
-  DELETE_APPLICATION_ERROR_MESSAGE,
-  DELETE_APPLICATION_SUCCESS_MESSAGE,
-} from './delete-application-button.constants';
+import { DELETE_APPLICATION_SUCCESS_MESSAGE, DELETE_APPLICATION_ERROR_MESSAGE } from '@/constants';
 
-type IUseDeleteApplicationParams = Pick<IDeleteApplicationButtonProps, 'applicationId' | 'onDeleted'>;
+type IUseDeleteApplicationParams = Pick<
+  IDeleteApplicationButtonProps,
+  'applicationId' | 'onDeleted'
+>;
 
 export function useDeleteApplication({ applicationId, onDeleted }: IUseDeleteApplicationParams) {
   const { removeApplicationById } = useApplications();
