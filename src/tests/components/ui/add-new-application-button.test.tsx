@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AddNewApplicationButton } from '@/components/ui/add-new-application-button';
 import { useLoginModal } from '@/contexts';
 import { useSession } from 'next-auth/react';
+import { AddNewApplicationButton } from '@/components/common/buttons/add-new-application-button';
 
 vi.mock('next-auth/react', () => ({
   useSession: vi.fn(),
