@@ -17,7 +17,7 @@ export function QuickActionCard({
         'hover:-translate-x-0.5 hover:-translate-y-0.5',
         isPrimary
           ? 'bg-accent text-white shadow-[5px_5px_0_rgba(0,0,0,0.2)] hover:shadow-[7px_7px_0_rgba(0,0,0,0.25)]'
-          : 'bg-surface border-2 border-[rgba(26,24,20,0.1)] text-primary shadow-[5px_5px_0_rgba(26,24,20,0.1)] hover:shadow-[7px_7px_0_rgba(26,24,20,0.15)]',
+          : 'bg-surface text-primary border-2 border-[rgba(26,24,20,0.1)] shadow-[5px_5px_0_rgba(26,24,20,0.1)] hover:shadow-[7px_7px_0_rgba(26,24,20,0.15)]',
       ].join(' ')}
       onClick={onClick}
     >
