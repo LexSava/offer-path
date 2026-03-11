@@ -1,7 +1,6 @@
 'use client';
 
-import { AddNewApplicationButton } from '../common';
-import { HomePageApplicationsCta } from './home-page-applications-cta';
+import { QuickActionsCards } from '../common';
 
 export function HomePageHero() {
   return (
@@ -12,8 +11,7 @@ export function HomePageHero() {
         Keep track of all your job applications in one place. Track the positions you applied for,
         manage their status, and get insights on your application history.
       </p>
-      <AddNewApplicationButton />
-      <HomePageApplicationsCta />
+      <QuickActionsCards />
     </section>
   );
 }

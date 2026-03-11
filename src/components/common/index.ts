@@ -8,5 +8,7 @@ export { ApplicationSortDropdown } from './application-sort-dropdown/application
 export { BackLink } from './back-link/back-link';
 export { FavoriteApplicationButton } from './favorite-application-button/favorite-application-button';
 export { HighlightMatch } from './highlight-match/highlight-match';
+export { QuickActionsCards } from './quick-actions';
+
 export * from './modals';
 export * from './buttons';

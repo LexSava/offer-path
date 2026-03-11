@@ -104,6 +104,16 @@ export interface IHighlightMatchProps {
   highlightClassName?: string;
 }
 
+export type QuickActionButtonVariant = 'primary' | 'secondary';
+
+export interface IQuickActionButtonProps {
+  title: string;
+  description: string;
+  icon: ReactNode;
+  variant: QuickActionButtonVariant;
+  onClick: () => void;
+}
+
 export interface INormalizedTextWithIndexMap {
   value: string;
   indexMap: number[];
