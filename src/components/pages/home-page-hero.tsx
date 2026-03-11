@@ -1,6 +1,6 @@
 'use client';
 
-import { AddNewApplicationButton } from '../ui';
+import { AddNewApplicationButton } from '../common';
 import { HomePageApplicationsCta } from './home-page-applications-cta';
 
 export function HomePageHero() {

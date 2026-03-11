@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { DeleteApplicationButton, FavoriteApplicationButton } from '@/components/common';
 import { Container } from '@/components/layout';
-import { Button } from '@/components/ui';
+import { Button } from '@/components/common';
 import { useApplications, useTooltip } from '@/contexts';
 import {
   createApplicationRequestSchema,

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Dropdown, Input, Textarea } from '@/components/common';
-import { Button } from '@/components/ui';
+import { Button } from '@/components/common';
 import { toSelectOptions } from '@/utils';
 import {
   createApplicationValidationSchema,

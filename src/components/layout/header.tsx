@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Container } from './container';
-import { LoginButton } from '../ui';
+import { LoginButton } from '../common';
 
 export function Header() {
   return (

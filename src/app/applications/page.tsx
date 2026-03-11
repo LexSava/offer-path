@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ApplicationCard } from '@/components/common';
 import { Container } from '@/components/layout';
-import { AddNewApplicationButton } from '@/components/ui';
+import { AddNewApplicationButton } from '@/components/common';
 import { useApplications } from '@/contexts';
 import { PageTitleHeader } from '@/components/pages/page-title-header';
 

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useApplications } from '@/contexts';
-import { Button } from '@/components/ui';
+import { Button } from '@/components/common';
 
 export function HomePageApplicationsCta() {
   const router = useRouter();
