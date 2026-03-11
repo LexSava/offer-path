@@ -1,20 +1,24 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ApplicationCard } from '@/components/common';
+import { ApplicationCard, Dropdown } from '@/components/common';
 import { Container } from '@/components/layout';
 import { AddNewApplicationButton } from '@/components/common';
 import { useApplications } from '@/contexts';
 import { PageTitleHeader } from '@/components/pages/page-title-header';
+import { getStableSortedApplications, isApplicationsSortOption } from '@/utils';
+import { applicationsSortOptions, type SortOption } from '@/constants';
 
 export default function ApplicationsPage() {
   const { applications, isLoading } = useApplications();
   const router = useRouter();
+  const [selectedSortOption, setSelectedSortOption] = useState<SortOption>('created_desc');
 
-  useEffect(() => {
-    console.log('Applications page data:', applications);
-  }, [applications]);
+  const sortedApplications = useMemo(
+    () => getStableSortedApplications(applications, selectedSortOption),
+    [applications, selectedSortOption],
+  );
 
   return (
     <Container className="bg-background flex flex-col gap-4">
@@ -26,6 +30,23 @@ export default function ApplicationsPage() {
         </div>
       </div>
 
+      <div className="w-full sm:max-w-xs">
+        <Dropdown
+          label="Sort applications"
+          options={applicationsSortOptions}
+          value={selectedSortOption}
+          onChange={(event) => {
+            const nextValue = event.currentTarget.value;
+
+            if (!isApplicationsSortOption(nextValue)) {
+              return;
+            }
+
+            setSelectedSortOption(nextValue);
+          }}
+        />
+      </div>
+
       {isLoading ? <p className="text-muted">Loading applications...</p> : null}
 
       {!isLoading && applications.length === 0 ? (
@@ -34,7 +55,7 @@ export default function ApplicationsPage() {
 
       {!isLoading && applications.length > 0 ? (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {applications.map((application) => (
+          {sortedApplications.map((application) => (
             <li key={application.id} className="h-full">
               <ApplicationCard
                 application={application}
