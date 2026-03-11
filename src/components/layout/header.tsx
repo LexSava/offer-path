@@ -6,7 +6,7 @@ import { LoginButton } from '../common';
 
 export function Header() {
   return (
-    <header className="bg-surface sticky top-0 z-50">
+    <header className="bg-surface sticky top-0 z-5 shadow-[0_2px_0_rgba(26,24,20,0.1)]">
       <Container className="py-4">
         <div className="flex items-center justify-between gap-6">
           <Link
