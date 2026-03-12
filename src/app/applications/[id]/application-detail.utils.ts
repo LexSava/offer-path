@@ -4,6 +4,7 @@ import type { CreateApplicationRequestValues } from '@/forms/create-application/
 export function toApplicationFromApi(application: IApplicationResponseDto): IApplication {
   return {
     ...application,
+    company: application.company?.trim() || 'Unknown',
     isFavorite: Boolean(application.isFavorite),
     createdAt: new Date(application.createdAt),
     updatedAt: new Date(application.updatedAt),
@@ -13,6 +14,7 @@ export function toApplicationFromApi(application: IApplicationResponseDto): IApp
 export function toFormValues(application: IApplication): CreateApplicationRequestValues {
   return {
     position: application.position,
+    company: application.company,
     specialization: application.specialization,
     grade: application.grade,
     mainStack: application.mainStack,

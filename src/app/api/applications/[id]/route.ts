@@ -11,6 +11,7 @@ interface IApplicationDetailErrorResponse {
 }
 
 const toNullableString = (value?: string) => (value && value.trim().length > 0 ? value : null);
+const normalizeCompany = (value?: string) => value?.trim() || 'Unknown';
 
 export async function GET(
   _request: Request,
@@ -83,6 +84,7 @@ export async function PATCH(
   try {
     const body = (await request.json()) as unknown;
     const values = createApplicationRequestSchema.parse(body);
+    const normalizedCompany = normalizeCompany(values.company);
 
     const existingApplication = await prisma.application.findFirst({
       where: {
@@ -104,6 +106,7 @@ export async function PATCH(
       },
       data: {
         position: values.position,
+        company: normalizedCompany,
         specialization: values.specialization,
         grade: values.grade,
         mainStack: values.mainStack,

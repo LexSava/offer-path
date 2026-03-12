@@ -10,6 +10,7 @@ const CACHE_KEY_PREFIX = 'applications-cache';
 function toApplicationFromApi(application: IApplicationResponseDto): IApplication {
   return {
     ...application,
+    company: application.company?.trim() || 'Unknown',
     isFavorite: Boolean(application.isFavorite),
     createdAt: new Date(application.createdAt),
     updatedAt: new Date(application.updatedAt),
@@ -34,6 +35,7 @@ function isApplicationDto(value: unknown): value is IApplicationResponseDto {
   return (
     typeof candidate.id === 'string' &&
     typeof candidate.position === 'string' &&
+    (typeof candidate.company === 'string' || typeof candidate.company === 'undefined') &&
     typeof candidate.specialization === 'string' &&
     typeof candidate.grade === 'string' &&
     typeof candidate.mainStack === 'string' &&

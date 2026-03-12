@@ -11,6 +11,7 @@ interface ICreateApplicationErrorResponse {
 }
 
 const toNullableString = (value?: string) => (value && value.trim().length > 0 ? value : null);
+const normalizeCompany = (value?: string) => value?.trim() || 'Unknown';
 const normalizeIsFavorite = <T extends { isFavorite: boolean | null }>(application: T) => ({
   ...application,
   isFavorite: Boolean(application.isFavorite),
@@ -65,10 +66,12 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as unknown;
     const values = createApplicationRequestSchema.parse(body);
+    const normalizedCompany = normalizeCompany(values.company);
 
     const createdApplication = await prisma.application.create({
       data: {
         position: values.position,
+        company: normalizedCompany,
         specialization: values.specialization,
         grade: values.grade,
         mainStack: values.mainStack,

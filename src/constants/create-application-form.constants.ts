@@ -4,6 +4,7 @@ import type { DefaultValues } from 'react-hook-form';
 export const createApplicationFormDefaultValues: DefaultValues<CreateApplicationFormInputValues> = {
   id: undefined,
   position: '',
+  company: '',
   specialization: '',
   grade: '',
   mainStack: '',

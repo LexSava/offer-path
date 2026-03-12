@@ -46,6 +46,10 @@ export function ApplicationCard({
 
       <div className="flex flex-col gap-3 text-sm">
         <ApplicationCardDetail
+          label="Company"
+          value={<HighlightMatch text={application.company || 'Unknown'} query={highlightQuery} />}
+        />
+        <ApplicationCardDetail
           label="Grade"
           value={<HighlightMatch text={application.grade} query={highlightQuery} />}
         />

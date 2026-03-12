@@ -60,6 +60,7 @@ const requiredMainStack = z
 export const createApplicationValidationSchema = z.object({
   id: z.string().optional(),
   position: z.string().min(1, 'Position is required'),
+  company: z.string().optional(),
   specialization: requiredSpecialization,
   grade: requiredGrade,
   mainStack: requiredMainStack,
@@ -79,6 +80,7 @@ export const createApplicationValidationSchema = z.object({
 
 export const createApplicationRequestSchema = createApplicationValidationSchema.pick({
   position: true,
+  company: true,
   specialization: true,
   grade: true,
   mainStack: true,

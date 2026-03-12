@@ -7,6 +7,7 @@ export const SEARCHABLE_APPLICATION_FIELDS = [
   'position',
   'specialization',
   'status',
+  'company',
 ] as const satisfies ReadonlyArray<keyof IApplication>;
 
 export type SearchableApplicationField = (typeof SEARCHABLE_APPLICATION_FIELDS)[number];

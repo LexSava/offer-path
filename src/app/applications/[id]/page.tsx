@@ -234,6 +234,7 @@ export default function ApplicationDetailPage() {
               <h1 className="font-logo text-primary text-3xl font-medium">
                 {resolvedApplication.position}
               </h1>
+              <p className="text-secondary text-base">Company: {resolvedApplication.company}</p>
               <p className="text-secondary text-lg">{resolvedApplication.specialization}</p>
             </div>
 

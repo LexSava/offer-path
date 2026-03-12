@@ -30,6 +30,14 @@ export function ApplicationDetailFormFields({
           disabled={!isEditing}
           readOnly={!isEditing}
         />
+        <Input
+          label="Company"
+          registration={register('company')}
+          error={errors.company?.message}
+          disabled={!isEditing}
+          readOnly={!isEditing}
+          placeholder="Enter company name"
+        />
         <Dropdown
           label="Specialization"
           options={toSelectOptions(specializationOptions)}

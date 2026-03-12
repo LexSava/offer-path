@@ -11,7 +11,7 @@ export function searchApplications(applications: IApplication[], query: string) 
 
   return applications.filter((application) =>
     SEARCHABLE_APPLICATION_FIELDS.some((field) =>
-      normalizeString(application[field]).includes(normalizedQuery),
+      normalizeString(String(application[field] ?? '')).includes(normalizedQuery),
     ),
   );
 }

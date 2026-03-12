@@ -22,6 +22,7 @@ export type StatusType =
 export interface IApplication {
   id: string;
   position: string;
+  company: string;
   specialization: SpecializationType;
   grade: GradeType;
   mainStack: StackType;

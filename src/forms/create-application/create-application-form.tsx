@@ -74,6 +74,7 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
 
     const payload: CreateApplicationRequestValues = {
       position: values.position,
+      company: values.company?.trim() || 'Unknown',
       specialization: values.specialization,
       grade: values.grade,
       mainStack: values.mainStack,
@@ -134,6 +135,13 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
         label="Position"
         registration={register('position')}
         error={errors.position?.message}
+      />
+
+      <Input
+        label="Company"
+        placeholder="Enter company name"
+        registration={register('company')}
+        error={errors.company?.message}
       />
 
       <Dropdown
