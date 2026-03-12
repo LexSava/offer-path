@@ -31,11 +31,6 @@ jobs:
       - name: Set up DATABASE_URL for Prisma
         run: echo "DATABASE_URL=postgresql://ci:ci@localhost:5432/offer_path_ci" >> $GITHUB_ENV
 
-      - name: Set Google Auth environment variables
-        run: |
-          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: npm ci
 
@@ -53,6 +48,9 @@ jobs:
         continue-on-error: false
 
       - name: Build the project
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID || 'ci-google-client-id' }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET || 'ci-google-client-secret' }}
         run: npm run build
 
       - name: Archive build artifacts
