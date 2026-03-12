@@ -1,21 +1,46 @@
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
-describe('Header - Session and Context Required', () => {
-  it('placeholder test for Header', () => {
-    // Note: Full testing of Header requires:
-    // - NextAuth session mocking
-    // - LoginButton integration
-    // - Link component testing
-    // - Session context setup
-    expect(true).toBe(true);
+import { Header } from '@/components/layout/header';
+
+const containerSpy = vi.fn();
+
+vi.mock('@/components/common', () => ({
+  LoginButton: () => <button type="button">Mock Login Button</button>,
+}));
+
+vi.mock('@/components/layout/container', () => ({
+  Container: ({ children, className }: { children: React.ReactNode; className?: string }) => {
+    containerSpy({ className });
+    return <div data-testid="header-container">{children}</div>;
+  },
+}));
+
+describe('Header', () => {
+  it('renders brand link to home page', () => {
+    render(<Header />);
+
+    const brandLink = screen.getByRole('link', { name: /offerpath/i });
+    expect(brandLink).toHaveAttribute('href', '/');
   });
 
-  it('Header requires auth setup for proper testing', () => {
-    // Full implementation requires:
-    // - Testing header rendering with authentication states
-    // - Testing navigation links
-    // - Testing LoginButton integration
-    // - Testing responsive layout
-    expect(true).toBe(true);
+  it('renders login button inside header', () => {
+    render(<Header />);
+
+    expect(screen.getByRole('button', { name: 'Mock Login Button' })).toBeInTheDocument();
+  });
+
+  it('passes compact vertical spacing to container', () => {
+    render(<Header />);
+
+    const lastCallArgs = containerSpy.mock.calls.at(-1)?.[0];
+    expect(lastCallArgs).toMatchObject({ className: 'py-4' });
+  });
+
+  it('applies sticky header classes', () => {
+    const { container } = render(<Header />);
+
+    const header = container.querySelector('header');
+    expect(header).toHaveClass('sticky', 'top-0', 'z-5', 'bg-surface');
   });
 });

@@ -1,21 +1,96 @@
-import { describe, it, expect, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-describe('AddNewApplicationButton - Session and Context Required', () => {
-  it('placeholder test for AddNewApplicationButton', () => {
-    // Note: Full testing of AddNewApplicationButton requires:
-    // - NextAuth session mocking
-    // - LoginModal context mock
-    // - CreateApplicationModal integration
-    // - useSession hook mocking
-    expect(true).toBe(true);
+import { AddNewApplicationButton } from '@/components/common/buttons/add-new-application-button';
+import { useLoginModal } from '@/contexts';
+import { useSession } from 'next-auth/react';
+
+vi.mock('next-auth/react', () => ({
+  useSession: vi.fn(),
+}));
+
+vi.mock('@/contexts', () => ({
+  useLoginModal: vi.fn(),
+}));
+
+vi.mock('@/components/common', () => ({
+  CreateApplicationModal: ({ isOpen }: { isOpen: boolean }) => (
+    <div data-testid="create-application-modal">{isOpen ? 'open' : 'closed'}</div>
+  ),
+}));
+
+describe('AddNewApplicationButton', () => {
+  const mockedUseSession = vi.mocked(useSession);
+  const mockedUseLoginModal = vi.mocked(useLoginModal);
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockedUseLoginModal.mockReturnValue({
+      openLoginModal: vi.fn(),
+      closeLoginModal: vi.fn(),
+    });
   });
 
-  it('AddNewApplicationButton requires session setup for proper testing', () => {
-    // Full implementation requires:
-    // - Mocking useSession from next-auth
-    // - Mocking LoginModal context
-    // - Testing authenticated vs unauthenticated flow
-    // - Testing modal state management
-    expect(true).toBe(true);
+  it('renders create application modal as closed by default', () => {
+    mockedUseSession.mockReturnValue({
+      data: null,
+      status: 'unauthenticated',
+      update: vi.fn(),
+    });
+
+    render(<AddNewApplicationButton />);
+
+    expect(screen.getByTestId('create-application-modal')).toHaveTextContent('closed');
+  });
+
+  it('opens login modal when user is not authenticated', () => {
+    const openLoginModal = vi.fn();
+
+    mockedUseSession.mockReturnValue({
+      data: null,
+      status: 'unauthenticated',
+      update: vi.fn(),
+    });
+
+    mockedUseLoginModal.mockReturnValue({
+      openLoginModal,
+      closeLoginModal: vi.fn(),
+    });
+
+    render(<AddNewApplicationButton />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Add New Application' }));
+
+    expect(openLoginModal).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('create-application-modal')).toHaveTextContent('closed');
+  });
+
+  it('opens create application modal when user is authenticated', () => {
+    const openLoginModal = vi.fn();
+
+    mockedUseSession.mockReturnValue({
+      data: {
+        user: {
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        },
+        expires: '2099-01-01T00:00:00.000Z',
+      },
+      status: 'authenticated',
+      update: vi.fn(),
+    });
+
+    mockedUseLoginModal.mockReturnValue({
+      openLoginModal,
+      closeLoginModal: vi.fn(),
+    });
+
+    render(<AddNewApplicationButton />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Add New Application' }));
+
+    expect(openLoginModal).not.toHaveBeenCalled();
+    expect(screen.getByTestId('create-application-modal')).toHaveTextContent('open');
   });
 });

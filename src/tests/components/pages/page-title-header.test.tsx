@@ -1,41 +1,22 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { PageTitleHeader } from '@/components/pages/page-title-header';
 
 describe('PageTitleHeader', () => {
   it('renders back link', () => {
-    render(
-      <PageTitleHeader
-        backLinkUrl="/previous"
-        backLinkText="Go Back"
-        title="Applications"
-      />
-    );
+    render(<PageTitleHeader backLinkUrl="/previous" backLinkText="Go Back" title="Applications" />);
 
     expect(screen.getByText('Go Back')).toBeInTheDocument();
   });
 
   it('renders page title', () => {
-    render(
-      <PageTitleHeader
-        backLinkUrl="/previous"
-        backLinkText="Go Back"
-        title="Applications"
-      />
-    );
+    render(<PageTitleHeader backLinkUrl="/previous" backLinkText="Go Back" title="Applications" />);
 
     expect(screen.getByText('Applications')).toBeInTheDocument();
   });
 
   it('back link has correct href', () => {
-    render(
-      <PageTitleHeader
-        backLinkUrl="/applications"
-        backLinkText="Go Back"
-        title="Detail"
-      />
-    );
+    render(<PageTitleHeader backLinkUrl="/applications" backLinkText="Go Back" title="Detail" />);
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/applications');
@@ -43,11 +24,7 @@ describe('PageTitleHeader', () => {
 
   it('renders divider separator', () => {
     const { container } = render(
-      <PageTitleHeader
-        backLinkUrl="/previous"
-        backLinkText="Go Back"
-        title="Applications"
-      />
+      <PageTitleHeader backLinkUrl="/previous" backLinkText="Go Back" title="Applications" />,
     );
 
     expect(container.textContent).toContain('|');
@@ -55,11 +32,7 @@ describe('PageTitleHeader', () => {
 
   it('renders as section element', () => {
     const { container } = render(
-      <PageTitleHeader
-        backLinkUrl="/previous"
-        backLinkText="Go Back"
-        title="Applications"
-      />
+      <PageTitleHeader backLinkUrl="/previous" backLinkText="Go Back" title="Applications" />,
     );
 
     expect(container.querySelector('section')).toBeInTheDocument();
@@ -67,11 +40,7 @@ describe('PageTitleHeader', () => {
 
   it('has correct layout classes', () => {
     const { container } = render(
-      <PageTitleHeader
-        backLinkUrl="/previous"
-        backLinkText="Go Back"
-        title="Applications"
-      />
+      <PageTitleHeader backLinkUrl="/previous" backLinkText="Go Back" title="Applications" />,
     );
 
     const section = container.querySelector('section');
@@ -80,11 +49,7 @@ describe('PageTitleHeader', () => {
 
   it('title has correct styling', () => {
     const { container } = render(
-      <PageTitleHeader
-        backLinkUrl="/previous"
-        backLinkText="Go Back"
-        title="Applications"
-      />
+      <PageTitleHeader backLinkUrl="/previous" backLinkText="Go Back" title="Applications" />,
     );
 
     const title = screen.getByText('Applications');
