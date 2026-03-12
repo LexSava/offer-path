@@ -19,9 +19,28 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://offer-path-sigma.vercel.app'),
   title: 'OfferPath - Your Job Application Tracker',
   description:
     'Track your job applications efficiently with OfferPath. Keep all your application information in one place and stay organized throughout your job search.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://offer-path-sigma.vercel.app',
+    siteName: 'OfferPath',
+    title: 'OfferPath - Your Job Application Tracker',
+    description:
+      'Track your job applications efficiently with OfferPath. Keep all your application information in one place and stay organized throughout your job search.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'OfferPath - Your Job Application Tracker',
+    description:
+      'Track your job applications efficiently with OfferPath. Keep all your application information in one place and stay organized throughout your job search.',
+  },
 };
 
 export default async function RootLayout({
