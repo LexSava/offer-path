@@ -25,6 +25,7 @@ export function ApplicationDetailFormFields({
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Input
           label="Position"
+          placeholder="Enter position title"
           registration={register('position')}
           error={errors.position?.message}
           disabled={!isEditing}
@@ -32,14 +33,15 @@ export function ApplicationDetailFormFields({
         />
         <Input
           label="Company"
+          placeholder="Enter company name"
           registration={register('company')}
           error={errors.company?.message}
           disabled={!isEditing}
           readOnly={!isEditing}
-          placeholder="Enter company name"
         />
         <Dropdown
           label="Specialization"
+          placeholder="Select specialization (backend, frontend, etc.)"
           options={toSelectOptions(specializationOptions)}
           registration={register('specialization')}
           error={errors.specialization?.message}
@@ -47,6 +49,7 @@ export function ApplicationDetailFormFields({
         />
         <Dropdown
           label="Grade"
+          placeholder="Select grade (senior, middle, junior, etc.)"
           options={toSelectOptions(gradeOptions)}
           registration={register('grade')}
           error={errors.grade?.message}
@@ -54,6 +57,7 @@ export function ApplicationDetailFormFields({
         />
         <Dropdown
           label="Main Stack"
+          placeholder="Select main technology stack"
           options={toSelectOptions(stackOptions)}
           registration={register('mainStack')}
           error={errors.mainStack?.message}
@@ -61,6 +65,7 @@ export function ApplicationDetailFormFields({
         />
         <Input
           label="Salary"
+          placeholder="Enter salary amount"
           registration={register('salary')}
           error={errors.salary?.message}
           disabled={!isEditing}
@@ -73,6 +78,7 @@ export function ApplicationDetailFormFields({
         />
         <Dropdown
           label="Currency"
+          placeholder="Select currency of salary"
           options={toSelectOptions(currencyOptions)}
           registration={register('currency')}
           error={errors.currency?.message}
@@ -80,6 +86,7 @@ export function ApplicationDetailFormFields({
         />
         <Dropdown
           label="Period"
+          placeholder="Select period of salary"
           options={toSelectOptions(periodOptions)}
           registration={register('period')}
           error={errors.period?.message}
@@ -87,6 +94,7 @@ export function ApplicationDetailFormFields({
         />
         <Dropdown
           label="Contract"
+          placeholder="Select contract type"
           options={toSelectOptions(contractOptions)}
           registration={register('contract')}
           error={errors.contract?.message}
@@ -94,6 +102,7 @@ export function ApplicationDetailFormFields({
         />
         <Dropdown
           label="Status"
+          placeholder="Select current status of application"
           options={toSelectOptions(statusOptions)}
           registration={register('status')}
           error={errors.status?.message}
@@ -102,6 +111,7 @@ export function ApplicationDetailFormFields({
 
         <Input
           label="URL"
+          placeholder="Enter URL to job posting or company website"
           registration={register('url')}
           error={errors.url?.message}
           disabled={!isEditing}
@@ -110,6 +120,7 @@ export function ApplicationDetailFormFields({
         />
         <Textarea
           label="Notes"
+          placeholder="Enter notes details about the application (achievements, interview feedback, etc.)"
           rows={4}
           maxCharacters={500}
           registration={register('notes')}

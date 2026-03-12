@@ -133,6 +133,7 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Input
         label="Position"
+        placeholder="Enter position title"
         registration={register('position')}
         error={errors.position?.message}
       />
@@ -146,21 +147,21 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
 
       <Dropdown
         label="Specialization"
-        placeholder="Choose specialization"
+        placeholder="Choose specialization (backend, frontend, etc.)"
         options={toSelectOptions(specializationOptions)}
         registration={register('specialization')}
         error={errors.specialization?.message}
       />
       <Dropdown
         label="Grade"
-        placeholder="Choose grade"
+        placeholder="Choose grade (senior, middle, junior, etc.)"
         options={toSelectOptions(gradeOptions)}
         registration={register('grade')}
         error={errors.grade?.message}
       />
       <Dropdown
         label="Main Stack"
-        placeholder="Choose technology"
+        placeholder="Choose main technology stack"
         options={toSelectOptions(stackOptions)}
         registration={register('mainStack')}
         error={errors.mainStack?.message}
@@ -168,6 +169,7 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
 
       <Input
         label="Salary"
+        placeholder="Enter salary amount"
         registration={register('salary', {
           setValueAs: (value) => (typeof value === 'string' ? value.replace(/\D/g, '') : value),
         })}
@@ -180,30 +182,36 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
       />
       <Dropdown
         label="Currency"
-        placeholder="Select currency"
+        placeholder="Select currency of salary"
         options={toSelectOptions(currencyOptions)}
         registration={register('currency')}
         error={errors.currency?.message}
       />
       <Dropdown
         label="Period"
-        placeholder="Select period"
+        placeholder="Select period of salary"
         options={toSelectOptions(periodOptions)}
         registration={register('period')}
         error={errors.period?.message}
       />
       <Dropdown
         label="Contract"
-        placeholder="Choose contract"
+        placeholder="Choose contract type"
         options={toSelectOptions(contractOptions)}
         registration={register('contract')}
         error={errors.contract?.message}
       />
 
-      <Input label="URL" registration={register('url')} error={errors.url?.message} />
+      <Input
+        label="URL"
+        placeholder="Enter URL to job posting or company website"
+        registration={register('url')}
+        error={errors.url?.message}
+      />
       <Textarea
         label="Notes"
-        rows={4}
+        placeholder="Enter notes details about the application (achievements, interview feedback, etc.)"
+        rows={2}
         maxCharacters={500}
         registration={register('notes')}
         error={errors.notes?.message}
