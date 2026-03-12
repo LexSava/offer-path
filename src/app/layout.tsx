@@ -34,12 +34,21 @@ export const metadata: Metadata = {
     title: 'OfferPath - Your Job Application Tracker',
     description:
       'Track your job applications efficiently with OfferPath. Keep all your application information in one place and stay organized throughout your job search.',
+    images: [
+      {
+        url: 'https://offer-path-sigma.vercel.app/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'OfferPath - Your Job Application Tracker',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'OfferPath - Your Job Application Tracker',
     description:
       'Track your job applications efficiently with OfferPath. Keep all your application information in one place and stay organized throughout your job search.',
+    images: ['https://offer-path-sigma.vercel.app/opengraph-image'],
   },
 };
 
