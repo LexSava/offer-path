@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-
-interface IFavoriteErrorResponse {
-  message: string;
-}
+import type { IFavoriteErrorResponse } from '@/types';
 
 export async function PATCH(
   _request: Request,

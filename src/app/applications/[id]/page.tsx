@@ -234,8 +234,8 @@ export default function ApplicationDetailPage() {
               <h1 className="font-logo text-primary text-3xl font-medium">
                 {resolvedApplication.position}
               </h1>
-              <p className="text-secondary text-base">Company: {resolvedApplication.company}</p>
               <p className="text-secondary text-lg">{resolvedApplication.specialization}</p>
+              <p className="text-secondary text-lg">Company: {resolvedApplication.company}</p>
             </div>
 
             <div className="flex items-center gap-2">

@@ -4,18 +4,8 @@ import { ZodError } from 'zod';
 import { createApplicationRequestSchema } from '@/forms/create-application/create-application-validation';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-
-interface ICreateApplicationErrorResponse {
-  message: string;
-  fieldErrors?: Record<string, string[]>;
-}
-
-const toNullableString = (value?: string) => (value && value.trim().length > 0 ? value : null);
-const normalizeCompany = (value?: string) => value?.trim() || 'Unknown';
-const normalizeIsFavorite = <T extends { isFavorite: boolean | null }>(application: T) => ({
-  ...application,
-  isFavorite: Boolean(application.isFavorite),
-});
+import type { ICreateApplicationErrorResponse } from '@/types';
+import { normalizeCompany, normalizeIsFavorite, toNullableString } from '@/utils';
 
 export async function GET() {
   const session = await getServerSession(authOptions);

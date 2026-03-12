@@ -4,14 +4,8 @@ import { ZodError } from 'zod';
 import { createApplicationRequestSchema } from '@/forms/create-application/create-application-validation';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-
-interface IApplicationDetailErrorResponse {
-  message: string;
-  fieldErrors?: Record<string, string[]>;
-}
-
-const toNullableString = (value?: string) => (value && value.trim().length > 0 ? value : null);
-const normalizeCompany = (value?: string) => value?.trim() || 'Unknown';
+import type { IApplicationDetailErrorResponse } from '@/types';
+import { normalizeCompany, normalizeIsFavorite, toNullableString } from '@/utils';
 
 export async function GET(
   _request: Request,
@@ -48,10 +42,7 @@ export async function GET(
 
     return NextResponse.json({
       message: 'Application fetched successfully',
-      data: {
-        ...application,
-        isFavorite: Boolean(application.isFavorite),
-      },
+      data: normalizeIsFavorite(application),
     });
   } catch (error) {
     console.error('Failed to fetch application detail:', error);
@@ -122,10 +113,7 @@ export async function PATCH(
 
     return NextResponse.json({
       message: 'Application updated successfully',
-      data: {
-        ...updatedApplication,
-        isFavorite: Boolean(updatedApplication.isFavorite),
-      },
+      data: normalizeIsFavorite(updatedApplication),
     });
   } catch (error) {
     if (error instanceof ZodError) {
