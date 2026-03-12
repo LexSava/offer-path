@@ -28,6 +28,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - name: Set up DATABASE_URL for Prisma
+        run: echo "DATABASE_URL=postgresql://ci:ci@localhost:5432/offer_path_ci" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: npm ci
 
