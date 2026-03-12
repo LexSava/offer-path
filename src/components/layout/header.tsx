@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Container } from './container';
-import { LoginButton } from '../common';
+import { Container } from '@/components/layout/container';
+import { LoginButton } from '@/components/common';
 
 export function Header() {
   return (

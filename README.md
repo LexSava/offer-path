@@ -165,15 +165,15 @@ The search system is intentionally simple, fast, and predictable.
 
 ```ts
 export function searchApplications(applications: IApplication[], query: string) {
-   const normalizedQuery = normalizeString(query);
+  const normalizedQuery = normalizeString(query);
 
-   if (!normalizedQuery) return applications;
+  if (!normalizedQuery) return applications;
 
-   return applications.filter((application) =>
-      SEARCHABLE_APPLICATION_FIELDS.some((field) =>
-         normalizeString(String(application[field] ?? '')).includes(normalizedQuery),
-      ),
-   );
+  return applications.filter((application) =>
+    SEARCHABLE_APPLICATION_FIELDS.some((field) =>
+      normalizeString(String(application[field] ?? '')).includes(normalizedQuery),
+    ),
+  );
 }
 ```
 
@@ -187,21 +187,21 @@ const parts: ReactNode[] = [];
 let cursor = 0;
 
 matchRanges.forEach((range, index) => {
-   if (cursor < range.start) {
-      parts.push(<Fragment key={`text-${index}`}>{text.slice(cursor, range.start)}</Fragment>);
-   }
+  if (cursor < range.start) {
+    parts.push(<Fragment key={`text-${index}`}>{text.slice(cursor, range.start)}</Fragment>);
+  }
 
-   parts.push(
-      <span key={`match-${index}`} className="rounded bg-yellow-200">
-         {text.slice(range.start, range.end)}
-      </span>,
-   );
+  parts.push(
+    <span key={`match-${index}`} className="rounded bg-yellow-200">
+      {text.slice(range.start, range.end)}
+    </span>,
+  );
 
-   cursor = range.end;
+  cursor = range.end;
 });
 
 if (cursor < text.length) {
-   parts.push(<Fragment key="text-tail">{text.slice(cursor)}</Fragment>);
+  parts.push(<Fragment key="text-tail">{text.slice(cursor)}</Fragment>);
 }
 
 return <>{parts}</>;

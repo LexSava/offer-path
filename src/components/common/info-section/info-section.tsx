@@ -3,7 +3,7 @@ import type { IInfoSectionProps } from '@/types';
 export function InfoSection({ number, title, description }: IInfoSectionProps) {
   return (
     <div className="flex gap-4">
-      <div className="bg-accent flex h-12 w-12 flex-shrink-0 items-center justify-center font-bold text-white">
+      <div className="bg-accent flex h-12 w-12 shrink-0 items-center justify-center font-bold text-white">
         {number}
       </div>
       <div>

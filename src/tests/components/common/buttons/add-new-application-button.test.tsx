@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { AddNewApplicationButton } from '@/components/common/buttons/add-new-application-button';
 import { useLoginModal } from '@/contexts';
 import { useSession } from 'next-auth/react';
-import { AddNewApplicationButton } from '@/components/common/buttons/add-new-application-button';
 
 vi.mock('next-auth/react', () => ({
   useSession: vi.fn(),
@@ -31,13 +31,27 @@ describe('AddNewApplicationButton', () => {
     });
   });
 
-  it('opens login modal when user is not authenticated', () => {
-    const openLoginModal = vi.fn();
+  it('renders create application modal as closed by default', () => {
     mockedUseSession.mockReturnValue({
       data: null,
       status: 'unauthenticated',
       update: vi.fn(),
     });
+
+    render(<AddNewApplicationButton />);
+
+    expect(screen.getByTestId('create-application-modal')).toHaveTextContent('closed');
+  });
+
+  it('opens login modal when user is not authenticated', () => {
+    const openLoginModal = vi.fn();
+
+    mockedUseSession.mockReturnValue({
+      data: null,
+      status: 'unauthenticated',
+      update: vi.fn(),
+    });
+
     mockedUseLoginModal.mockReturnValue({
       openLoginModal,
       closeLoginModal: vi.fn(),
@@ -53,18 +67,20 @@ describe('AddNewApplicationButton', () => {
 
   it('opens create application modal when user is authenticated', () => {
     const openLoginModal = vi.fn();
+
     mockedUseSession.mockReturnValue({
       data: {
         user: {
           id: '1',
           email: 'test@example.com',
-          name: 'Test',
+          name: 'Test User',
         },
         expires: '2099-01-01T00:00:00.000Z',
       },
       status: 'authenticated',
       update: vi.fn(),
     });
+
     mockedUseLoginModal.mockReturnValue({
       openLoginModal,
       closeLoginModal: vi.fn(),

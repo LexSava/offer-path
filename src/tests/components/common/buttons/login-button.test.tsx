@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { LoginButton } from '@/components/common/buttons/login-button';
 import { useLoginModal } from '@/contexts';
@@ -29,11 +29,13 @@ describe('LoginButton', () => {
 
   it('shows Login and opens login modal when user is not signed in', () => {
     const openLoginModal = vi.fn();
+
     mockedUseSession.mockReturnValue({
       data: null,
       status: 'unauthenticated',
       update: vi.fn(),
     });
+
     mockedUseLoginModal.mockReturnValue({
       openLoginModal,
       closeLoginModal: vi.fn(),
@@ -65,6 +67,7 @@ describe('LoginButton', () => {
       status: 'authenticated',
       update: vi.fn(),
     });
+
     mockedSignOut.mockResolvedValue(undefined);
 
     render(<LoginButton />);

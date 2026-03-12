@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import { X } from 'lucide-react';
 import type { IConfirmationModalProps } from '@/types';
 import { useCloseOnEscape } from '@/utils';
@@ -14,13 +15,19 @@ export function ConfirmationModal({
   onCancel,
 }: IConfirmationModalProps) {
   useCloseOnEscape({ isOpen, onClose: onCancel });
+  const messageId = useId();
 
   if (!isOpen) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 opacity-100 transition-opacity duration-300">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 opacity-100 transition-opacity duration-300"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={messageId}
+    >
       <div className="relative w-full max-w-md bg-white p-6 shadow-2xl">
         <button
           type="button"
@@ -32,7 +39,9 @@ export function ConfirmationModal({
           <X />
         </button>
 
-        <p className="text-primary pr-8 text-base font-medium">{message}</p>
+        <p id={messageId} className="text-primary pr-8 text-base font-medium">
+          {message}
+        </p>
 
         <div className="mt-6 flex items-center justify-end gap-3">
           <button
