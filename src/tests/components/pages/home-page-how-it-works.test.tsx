@@ -43,11 +43,4 @@ describe('HomePageHowItWorks', () => {
     const section = container.querySelector('section');
     expect(section).toHaveClass('mb-16', 'w-full');
   });
-
-  it('renders numbered steps', () => {
-    render(<HomePageHowItWorks />);
-
-    // HOME_PAGE_INFO_SECTIONS should contain numbered items
-    expect(screen.getByText('How It Works')).toBeInTheDocument();
-  });
 });

@@ -13,7 +13,9 @@ describe('HomePageHero', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'OfferPath' })).toBeInTheDocument();
     expect(screen.getByText('Track your job applications easily')).toBeInTheDocument();
-    expect(screen.getByText(/keep track of all your job applications in one place/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/keep track of all your job applications in one place/i),
+    ).toBeInTheDocument();
   });
 
   it('renders quick actions block', () => {

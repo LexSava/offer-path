@@ -4,10 +4,7 @@ import userEvent from '@testing-library/user-event';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 import { Dropdown } from '@/components/common/dropdown/dropdown';
 
-const createRegistration = (
-  name: string,
-  onChange = vi.fn(),
-): UseFormRegisterReturn => ({
+const createRegistration = (name: string, onChange = vi.fn()): UseFormRegisterReturn => ({
   name,
   onChange,
   onBlur: vi.fn(),
@@ -27,7 +24,7 @@ describe('Dropdown', () => {
         label="Test Label"
         options={mockOptions}
         registration={createRegistration('test')}
-      />
+      />,
     );
 
     expect(screen.getByText('Test Label')).toBeInTheDocument();
@@ -39,10 +36,10 @@ describe('Dropdown', () => {
         label="Test Label"
         options={mockOptions}
         registration={createRegistration('test')}
-      />
+      />,
     );
 
-    mockOptions.forEach(option => {
+    mockOptions.forEach((option) => {
       expect(screen.getByText(option.label)).toBeInTheDocument();
     });
   });
@@ -54,7 +51,7 @@ describe('Dropdown', () => {
         options={mockOptions}
         placeholder="Select an option"
         registration={createRegistration('test')}
-      />
+      />,
     );
 
     expect(screen.getByText('Select an option')).toBeInTheDocument();
@@ -67,7 +64,7 @@ describe('Dropdown', () => {
         error="This is an error"
         options={mockOptions}
         registration={createRegistration('test')}
-      />
+      />,
     );
 
     expect(screen.getByText('This is an error')).toBeInTheDocument();
@@ -80,7 +77,7 @@ describe('Dropdown', () => {
         error="This is an error"
         options={mockOptions}
         registration={createRegistration('test')}
-      />
+      />,
     );
 
     const select = container.querySelector('select');
@@ -93,7 +90,7 @@ describe('Dropdown', () => {
         label="Test Label"
         options={mockOptions}
         registration={createRegistration('test')}
-      />
+      />,
     );
 
     const select = container.querySelector('select');
@@ -106,7 +103,7 @@ describe('Dropdown', () => {
         label="Test Label"
         options={mockOptions}
         registration={createRegistration('myField')}
-      />
+      />,
     );
 
     const select = screen.getByRole('combobox');
@@ -119,7 +116,7 @@ describe('Dropdown', () => {
         label="Test Label"
         options={mockOptions}
         registration={createRegistration('test')}
-      />
+      />,
     );
 
     const icon = container.querySelector('svg');
@@ -133,7 +130,7 @@ describe('Dropdown', () => {
         options={mockOptions}
         registration={createRegistration('test')}
         disabled={true}
-      />
+      />,
     );
 
     const icon = container.querySelector('svg');
@@ -147,7 +144,7 @@ describe('Dropdown', () => {
         options={mockOptions}
         registration={createRegistration('test')}
         className="custom-class"
-      />
+      />,
     );
 
     const select = container.querySelector('select');
@@ -163,7 +160,7 @@ describe('Dropdown', () => {
         label="Test Label"
         options={mockOptions}
         registration={createRegistration('test', handleChange)}
-      />
+      />,
     );
 
     const select = screen.getByRole('combobox');

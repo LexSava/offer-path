@@ -5,9 +5,7 @@ import { Button } from '@/components/common/buttons/button';
 
 describe('Button', () => {
   it('renders button with text', () => {
-    render(
-      <Button text="Click me" variant="primary" onClick={vi.fn()} />
-    );
+    render(<Button text="Click me" variant="primary" onClick={vi.fn()} />);
 
     expect(screen.getByRole('button', { name: /click me/i })).toBeInTheDocument();
   });
@@ -16,9 +14,7 @@ describe('Button', () => {
     const user = userEvent.setup();
     const handleClick = vi.fn();
 
-    render(
-      <Button text="Click me" variant="primary" onClick={handleClick} />
-    );
+    render(<Button text="Click me" variant="primary" onClick={handleClick} />);
 
     const button = screen.getByRole('button', { name: /click me/i });
     await user.click(button);
@@ -27,36 +23,28 @@ describe('Button', () => {
   });
 
   it('applies primary variant styles', () => {
-    const { container } = render(
-      <Button text="Click me" variant="primary" onClick={vi.fn()} />
-    );
+    const { container } = render(<Button text="Click me" variant="primary" onClick={vi.fn()} />);
 
     const button = container.querySelector('button');
     expect(button).toHaveClass('bg-primary', 'text-white');
   });
 
   it('applies secondary variant styles', () => {
-    const { container } = render(
-      <Button text="Click me" variant="secondary" onClick={vi.fn()} />
-    );
+    const { container } = render(<Button text="Click me" variant="secondary" onClick={vi.fn()} />);
 
     const button = container.querySelector('button');
     expect(button).toHaveClass('border-gray-300', 'text-gray-700');
   });
 
   it('sets button type to specified type', () => {
-    render(
-      <Button text="Submit" variant="primary" onClick={vi.fn()} type="submit" />
-    );
+    render(<Button text="Submit" variant="primary" onClick={vi.fn()} type="submit" />);
 
     const button = screen.getByRole('button', { name: /submit/i });
     expect(button).toHaveAttribute('type', 'submit');
   });
 
   it('disables button when disabled prop is true', () => {
-    render(
-      <Button text="Click me" variant="primary" onClick={vi.fn()} disabled={true} />
-    );
+    render(<Button text="Click me" variant="primary" onClick={vi.fn()} disabled={true} />);
 
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button).toBeDisabled();
@@ -64,7 +52,7 @@ describe('Button', () => {
 
   it('applies opacity class when disabled', () => {
     const { container } = render(
-      <Button text="Click me" variant="primary" onClick={vi.fn()} disabled={true} />
+      <Button text="Click me" variant="primary" onClick={vi.fn()} disabled={true} />,
     );
 
     const button = container.querySelector('button');
@@ -73,7 +61,7 @@ describe('Button', () => {
 
   it('applies custom className', () => {
     const { container } = render(
-      <Button text="Click me" variant="primary" onClick={vi.fn()} className="custom-class" />
+      <Button text="Click me" variant="primary" onClick={vi.fn()} className="custom-class" />,
     );
 
     const button = container.querySelector('button');
@@ -81,9 +69,7 @@ describe('Button', () => {
   });
 
   it('has button type by default', () => {
-    render(
-      <Button text="Click me" variant="primary" onClick={vi.fn()} />
-    );
+    render(<Button text="Click me" variant="primary" onClick={vi.fn()} />);
 
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button).toHaveAttribute('type', 'button');

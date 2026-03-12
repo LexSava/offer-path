@@ -13,7 +13,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="primary"
         onClick={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Test Title')).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="primary"
         onClick={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Test Description')).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="primary"
         onClick={vi.fn()}
-      />
+      />,
     );
 
     const svg = container.querySelector('svg');
@@ -56,7 +56,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="primary"
         onClick={vi.fn()}
-      />
+      />,
     );
 
     const button = container.querySelector('button');
@@ -71,7 +71,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="secondary"
         onClick={vi.fn()}
-      />
+      />,
     );
 
     const button = container.querySelector('button');
@@ -89,7 +89,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="primary"
         onClick={handleClick}
-      />
+      />,
     );
 
     const button = screen.getByRole('button', { name: /test title/i });
@@ -106,7 +106,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="primary"
         onClick={vi.fn()}
-      />
+      />,
     );
 
     const button = screen.getByRole('button');
@@ -121,7 +121,7 @@ describe('QuickActionCard', () => {
         icon={<Plus size={24} />}
         variant="primary"
         onClick={vi.fn()}
-      />
+      />,
     );
 
     const button = container.querySelector('button');

@@ -11,7 +11,7 @@ describe('ConfirmationModal', () => {
         message="Confirm this action?"
         onConfirm={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
     expect(container.firstChild).toBeNull();
@@ -24,24 +24,25 @@ describe('ConfirmationModal', () => {
         message="Confirm this action?"
         onConfirm={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Confirm this action?')).toBeInTheDocument();
   });
 
   it('renders with dialog role', () => {
-    const { container } = render(
+    render(
       <ConfirmationModal
         isOpen={true}
         message="Confirm this action?"
         onConfirm={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
-    const dialog = container.querySelector('[role="dialog"]');
-    expect(dialog).not.toBeInTheDocument();
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
   });
 
   it('displays confirm and cancel buttons with custom text', () => {
@@ -53,7 +54,7 @@ describe('ConfirmationModal', () => {
         cancelText="Cancel"
         onConfirm={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
@@ -67,7 +68,7 @@ describe('ConfirmationModal', () => {
         message="Confirm this action?"
         onConfirm={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByRole('button', { name: /no/i })).toBeInTheDocument();
@@ -84,7 +85,7 @@ describe('ConfirmationModal', () => {
         message="Confirm this action?"
         onConfirm={handleConfirm}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
     const confirmButton = screen.getByRole('button', { name: /yes/i });
@@ -103,7 +104,7 @@ describe('ConfirmationModal', () => {
         message="Confirm this action?"
         onConfirm={vi.fn()}
         onCancel={handleCancel}
-      />
+      />,
     );
 
     const cancelButton = screen.getByRole('button', { name: /no/i });
@@ -122,7 +123,7 @@ describe('ConfirmationModal', () => {
         message="Confirm this action?"
         onConfirm={vi.fn()}
         onCancel={handleCancel}
-      />
+      />,
     );
 
     const closeButton = screen.getByLabelText('Close modal');
@@ -139,7 +140,7 @@ describe('ConfirmationModal', () => {
         isSubmitting={true}
         onConfirm={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
     const confirmButton = screen.getByRole('button', { name: /yes/i });
@@ -156,7 +157,7 @@ describe('ConfirmationModal', () => {
         message="Confirm this action?"
         onConfirm={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByLabelText('Close modal')).toBeInTheDocument();

@@ -73,7 +73,7 @@ describe('DeleteApplicationButton', () => {
     render(
       <div onClick={parentClick}>
         <DeleteApplicationButton applicationId="app-1" />
-      </div>
+      </div>,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /delete application/i }));

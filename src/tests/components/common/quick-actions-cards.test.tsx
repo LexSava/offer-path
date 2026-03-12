@@ -52,7 +52,9 @@ describe('QuickActionsCards', () => {
     fireEvent.click(loginCard);
 
     expect(screen.queryByRole('button', { name: /add application/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /view all applications/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /view all applications/i }),
+    ).not.toBeInTheDocument();
     expect(handleOpenLogin).toHaveBeenCalledTimes(1);
   });
 

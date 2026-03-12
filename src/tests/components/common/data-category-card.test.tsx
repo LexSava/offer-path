@@ -7,38 +7,22 @@ describe('DataCategoryCard', () => {
   const mockFields = ['Field 1', 'Field 2', 'Field 3'];
 
   it('renders title', () => {
-    render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={mockFields}
-      />
-    );
+    render(<DataCategoryCard icon={Plus} title="Test Category" fields={mockFields} />);
 
     expect(screen.getByText('Test Category')).toBeInTheDocument();
   });
 
   it('renders all fields', () => {
-    render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={mockFields}
-      />
-    );
+    render(<DataCategoryCard icon={Plus} title="Test Category" fields={mockFields} />);
 
-    mockFields.forEach(field => {
+    mockFields.forEach((field) => {
       expect(screen.getByText(field)).toBeInTheDocument();
     });
   });
 
   it('renders icon', () => {
     const { container } = render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={mockFields}
-      />
+      <DataCategoryCard icon={Plus} title="Test Category" fields={mockFields} />,
     );
 
     const svg = container.querySelector('svg');
@@ -47,11 +31,7 @@ describe('DataCategoryCard', () => {
 
   it('renders as article element', () => {
     const { container } = render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={mockFields}
-      />
+      <DataCategoryCard icon={Plus} title="Test Category" fields={mockFields} />,
     );
 
     expect(container.querySelector('article')).toBeInTheDocument();
@@ -59,11 +39,7 @@ describe('DataCategoryCard', () => {
 
   it('renders fields as list items', () => {
     const { container } = render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={mockFields}
-      />
+      <DataCategoryCard icon={Plus} title="Test Category" fields={mockFields} />,
     );
 
     const listItems = container.querySelectorAll('li');
@@ -72,26 +48,18 @@ describe('DataCategoryCard', () => {
 
   it('applies correct classes to fields', () => {
     const { container } = render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={mockFields}
-      />
+      <DataCategoryCard icon={Plus} title="Test Category" fields={mockFields} />,
     );
 
     const listItems = container.querySelectorAll('li');
-    listItems.forEach(item => {
+    listItems.forEach((item) => {
       expect(item).toHaveClass('text-secondary', 'text-sm');
     });
   });
 
   it('renders with border and padding', () => {
     const { container } = render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={mockFields}
-      />
+      <DataCategoryCard icon={Plus} title="Test Category" fields={mockFields} />,
     );
 
     const article = container.querySelector('article');
@@ -99,13 +67,7 @@ describe('DataCategoryCard', () => {
   });
 
   it('handles empty fields array', () => {
-    render(
-      <DataCategoryCard
-        icon={Plus}
-        title="Test Category"
-        fields={[]}
-      />
-    );
+    render(<DataCategoryCard icon={Plus} title="Test Category" fields={[]} />);
 
     expect(screen.getByText('Test Category')).toBeInTheDocument();
   });

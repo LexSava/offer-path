@@ -4,24 +4,20 @@ import { ApplicationCardDetail } from '@/components/common/application-card/appl
 
 describe('ApplicationCardDetail', () => {
   it('renders label', () => {
-    render(
-      <ApplicationCardDetail label="Position" value="Software Engineer" />
-    );
+    render(<ApplicationCardDetail label="Position" value="Software Engineer" />);
 
     expect(screen.getByText(/position/i)).toBeInTheDocument();
   });
 
   it('renders value', () => {
-    render(
-      <ApplicationCardDetail label="Position" value="Software Engineer" />
-    );
+    render(<ApplicationCardDetail label="Position" value="Software Engineer" />);
 
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
   });
 
   it('renders label and value with colon separator', () => {
     const { container } = render(
-      <ApplicationCardDetail label="Position" value="Software Engineer" />
+      <ApplicationCardDetail label="Position" value="Software Engineer" />,
     );
 
     expect(container.textContent).toContain('Position:');
@@ -29,7 +25,7 @@ describe('ApplicationCardDetail', () => {
 
   it('renders with correct text styling for label', () => {
     const { container } = render(
-      <ApplicationCardDetail label="Position" value="Software Engineer" />
+      <ApplicationCardDetail label="Position" value="Software Engineer" />,
     );
 
     const labelElement = container.querySelector('p');
@@ -38,7 +34,7 @@ describe('ApplicationCardDetail', () => {
 
   it('renders with correct text styling for value', () => {
     const { container } = render(
-      <ApplicationCardDetail label="Position" value="Software Engineer" />
+      <ApplicationCardDetail label="Position" value="Software Engineer" />,
     );
 
     const valueElement = container.querySelector('span');
@@ -47,7 +43,7 @@ describe('ApplicationCardDetail', () => {
 
   it('renders with correct flex layout', () => {
     const { container } = render(
-      <ApplicationCardDetail label="Position" value="Software Engineer" />
+      <ApplicationCardDetail label="Position" value="Software Engineer" />,
     );
 
     const wrapper = container.querySelector('div');
@@ -59,7 +55,7 @@ describe('ApplicationCardDetail', () => {
       <ApplicationCardDetail
         label="Position"
         value={<span data-testid="custom-value">Custom Value</span>}
-      />
+      />,
     );
 
     expect(screen.getByTestId('custom-value')).toBeInTheDocument();
@@ -70,7 +66,7 @@ describe('ApplicationCardDetail', () => {
       <>
         <ApplicationCardDetail label="Position" value="Software Engineer" />
         <ApplicationCardDetail label="Company" value="Tech Corp" />
-      </>
+      </>,
     );
 
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();

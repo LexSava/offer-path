@@ -4,10 +4,7 @@ import userEvent from '@testing-library/user-event';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 import { Textarea } from '@/components/common/textarea/textarea';
 
-const createRegistration = (
-  name: string,
-  onChange = vi.fn(),
-): UseFormRegisterReturn => ({
+const createRegistration = (name: string, onChange = vi.fn()): UseFormRegisterReturn => ({
   name,
   onChange,
   onBlur: vi.fn(),
@@ -16,25 +13,13 @@ const createRegistration = (
 
 describe('Textarea', () => {
   it('renders textarea with label', () => {
-    render(
-      <Textarea
-        label="Test Label"
-        registration={createRegistration('test')}
-        id="test-id"
-      />
-    );
+    render(<Textarea label="Test Label" registration={createRegistration('test')} id="test-id" />);
 
     expect(screen.getByText('Test Label')).toBeInTheDocument();
   });
 
   it('renders textarea input element', () => {
-    render(
-      <Textarea
-        label="Test Label"
-        registration={createRegistration('test')}
-        id="test-id"
-      />
-    );
+    render(<Textarea label="Test Label" registration={createRegistration('test')} id="test-id" />);
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
@@ -46,7 +31,7 @@ describe('Textarea', () => {
         error="This is an error"
         registration={createRegistration('test')}
         id="test-id"
-      />
+      />,
     );
 
     expect(screen.getByText('This is an error')).toBeInTheDocument();
@@ -61,7 +46,7 @@ describe('Textarea', () => {
         label="Test Label"
         registration={createRegistration('test', handleChange)}
         id="test-id"
-      />
+      />,
     );
 
     const textarea = screen.getByRole('textbox');
@@ -78,7 +63,7 @@ describe('Textarea', () => {
         id="test-id"
         maxCharacters={100}
         value=""
-      />
+      />,
     );
 
     expect(screen.getByText('0 / 100')).toBeInTheDocument();
@@ -93,7 +78,7 @@ describe('Textarea', () => {
         registration={createRegistration('test')}
         id="test-id"
         maxCharacters={100}
-      />
+      />,
     );
 
     const textarea = screen.getByRole('textbox');
@@ -103,12 +88,7 @@ describe('Textarea', () => {
   });
 
   it('uses registration name for textarea id when id is not provided', () => {
-    render(
-      <Textarea
-        label="Test Label"
-        registration={createRegistration('myField')}
-      />
-    );
+    render(<Textarea label="Test Label" registration={createRegistration('myField')} />);
 
     const textbox = screen.getByRole('textbox');
     expect(textbox).toHaveAttribute('id', 'myField');
@@ -121,7 +101,7 @@ describe('Textarea', () => {
         registration={createRegistration('test')}
         id="test-id"
         className="custom-class"
-      />
+      />,
     );
 
     const textarea = container.querySelector('textarea');

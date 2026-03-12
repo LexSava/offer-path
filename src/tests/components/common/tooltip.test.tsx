@@ -5,27 +5,13 @@ import { Tooltip } from '@/components/common/tooltip/tooltip';
 
 describe('Tooltip', () => {
   it('renders tooltip with message when visible', () => {
-    render(
-      <Tooltip
-        message="Test message"
-        isVisible={true}
-        variant="success"
-        onClose={vi.fn()}
-      />
-    );
+    render(<Tooltip message="Test message" isVisible={true} variant="success" onClose={vi.fn()} />);
 
     expect(screen.getByText('Test message')).toBeInTheDocument();
   });
 
   it('has correct aria attributes for accessibility', () => {
-    render(
-      <Tooltip
-        message="Test message"
-        isVisible={true}
-        variant="success"
-        onClose={vi.fn()}
-      />
-    );
+    render(<Tooltip message="Test message" isVisible={true} variant="success" onClose={vi.fn()} />);
 
     const tooltip = screen.getByRole('status');
     expect(tooltip).toHaveAttribute('aria-live', 'polite');
@@ -36,12 +22,7 @@ describe('Tooltip', () => {
     const handleClose = vi.fn();
 
     render(
-      <Tooltip
-        message="Test message"
-        isVisible={true}
-        variant="success"
-        onClose={handleClose}
-      />
+      <Tooltip message="Test message" isVisible={true} variant="success" onClose={handleClose} />,
     );
 
     const closeButton = screen.getByLabelText('Close tooltip');
@@ -52,12 +33,7 @@ describe('Tooltip', () => {
 
   it('applies success variant styles', () => {
     const { container } = render(
-      <Tooltip
-        message="Test message"
-        isVisible={true}
-        variant="success"
-        onClose={vi.fn()}
-      />
+      <Tooltip message="Test message" isVisible={true} variant="success" onClose={vi.fn()} />,
     );
 
     const tooltip = container.querySelector('[role="status"]');
@@ -66,12 +42,7 @@ describe('Tooltip', () => {
 
   it('applies error variant styles', () => {
     const { container } = render(
-      <Tooltip
-        message="Test message"
-        isVisible={true}
-        variant="error"
-        onClose={vi.fn()}
-      />
+      <Tooltip message="Test message" isVisible={true} variant="error" onClose={vi.fn()} />,
     );
 
     const tooltip = container.querySelector('[role="status"]');
@@ -80,12 +51,7 @@ describe('Tooltip', () => {
 
   it('hides tooltip with opacity class when not visible', () => {
     const { container } = render(
-      <Tooltip
-        message="Test message"
-        isVisible={false}
-        variant="success"
-        onClose={vi.fn()}
-      />
+      <Tooltip message="Test message" isVisible={false} variant="success" onClose={vi.fn()} />,
     );
 
     const tooltip = container.querySelector('[role="status"]');

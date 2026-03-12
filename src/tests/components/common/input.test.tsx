@@ -4,10 +4,7 @@ import userEvent from '@testing-library/user-event';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 import { Input } from '@/components/common/input/input';
 
-const createRegistration = (
-  name: string,
-  onChange = vi.fn(),
-): UseFormRegisterReturn => ({
+const createRegistration = (name: string, onChange = vi.fn()): UseFormRegisterReturn => ({
   name,
   onChange,
   onBlur: vi.fn(),
@@ -16,25 +13,13 @@ const createRegistration = (
 
 describe('Input', () => {
   it('renders input with label', () => {
-    render(
-      <Input
-        label="Test Label"
-        registration={createRegistration('test')}
-        id="test-id"
-      />
-    );
+    render(<Input label="Test Label" registration={createRegistration('test')} id="test-id" />);
 
     expect(screen.getByText('Test Label')).toBeInTheDocument();
   });
 
   it('renders input element', () => {
-    render(
-      <Input
-        label="Test Label"
-        registration={createRegistration('test')}
-        id="test-id"
-      />
-    );
+    render(<Input label="Test Label" registration={createRegistration('test')} id="test-id" />);
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
@@ -46,7 +31,7 @@ describe('Input', () => {
         error="This is an error"
         registration={createRegistration('test')}
         id="test-id"
-      />
+      />,
     );
 
     expect(screen.getByText('This is an error')).toBeInTheDocument();
@@ -59,7 +44,7 @@ describe('Input', () => {
         error="This is an error"
         registration={createRegistration('test')}
         id="test-id"
-      />
+      />,
     );
 
     const input = container.querySelector('input');
@@ -68,11 +53,7 @@ describe('Input', () => {
 
   it('applies default styles when no error', () => {
     const { container } = render(
-      <Input
-        label="Test Label"
-        registration={createRegistration('test')}
-        id="test-id"
-      />
+      <Input label="Test Label" registration={createRegistration('test')} id="test-id" />,
     );
 
     const input = container.querySelector('input');
@@ -80,12 +61,7 @@ describe('Input', () => {
   });
 
   it('uses registration name for input id when id is not provided', () => {
-    render(
-      <Input
-        label="Test Label"
-        registration={createRegistration('myField')}
-      />
-    );
+    render(<Input label="Test Label" registration={createRegistration('myField')} />);
 
     const input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('id', 'myField');
@@ -98,7 +74,7 @@ describe('Input', () => {
         registration={createRegistration('test')}
         id="test-id"
         className="custom-class"
-      />
+      />,
     );
 
     const input = container.querySelector('input');
@@ -107,12 +83,7 @@ describe('Input', () => {
 
   it('handles input type prop', () => {
     render(
-      <Input
-        label="Email"
-        registration={createRegistration('email')}
-        id="email"
-        type="email"
-      />
+      <Input label="Email" registration={createRegistration('email')} id="email" type="email" />,
     );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
@@ -128,7 +99,7 @@ describe('Input', () => {
         label="Test Label"
         registration={createRegistration('test', handleChange)}
         id="test-id"
-      />
+      />,
     );
 
     const input = screen.getByRole('textbox');
