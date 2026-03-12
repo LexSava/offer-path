@@ -48,9 +48,9 @@ describe('ApplicationSearchInput', () => {
 
     expect(handleChange).toHaveBeenCalledTimes(4);
     expect(handleChange).toHaveBeenNthCalledWith(1, 't');
-    expect(handleChange).toHaveBeenNthCalledWith(2, 'e');
-    expect(handleChange).toHaveBeenNthCalledWith(3, 's');
-    expect(handleChange).toHaveBeenNthCalledWith(4, 't');
+    expect(handleChange).toHaveBeenNthCalledWith(2, 'te');
+    expect(handleChange).toHaveBeenNthCalledWith(3, 'tes');
+    expect(handleChange).toHaveBeenNthCalledWith(4, 'test');
   });
 
   it('updates value on input change', async () => {
