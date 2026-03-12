@@ -9,7 +9,7 @@ export { DataCategoryCard } from './data-category-card/data-category-card';
 export { Dropdown } from './dropdown/dropdown';
 export { FavoriteApplicationButton } from './favorite-application-button/favorite-application-button';
 export { HighlightMatch } from './highlight-match/highlight-match';
-export { InfoSection } from './info-section';
+export { InfoSection } from './info-section/info-section';
 export { Input } from './input/input';
 export { QuickActionsCards } from './quick-actions';
 export { Textarea } from './textarea/textarea';
