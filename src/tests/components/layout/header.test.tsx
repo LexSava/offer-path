@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Header } from '@/components/layout/header';
+import { ReactNode } from 'react';
 
 const containerSpy = vi.fn();
 
@@ -10,7 +11,7 @@ vi.mock('@/components/common', () => ({
 }));
 
 vi.mock('@/components/layout/container', () => ({
-  Container: ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  Container: ({ children, className }: { children: ReactNode; className?: string }) => {
     containerSpy({ className });
     return <div data-testid="header-container">{children}</div>;
   },
