@@ -47,9 +47,12 @@ describe('FavoriteApplicationButton', () => {
       hideTooltip: vi.fn(),
     });
 
-    global.fetch = vi.fn();
+    vi.stubGlobal('fetch', vi.fn());
   });
 
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
   it('renders button with add label when application is not favorite', () => {
     render(<FavoriteApplicationButton applicationId="app-1" isFavorite={false} />);
 
