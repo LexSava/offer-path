@@ -1,18 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
+import { FormEvent, memo } from 'react';
+import { FormProvider, useFormContext, useFormState } from 'react-hook-form';
 import { Dropdown, Input, Textarea } from '@/components/common';
 import { Button } from '@/components/common';
 import { toSelectOptions } from '@/utils';
-import {
-  createApplicationValidationSchema,
-  type CreateApplicationFormInputValues,
-  type CreateApplicationFormValues,
-  type CreateApplicationRequestValues,
-} from './create-application-validation';
+import { type CreateApplicationFormValues } from './create-application-validation';
 import {
   contractOptions,
   currencyOptions,
@@ -22,221 +15,277 @@ import {
   stackOptions,
   statusOptions,
 } from '@/constants/application-options.constants';
-import { useApplications } from '@/contexts';
-import { TOAST_MESSAGES, showErrorToast, showSuccessToast } from '@/lib/toast';
-import type { IApplicationResponseDto, ICreateApplicationFormProps } from '@/types';
-import { createApplicationFormDefaultValues } from '@/constants';
+import type { ICreateApplicationFormProps } from '@/types';
+import {
+  useCreateApplicationForm,
+  useRegisterWithInstantErrorClear,
+} from './use-create-application-form';
 
-interface ICreateApplicationErrorResponse {
-  message: string;
-  fieldErrors?: Partial<Record<keyof CreateApplicationRequestValues, string[]>>;
+const specializationSelectOptions = toSelectOptions(specializationOptions);
+const gradeSelectOptions = toSelectOptions(gradeOptions);
+const stackSelectOptions = toSelectOptions(stackOptions);
+const currencySelectOptions = toSelectOptions(currencyOptions);
+const periodSelectOptions = toSelectOptions(periodOptions);
+const contractSelectOptions = toSelectOptions(contractOptions);
+const statusSelectOptions = toSelectOptions(statusOptions);
+const salaryRegistrationOptions = {
+  setValueAs: (value: unknown) => (typeof value === 'string' ? value.replace(/\D/g, '') : value),
+};
+
+function handleSalaryInput(event: FormEvent<HTMLInputElement>) {
+  event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '');
 }
 
-interface ICreateApplicationSuccessResponse {
-  message: string;
-  data: IApplicationResponseDto;
-}
+const CreateApplicationFieldsSection = memo(function CreateApplicationFieldsSectionComponent() {
+  return (
+    <>
+      <PositionField />
+      <CompanyField />
+      <SpecializationField />
+      <GradeField />
+      <MainStackField />
+      <SalaryField />
+      <CurrencyField />
+      <PeriodField />
+      <ContractField />
+      <UrlField />
+      <NotesField />
+      <StatusField />
+    </>
+  );
+});
 
-export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFormProps) {
-  const { data: session } = useSession();
-  const { addApplicationFromApi } = useApplications();
+const CreateApplicationRootError = memo(function CreateApplicationRootErrorComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control });
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    clearErrors,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<CreateApplicationFormInputValues, unknown, CreateApplicationFormValues>({
-    resolver: zodResolver(createApplicationValidationSchema),
-    mode: 'onSubmit',
-    defaultValues: createApplicationFormDefaultValues,
-  });
+  return errors.root?.message ? (
+    <p className="text-sm text-red-600">{errors.root.message}</p>
+  ) : null;
+});
 
-  useEffect(() => {
-    if (!isOpen) {
-      reset(createApplicationFormDefaultValues);
-    }
-  }, [isOpen, reset]);
-
-  const onSubmit = async (values: CreateApplicationFormValues) => {
-    if (!session?.user?.id) {
-      setError('root', {
-        type: 'manual',
-        message: 'Please sign in to create an application',
-      });
-
-      return;
-    }
-
-    clearErrors('root');
-
-    const payload: CreateApplicationRequestValues = {
-      position: values.position,
-      company: values.company?.trim() || 'Unknown',
-      specialization: values.specialization,
-      grade: values.grade,
-      mainStack: values.mainStack,
-      salary: values.salary,
-      currency: values.currency,
-      period: values.period,
-      contract: values.contract,
-      url: values.url,
-      notes: values.notes,
-      status: values.status,
-    };
-
-    const response = await fetch('/api/applications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errorResponse = (await response
-        .json()
-        .catch(() => null)) as ICreateApplicationErrorResponse | null;
-
-      if (errorResponse?.fieldErrors) {
-        Object.entries(errorResponse.fieldErrors).forEach(([field, fieldError]) => {
-          const message = fieldError?.[0];
-
-          if (!message) return;
-
-          setError(field as keyof CreateApplicationRequestValues, {
-            type: 'server',
-            message,
-          });
-        });
-      }
-
-      setError('root', {
-        type: 'server',
-        message: errorResponse?.message ?? 'Failed to create application',
-      });
-
-      showErrorToast(TOAST_MESSAGES.FORM_NOT_CREATED);
-
-      return;
-    }
-
-    const successResponse = (await response.json()) as ICreateApplicationSuccessResponse;
-    addApplicationFromApi(successResponse.data);
-
-    reset(createApplicationFormDefaultValues);
-    onClose();
-    showSuccessToast(TOAST_MESSAGES.APPLICATION_CREATED);
-  };
+const CreateApplicationSubmitActions = memo(function CreateApplicationSubmitActionsComponent({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
+  const { isSubmitting } = useFormState<CreateApplicationFormValues>();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Input
-        label="Position"
-        placeholder="Enter position title"
-        registration={register('position')}
-        error={errors.position?.message}
+    <div className="mt-2 flex items-center justify-end gap-3">
+      <Button text="Close" variant="secondary" onClick={onClose} disabled={isSubmitting} />
+      <Button
+        text={isSubmitting ? 'Submitting...' : 'Submit'}
+        variant="primary"
+        type="submit"
+        disabled={isSubmitting}
       />
+    </div>
+  );
+});
 
-      <Input
-        label="Company"
-        placeholder="Enter company name"
-        registration={register('company')}
-        error={errors.company?.message}
-      />
+const PositionField = memo(function PositionFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'position' });
+  const registerField = useRegisterWithInstantErrorClear();
 
-      <Dropdown
-        label="Specialization"
-        placeholder="Choose specialization (backend, frontend, etc.)"
-        options={toSelectOptions(specializationOptions)}
-        registration={register('specialization')}
-        error={errors.specialization?.message}
-      />
-      <Dropdown
-        label="Grade"
-        placeholder="Choose grade (senior, middle, junior, etc.)"
-        options={toSelectOptions(gradeOptions)}
-        registration={register('grade')}
-        error={errors.grade?.message}
-      />
-      <Dropdown
-        label="Main Stack"
-        placeholder="Choose main technology stack"
-        options={toSelectOptions(stackOptions)}
-        registration={register('mainStack')}
-        error={errors.mainStack?.message}
-      />
+  return (
+    <Input
+      label="Position"
+      placeholder="Enter position title"
+      registration={registerField('position')}
+      error={errors.position?.message}
+    />
+  );
+});
 
-      <Input
-        label="Salary"
-        placeholder="Enter salary amount"
-        registration={register('salary', {
-          setValueAs: (value) => (typeof value === 'string' ? value.replace(/\D/g, '') : value),
-        })}
-        error={errors.salary?.message}
-        inputMode="numeric"
-        pattern="[0-9]*"
-        onInput={(event) => {
-          event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '');
-        }}
-      />
-      <Dropdown
-        label="Currency"
-        placeholder="Select currency of salary"
-        options={toSelectOptions(currencyOptions)}
-        registration={register('currency')}
-        error={errors.currency?.message}
-      />
-      <Dropdown
-        label="Period"
-        placeholder="Select period of salary"
-        options={toSelectOptions(periodOptions)}
-        registration={register('period')}
-        error={errors.period?.message}
-      />
-      <Dropdown
-        label="Contract"
-        placeholder="Choose contract type"
-        options={toSelectOptions(contractOptions)}
-        registration={register('contract')}
-        error={errors.contract?.message}
-      />
+const CompanyField = memo(function CompanyFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'company' });
+  const registerField = useRegisterWithInstantErrorClear();
 
-      <Input
-        label="URL"
-        placeholder="Enter URL to job posting or company website"
-        registration={register('url')}
-        error={errors.url?.message}
-      />
-      <Textarea
-        label="Notes"
-        placeholder="Enter notes details about the application (achievements, interview feedback, etc.)"
-        rows={2}
-        maxCharacters={500}
-        registration={register('notes')}
-        error={errors.notes?.message}
-      />
+  return (
+    <Input
+      label="Company"
+      placeholder="Enter company name"
+      registration={registerField('company')}
+      error={errors.company?.message}
+    />
+  );
+});
 
-      <Dropdown
-        label="Status"
-        options={toSelectOptions(statusOptions)}
-        registration={register('status')}
-        error={errors.status?.message}
-      />
+const SpecializationField = memo(function SpecializationFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'specialization' });
+  const registerField = useRegisterWithInstantErrorClear();
 
-      {errors.root?.message ? <p className="text-sm text-red-600">{errors.root.message}</p> : null}
+  return (
+    <Dropdown
+      label="Specialization"
+      placeholder="Choose specialization (backend, frontend, etc.)"
+      options={specializationSelectOptions}
+      registration={registerField('specialization')}
+      error={errors.specialization?.message}
+    />
+  );
+});
 
-      <div className="mt-2 flex items-center justify-end gap-3">
-        <Button text="Close" variant="secondary" onClick={onClose} disabled={isSubmitting} />
-        <Button
-          text={isSubmitting ? 'Submitting...' : 'Submit'}
-          variant="primary"
-          type="submit"
-          disabled={isSubmitting}
-        />
-      </div>
-    </form>
+const GradeField = memo(function GradeFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'grade' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Dropdown
+      label="Grade"
+      placeholder="Choose grade (senior, middle, junior, etc.)"
+      options={gradeSelectOptions}
+      registration={registerField('grade')}
+      error={errors.grade?.message}
+    />
+  );
+});
+
+const MainStackField = memo(function MainStackFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'mainStack' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Dropdown
+      label="Main Stack"
+      placeholder="Choose main technology stack"
+      options={stackSelectOptions}
+      registration={registerField('mainStack')}
+      error={errors.mainStack?.message}
+    />
+  );
+});
+
+const SalaryField = memo(function SalaryFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'salary' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Input
+      label="Salary"
+      placeholder="Enter salary amount"
+      registration={registerField('salary', salaryRegistrationOptions)}
+      error={errors.salary?.message}
+      inputMode="numeric"
+      pattern="[0-9]*"
+      onInput={handleSalaryInput}
+    />
+  );
+});
+
+const CurrencyField = memo(function CurrencyFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'currency' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Dropdown
+      label="Currency"
+      placeholder="Select currency of salary"
+      options={currencySelectOptions}
+      registration={registerField('currency')}
+      error={errors.currency?.message}
+    />
+  );
+});
+
+const PeriodField = memo(function PeriodFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'period' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Dropdown
+      label="Period"
+      placeholder="Select period of salary"
+      options={periodSelectOptions}
+      registration={registerField('period')}
+      error={errors.period?.message}
+    />
+  );
+});
+
+const ContractField = memo(function ContractFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'contract' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Dropdown
+      label="Contract"
+      placeholder="Choose contract type"
+      options={contractSelectOptions}
+      registration={registerField('contract')}
+      error={errors.contract?.message}
+    />
+  );
+});
+
+const UrlField = memo(function UrlFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'url' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Input
+      label="URL"
+      placeholder="Enter URL to job posting or company website"
+      registration={registerField('url')}
+      error={errors.url?.message}
+    />
+  );
+});
+
+const NotesField = memo(function NotesFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'notes' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Textarea
+      label="Notes"
+      placeholder="Enter notes details about the application (achievements, interview feedback, etc.)"
+      rows={2}
+      maxCharacters={500}
+      registration={registerField('notes')}
+      error={errors.notes?.message}
+    />
+  );
+});
+
+const StatusField = memo(function StatusFieldComponent() {
+  const { control } = useFormContext<CreateApplicationFormValues>();
+  const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'status' });
+  const registerField = useRegisterWithInstantErrorClear();
+
+  return (
+    <Dropdown
+      label="Status"
+      options={statusSelectOptions}
+      registration={registerField('status')}
+      error={errors.status?.message}
+    />
+  );
+});
+
+export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFormProps) {
+  const { methods, onSubmit } = useCreateApplicationForm({ isOpen, onClose });
+  const { handleSubmit } = methods;
+
+  return (
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <CreateApplicationFieldsSection />
+        <CreateApplicationRootError />
+        <CreateApplicationSubmitActions onClose={onClose} />
+      </form>
+    </FormProvider>
   );
 }
