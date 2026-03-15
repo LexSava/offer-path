@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Header } from '@/components/layout/header';
+import { Header } from '@/components/layout/header/header';
 import { ReactNode } from 'react';
 
 const containerSpy = vi.fn();
 
 vi.mock('@/components/common', () => ({
+  HeaderLinks: () => <nav aria-label="Main navigation">Mock Header Links</nav>,
   LoginButton: () => <button type="button">Mock Login Button</button>,
 }));
 
