@@ -6,10 +6,6 @@ import type { IApplication } from '@/types';
 
 vi.mock('@/contexts', () => ({
   useApplicationIsFavoriteById: () => false,
-  useTooltip: () => ({
-    showTooltip: vi.fn(),
-    hideTooltip: vi.fn(),
-  }),
   useApplications: () => ({
     setApplicationFavoriteState: vi.fn(),
   }),

@@ -3,7 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTransition } from 'react';
 
 import { FavoriteApplicationButton } from '@/components/common/favorite-application-button/favorite-application-button';
-import { useApplicationIsFavoriteById, useApplications, useTooltip } from '@/contexts';
+import { useApplicationIsFavoriteById, useApplications } from '@/contexts';
+import { showErrorToast, showInfoToast, showSuccessToast } from '@/lib/toast';
 
 vi.mock('react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react')>();
@@ -17,17 +18,28 @@ vi.mock('react', async (importOriginal) => {
 vi.mock('@/contexts', () => ({
   useApplicationIsFavoriteById: vi.fn(),
   useApplications: vi.fn(),
-  useTooltip: vi.fn(),
+}));
+
+vi.mock('@/lib/toast', () => ({
+  TOAST_MESSAGES: {
+    APPLICATION_ADDED_TO_FAVORITE: 'Application added to favorites',
+    APPLICATION_REMOVED_FROM_FAVORITE: 'Application removed from favorites',
+    FAVORITE_UPDATE_FAILED: 'Failed to update favorite',
+  },
+  showSuccessToast: vi.fn(),
+  showErrorToast: vi.fn(),
+  showInfoToast: vi.fn(),
 }));
 
 describe('FavoriteApplicationButton', () => {
   const mockedUseApplicationIsFavoriteById = vi.mocked(useApplicationIsFavoriteById);
   const mockedUseApplications = vi.mocked(useApplications);
-  const mockedUseTooltip = vi.mocked(useTooltip);
+  const mockedShowSuccessToast = vi.mocked(showSuccessToast);
+  const mockedShowErrorToast = vi.mocked(showErrorToast);
+  const mockedShowInfoToast = vi.mocked(showInfoToast);
   const mockedUseTransition = vi.mocked(useTransition);
 
   const setApplicationFavoriteState = vi.fn();
-  const showTooltip = vi.fn();
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
@@ -42,11 +54,6 @@ describe('FavoriteApplicationButton', () => {
       updateApplicationFromApi: vi.fn(),
       removeApplicationById: vi.fn(),
       setApplicationFavoriteState,
-    });
-
-    mockedUseTooltip.mockReturnValue({
-      showTooltip,
-      hideTooltip: vi.fn(),
     });
 
     vi.stubGlobal('fetch', vi.fn());
@@ -93,7 +100,7 @@ describe('FavoriteApplicationButton', () => {
     });
 
     await waitFor(() => {
-      expect(showTooltip).toHaveBeenCalledWith('Added to favorites', { variant: 'success' });
+      expect(mockedShowSuccessToast).toHaveBeenCalledWith('Application added to favorites');
     });
 
     expect(setApplicationFavoriteState).toHaveBeenCalledTimes(1);
@@ -117,7 +124,7 @@ describe('FavoriteApplicationButton', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Remove from favorites' }));
 
     await waitFor(() => {
-      expect(showTooltip).toHaveBeenCalledWith('Removed from favorites', { variant: 'success' });
+      expect(mockedShowInfoToast).toHaveBeenCalledWith('Application removed from favorites');
     });
   });
 
@@ -132,7 +139,7 @@ describe('FavoriteApplicationButton', () => {
 
     await waitFor(() => {
       expect(setApplicationFavoriteState).toHaveBeenNthCalledWith(2, 'app-1', false);
-      expect(showTooltip).toHaveBeenCalledWith('Failed to update favorite', { variant: 'error' });
+      expect(mockedShowErrorToast).toHaveBeenCalledWith('Failed to update favorite');
     });
   });
 
@@ -148,7 +155,9 @@ describe('FavoriteApplicationButton', () => {
 
     expect(global.fetch).not.toHaveBeenCalled();
     expect(setApplicationFavoriteState).not.toHaveBeenCalled();
-    expect(showTooltip).not.toHaveBeenCalled();
+    expect(mockedShowSuccessToast).not.toHaveBeenCalled();
+    expect(mockedShowErrorToast).not.toHaveBeenCalled();
+    expect(mockedShowInfoToast).not.toHaveBeenCalled();
   });
 
   afterEach(() => {

@@ -14,4 +14,3 @@ export { Input } from './input/input';
 export { QuickActionsCards } from './quick-actions';
 export { StatusBadge } from './status-badge/status-badge';
 export { Textarea } from './textarea/textarea';
-export { Tooltip } from './tooltip/tooltip';

@@ -8,12 +8,13 @@ import { useForm } from 'react-hook-form';
 import { DeleteApplicationButton, FavoriteApplicationButton } from '@/components/common';
 import { Container } from '@/components/layout';
 import { Button } from '@/components/common';
-import { useApplicationById, useApplications, useTooltip } from '@/contexts';
+import { useApplicationById, useApplications } from '@/contexts';
 import {
   createApplicationRequestSchema,
   type CreateApplicationRequestInputValues,
   type CreateApplicationRequestValues,
 } from '@/forms/create-application/create-application-validation';
+import { TOAST_MESSAGES, showInfoToast, showSuccessToast } from '@/lib/toast';
 import type {
   IApplication,
   IApplicationDetailApiResponse,
@@ -30,7 +31,6 @@ export default function ApplicationDetailPage() {
   const router = useRouter();
 
   const { setApplicationFavoriteState, updateApplicationFromApi } = useApplications();
-  const { showTooltip } = useTooltip();
 
   const [localApplication, setLocalApplication] = useState<IApplication | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -147,7 +147,7 @@ export default function ApplicationDetailPage() {
     }
 
     if (!isDirty) {
-      showTooltip('No changes detected', { variant: 'success' });
+      showInfoToast(TOAST_MESSAGES.FORM_NOT_CHANGED);
       return;
     }
 
@@ -200,7 +200,7 @@ export default function ApplicationDetailPage() {
     setInitialEditValues(toFormValues(normalized));
     reset(toFormValues(normalized));
     setIsEditing(false);
-    showTooltip('Application updated successfully', { variant: 'success' });
+    showSuccessToast(TOAST_MESSAGES.APPLICATION_UPDATED);
   };
 
   return (

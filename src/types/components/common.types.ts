@@ -24,13 +24,6 @@ export interface ILoginModalProps {
   onClose: () => void;
 }
 
-export interface ITooltipProps {
-  message: string;
-  isVisible: boolean;
-  variant: 'success' | 'error';
-  onClose: () => void;
-}
-
 export interface IApplicationCardProps {
   application: IApplication;
   onClick?: () => void;

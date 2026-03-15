@@ -3,10 +3,13 @@ import { ReactNode } from 'react';
 import { Doto, Montserrat } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import './globals.css';
+import '@/lib/toast/toast.styles.css';
 import { Header } from '@/components/layout';
 import { AuthProvider } from '@/components/providers';
-import { ApplicationsProvider, LoginModalProvider, TooltipProvider } from '@/contexts';
+import { Toaster } from 'sonner';
+import { ApplicationsProvider, LoginModalProvider } from '@/contexts';
 import { authOptions } from '@/lib/auth';
+import { TOASTER_CONFIG } from '@/lib/toast';
 
 const doto = Doto({
   subsets: ['latin'],
@@ -64,12 +67,11 @@ export default async function RootLayout({
       <body className={`${doto.variable} ${montserrat.variable} antialiased`}>
         <AuthProvider session={session}>
           <ApplicationsProvider>
-            <TooltipProvider>
-              <LoginModalProvider>
-                <Header />
-                {children}
-              </LoginModalProvider>
-            </TooltipProvider>
+            <LoginModalProvider>
+              <Header />
+              {children}
+              <Toaster {...TOASTER_CONFIG} />
+            </LoginModalProvider>
           </ApplicationsProvider>
         </AuthProvider>
       </body>

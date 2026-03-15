@@ -22,7 +22,8 @@ import {
   stackOptions,
   statusOptions,
 } from '@/constants/application-options.constants';
-import { useApplications, useTooltip } from '@/contexts';
+import { useApplications } from '@/contexts';
+import { TOAST_MESSAGES, showErrorToast, showSuccessToast } from '@/lib/toast';
 import type { IApplicationResponseDto, ICreateApplicationFormProps } from '@/types';
 import { createApplicationFormDefaultValues } from '@/constants';
 
@@ -38,7 +39,6 @@ interface ICreateApplicationSuccessResponse {
 
 export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFormProps) {
   const { data: session } = useSession();
-  const { showTooltip } = useTooltip();
   const { addApplicationFromApi } = useApplications();
 
   const {
@@ -118,6 +118,8 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
         message: errorResponse?.message ?? 'Failed to create application',
       });
 
+      showErrorToast(TOAST_MESSAGES.FORM_NOT_CREATED);
+
       return;
     }
 
@@ -126,7 +128,7 @@ export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFor
 
     reset(createApplicationFormDefaultValues);
     onClose();
-    showTooltip('Application created successfully', { variant: 'success' });
+    showSuccessToast(TOAST_MESSAGES.APPLICATION_CREATED);
   };
 
   return (

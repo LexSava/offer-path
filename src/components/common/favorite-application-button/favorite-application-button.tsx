@@ -2,7 +2,8 @@
 
 import { Bookmark } from 'lucide-react';
 import { useCallback, useOptimistic, useTransition, type MouseEvent } from 'react';
-import { useApplicationIsFavoriteById, useApplications, useTooltip } from '@/contexts';
+import { useApplicationIsFavoriteById, useApplications } from '@/contexts';
+import { TOAST_MESSAGES, showErrorToast, showInfoToast, showSuccessToast } from '@/lib/toast';
 import type { IFavoriteApplicationButtonProps, IUpdateFavoriteResponse } from '@/types';
 import { cn } from '@/utils';
 
@@ -10,7 +11,6 @@ export function FavoriteApplicationButton({
   applicationId,
   className,
 }: IFavoriteApplicationButtonProps) {
-  const { showTooltip } = useTooltip();
   const { setApplicationFavoriteState } = useApplications();
   const isFavorite = useApplicationIsFavoriteById(applicationId);
   const [isPending, startTransition] = useTransition();
@@ -54,9 +54,11 @@ export function FavoriteApplicationButton({
           });
         }
 
-        showTooltip(confirmedState ? 'Added to favorites' : 'Removed from favorites', {
-          variant: 'success',
-        });
+        if (confirmedState) {
+          showSuccessToast(TOAST_MESSAGES.APPLICATION_ADDED_TO_FAVORITE);
+        } else {
+          showInfoToast(TOAST_MESSAGES.APPLICATION_REMOVED_FROM_FAVORITE);
+        }
       } catch (error) {
         console.error('Failed to toggle favorite state:', error);
 
@@ -65,7 +67,7 @@ export function FavoriteApplicationButton({
           setApplicationFavoriteState(applicationId, !nextState);
         });
 
-        showTooltip('Failed to update favorite', { variant: 'error' });
+        showErrorToast(TOAST_MESSAGES.FAVORITE_UPDATE_FAILED);
       }
     })();
   }, [
@@ -74,7 +76,6 @@ export function FavoriteApplicationButton({
     optimisticIsFavorite,
     setApplicationFavoriteState,
     setOptimisticIsFavorite,
-    showTooltip,
     startTransition,
   ]);
 
