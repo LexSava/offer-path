@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { IApplication } from '@/types/models/application.types';
 import type { SortOption } from '@/constants';
+import type { StatusType } from '@/types/models/application.types';
 
 export interface ICreateApplicationModalProps {
   isOpen: boolean;
@@ -50,6 +51,11 @@ export interface IBackLinkProps {
 export interface IFavoriteApplicationButtonProps {
   applicationId: string;
   isFavorite: boolean;
+  className?: string;
+}
+
+export interface IStatusBadgeProps {
+  status: StatusType;
   className?: string;
 }
 

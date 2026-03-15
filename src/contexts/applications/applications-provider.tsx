@@ -89,7 +89,6 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
         ];
 
         persistApplications(nextApplications);
-        console.log('Applications cache updated:', nextApplications);
 
         return nextApplications;
       });
@@ -172,7 +171,6 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
           const cachedApplications = parsedCachedValue.map(toApplicationFromApi);
           setApplications(cachedApplications);
           loadedUserIdRef.current = userId;
-          console.log('Applications loaded from cache:', cachedApplications);
 
           return;
         }
@@ -204,7 +202,6 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
         setApplications(receivedApplications);
         loadedUserIdRef.current = userId;
         persistApplications(receivedApplications);
-        console.log('Applications fetched from API:', receivedApplications);
       } catch (error) {
         console.error('Failed to fetch applications:', error);
       } finally {

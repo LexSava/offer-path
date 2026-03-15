@@ -117,8 +117,6 @@ export default function ApplicationDetailPage() {
     if (!resolvedApplication) {
       return;
     }
-
-    console.log('Application detail data:', resolvedApplication);
   }, [resolvedApplication]);
 
   const handleStartEdit = () => {

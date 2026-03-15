@@ -14,7 +14,8 @@ export default function Home() {
       <HomePageHero />
       <HomePageHowItWorks />
       <ApplicationDataInfo />
-      <HomePageStatsCta />
+      {/* // TODO: Update this HomePageStatsCta component */}
+      {/* <HomePageStatsCta /> */}
     </Container>
   );
 }
