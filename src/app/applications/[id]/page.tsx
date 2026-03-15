@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { DeleteApplicationButton, FavoriteApplicationButton } from '@/components/common';
 import { Container } from '@/components/layout';
 import { Button } from '@/components/common';
-import { useApplications, useTooltip } from '@/contexts';
+import { useApplicationById, useApplications, useTooltip } from '@/contexts';
 import {
   createApplicationRequestSchema,
   type CreateApplicationRequestInputValues,
@@ -29,7 +29,7 @@ export default function ApplicationDetailPage() {
   const applicationId = params.id;
   const router = useRouter();
 
-  const { applications, setApplicationFavoriteState, updateApplicationFromApi } = useApplications();
+  const { setApplicationFavoriteState, updateApplicationFromApi } = useApplications();
   const { showTooltip } = useTooltip();
 
   const [localApplication, setLocalApplication] = useState<IApplication | null>(null);
@@ -53,10 +53,7 @@ export default function ApplicationDetailPage() {
     mode: 'onSubmit',
   });
 
-  const contextApplication = useMemo(
-    () => applications.find((application) => application.id === applicationId) ?? null,
-    [applicationId, applications],
-  );
+  const contextApplication = useApplicationById(applicationId);
 
   const resolvedApplication = contextApplication ?? localApplication;
 

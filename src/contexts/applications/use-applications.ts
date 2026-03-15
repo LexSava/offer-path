@@ -1,10 +1,10 @@
 'use client';
 
 import { useContext } from 'react';
-import { ApplicationsContext } from './applications-context';
+import { ApplicationsActionsContext } from './applications-context';
 
 export function useApplications() {
-  const context = useContext(ApplicationsContext);
+  const context = useContext(ApplicationsActionsContext);
 
   if (!context) {
     throw new Error('useApplications must be used within ApplicationsProvider');

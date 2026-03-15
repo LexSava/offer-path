@@ -1,7 +1,7 @@
 'use client';
 
 import { Bookmark } from 'lucide-react';
-import { useOptimistic, useTransition } from 'react';
+import { useCallback, useOptimistic, useTransition, type MouseEvent } from 'react';
 import { useApplications, useTooltip } from '@/contexts';
 import type { IFavoriteApplicationButtonProps, IUpdateFavoriteResponse } from '@/types';
 import { cn } from '@/utils';
@@ -19,7 +19,7 @@ export function FavoriteApplicationButton({
     (_currentState, nextState: boolean) => nextState,
   );
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = useCallback(() => {
     if (isPending) {
       return;
     }
@@ -47,10 +47,12 @@ export function FavoriteApplicationButton({
         const payload = (await response.json()) as IUpdateFavoriteResponse;
         const confirmedState = payload.data?.isFavorite ?? nextState;
 
-        startTransition(() => {
-          setOptimisticIsFavorite(confirmedState);
-          setApplicationFavoriteState(applicationId, confirmedState);
-        });
+        if (confirmedState !== nextState) {
+          startTransition(() => {
+            setOptimisticIsFavorite(confirmedState);
+            setApplicationFavoriteState(applicationId, confirmedState);
+          });
+        }
 
         showTooltip(confirmedState ? 'Added to favorites' : 'Removed from favorites', {
           variant: 'success',
@@ -66,15 +68,28 @@ export function FavoriteApplicationButton({
         showTooltip('Failed to update favorite', { variant: 'error' });
       }
     })();
-  };
+  }, [
+    applicationId,
+    isPending,
+    optimisticIsFavorite,
+    setApplicationFavoriteState,
+    setOptimisticIsFavorite,
+    showTooltip,
+    startTransition,
+  ]);
+
+  const handleButtonClick = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+      handleToggleFavorite();
+    },
+    [handleToggleFavorite],
+  );
 
   return (
     <button
       type="button"
-      onClick={(event) => {
-        event.stopPropagation();
-        handleToggleFavorite();
-      }}
+      onClick={handleButtonClick}
       disabled={isPending}
       aria-label={optimisticIsFavorite ? 'Remove from favorites' : 'Add to favorites'}
       className={cn(

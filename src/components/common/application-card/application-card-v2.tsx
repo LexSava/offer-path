@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo, type KeyboardEvent } from 'react';
 import { CalendarDays } from 'lucide-react';
 import type { IApplicationCardProps } from '@/types';
 import { cn, formatDate } from '@/utils';
@@ -7,14 +8,28 @@ import { StatusBadge } from '../status-badge/status-badge';
 import { ApplicationCardV2Detail } from './application-card-v2-detail';
 import { getApplicationCardFields, getApplicationDates } from './application-card-v2.utils';
 
-export function ApplicationCardV2({
+function ApplicationCardV2Component({
   application,
   onClick,
   className,
   highlightQuery,
 }: IApplicationCardProps) {
-  const fields = getApplicationCardFields(application);
-  const { createdAt, updatedAt } = getApplicationDates(application);
+  const fields = useMemo(() => getApplicationCardFields(application), [application]);
+  const { createdAt, updatedAt } = useMemo(() => getApplicationDates(application), [application]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLElement>) => {
+      if (!onClick) {
+        return;
+      }
+
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        onClick();
+      }
+    },
+    [onClick],
+  );
 
   return (
     <article
@@ -26,16 +41,7 @@ export function ApplicationCardV2({
         className,
       )}
       onClick={onClick}
-      onKeyDown={(event) => {
-        if (!onClick) {
-          return;
-        }
-
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          onClick();
-        }
-      }}
+      onKeyDown={handleKeyDown}
       tabIndex={onClick ? 0 : undefined}
       role={onClick ? 'button' : undefined}
       aria-label={onClick ? `Open application ${application.position}` : undefined}
@@ -81,3 +87,5 @@ export function ApplicationCardV2({
     </article>
   );
 }
+
+export const ApplicationCardV2 = memo(ApplicationCardV2Component);

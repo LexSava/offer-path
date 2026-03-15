@@ -1,6 +1,10 @@
 'use client';
 
 import { createContext } from 'react';
-import type { IApplicationsContextValue } from '@/types';
+import type { IApplicationsActionsContextValue, IApplicationsStore } from '@/types';
 
-export const ApplicationsContext = createContext<IApplicationsContextValue | undefined>(undefined);
+export const ApplicationsStoreContext = createContext<IApplicationsStore | undefined>(undefined);
+
+export const ApplicationsActionsContext = createContext<
+  IApplicationsActionsContextValue | undefined
+>(undefined);

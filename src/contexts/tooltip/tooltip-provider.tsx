@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Tooltip } from '@/components/common';
 import {
   IShowTooltipOptions,
@@ -48,15 +49,28 @@ export function TooltipProvider({ children }: ITooltipProviderProps) {
     };
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      showTooltip,
+      hideTooltip,
+    }),
+    [hideTooltip, showTooltip],
+  );
+
   return (
-    <TooltipContext.Provider value={{ showTooltip, hideTooltip }}>
+    <TooltipContext.Provider value={contextValue}>
       {children}
-      <Tooltip
-        isVisible={Boolean(tooltipState)}
-        message={tooltipState?.message ?? ''}
-        variant={tooltipState?.variant ?? 'success'}
-        onClose={hideTooltip}
-      />
+      {typeof document !== 'undefined'
+        ? createPortal(
+            <Tooltip
+              isVisible={Boolean(tooltipState)}
+              message={tooltipState?.message ?? ''}
+              variant={tooltipState?.variant ?? 'success'}
+              onClose={hideTooltip}
+            />,
+            document.body,
+          )
+        : null}
     </TooltipContext.Provider>
   );
 }
