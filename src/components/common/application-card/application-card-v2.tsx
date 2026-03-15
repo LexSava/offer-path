@@ -1,12 +1,10 @@
 import { memo, useCallback, useMemo, type KeyboardEvent } from 'react';
-import { CalendarDays } from 'lucide-react';
 import type { IApplicationCardProps } from '@/types';
-import { cn, formatDate } from '@/utils';
-import { FavoriteApplicationButton } from '../favorite-application-button/favorite-application-button';
-import { HighlightMatch } from '../highlight-match/highlight-match';
-import { StatusBadge } from '../status-badge/status-badge';
-import { ApplicationCardV2Detail } from './application-card-v2-detail';
+import { cn } from '@/utils';
 import { getApplicationCardFields, getApplicationDates } from './application-card-v2.utils';
+import { ApplicationCardV2Content } from './application-card-v2-content';
+import { ApplicationCardV2Header } from './application-card-v2-header';
+import { ApplicationCardV2Meta } from './application-card-v2-meta';
 
 function ApplicationCardV2Component({
   application,
@@ -46,44 +44,20 @@ function ApplicationCardV2Component({
       role={onClick ? 'button' : undefined}
       aria-label={onClick ? `Open application ${application.position}` : undefined}
     >
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <h3 className="text-primary overflow-hidden text-lg leading-tight font-semibold text-ellipsis whitespace-nowrap">
-            <HighlightMatch text={application.position} query={highlightQuery} />
-          </h3>
-          <p className="overflow-hidden text-xs leading-tight font-semibold tracking-wide text-ellipsis whitespace-nowrap text-gray-600 uppercase">
-            <HighlightMatch text={application.specialization} query={highlightQuery} />
-          </p>
-        </div>
+      <ApplicationCardV2Header
+        applicationId={application.id}
+        position={application.position}
+        specialization={application.specialization}
+        highlightQuery={highlightQuery}
+      />
 
-        <FavoriteApplicationButton
-          applicationId={application.id}
-          isFavorite={application.isFavorite}
-          className="shrink-0"
-        />
-      </div>
+      <ApplicationCardV2Content fields={fields} highlightQuery={highlightQuery} />
 
-      <div className="flex flex-1 flex-col gap-2 text-sm">
-        {fields.map((field) => (
-          <ApplicationCardV2Detail
-            key={field.label}
-            label={field.label}
-            value={<HighlightMatch text={field.value} query={highlightQuery} />}
-          />
-        ))}
-      </div>
-
-      <div className="mt-4 flex flex-col gap-2">
-        <StatusBadge status={application.status} />
-
-        <div className="flex items-center justify-start gap-1 text-xs text-gray-600">
-          <CalendarDays size={14} aria-hidden="true" />
-          <div className="flex flex-1 items-center justify-between gap-1.5 pt-0.5">
-            {updatedAt ? <span>Updated: {formatDate(updatedAt)}</span> : null}
-            <span>Created: {formatDate(createdAt)}</span>
-          </div>
-        </div>
-      </div>
+      <ApplicationCardV2Meta
+        status={application.status}
+        createdAt={createdAt}
+        updatedAt={updatedAt}
+      />
     </article>
   );
 }

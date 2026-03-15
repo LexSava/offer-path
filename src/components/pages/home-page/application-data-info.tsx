@@ -1,5 +1,5 @@
 import { APPLICATION_DATA_INFO_CATEGORIES } from '@/constants';
-import { DataCategoryCard } from '../common';
+import { DataCategoryCard } from '../../common';
 
 export function ApplicationDataInfo() {
   return (

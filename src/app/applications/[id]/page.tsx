@@ -234,10 +234,7 @@ export default function ApplicationDetailPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <FavoriteApplicationButton
-                applicationId={resolvedApplication.id}
-                isFavorite={resolvedApplication.isFavorite}
-              />
+              <FavoriteApplicationButton applicationId={resolvedApplication.id} />
 
               {!isEditing ? (
                 <DeleteApplicationButton

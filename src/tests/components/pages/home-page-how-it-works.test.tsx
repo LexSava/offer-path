@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { HomePageHowItWorks } from '@/components/pages/home-page-how-it-works';
+import { HomePageHowItWorks } from '@/components/pages/home-page/home-page-how-it-works';
 
 describe('HomePageHowItWorks', () => {
   it('renders section title', () => {

@@ -1,20 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { Tooltip } from '@/components/common';
-import {
-  IShowTooltipOptions,
-  ITooltipProviderProps,
-  ITooltipState,
-  TooltipVariantType,
-} from '@/types';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { IShowTooltipOptions, ITooltipProviderProps, TooltipVariantType } from '@/types';
 import { TooltipContext } from './tooltip-context';
+import { createTooltipStore } from './tooltip-store';
+import { TooltipRenderer } from './tooltip-renderer';
 
 const DEFAULT_DURATION_MS = 3000;
 
 export function TooltipProvider({ children }: ITooltipProviderProps) {
-  const [tooltipState, setTooltipState] = useState<ITooltipState | null>(null);
+  const store = useMemo(() => createTooltipStore(), []);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const hideTooltip = useCallback(() => {
@@ -23,23 +18,26 @@ export function TooltipProvider({ children }: ITooltipProviderProps) {
       timeoutRef.current = null;
     }
 
-    setTooltipState(null);
-  }, []);
+    store.setState(null);
+  }, [store]);
 
-  const showTooltip = useCallback((message: string, options?: IShowTooltipOptions) => {
-    const variant: TooltipVariantType = options?.variant ?? 'success';
-    const durationMs = options?.durationMs ?? DEFAULT_DURATION_MS;
+  const showTooltip = useCallback(
+    (message: string, options?: IShowTooltipOptions) => {
+      const variant: TooltipVariantType = options?.variant ?? 'success';
+      const durationMs = options?.durationMs ?? DEFAULT_DURATION_MS;
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
 
-    setTooltipState({ message, variant });
+      store.setState({ message, variant });
 
-    timeoutRef.current = setTimeout(() => {
-      setTooltipState(null);
-    }, durationMs);
-  }, []);
+      timeoutRef.current = setTimeout(() => {
+        store.setState(null);
+      }, durationMs);
+    },
+    [store],
+  );
 
   useEffect(() => {
     return () => {
@@ -60,17 +58,7 @@ export function TooltipProvider({ children }: ITooltipProviderProps) {
   return (
     <TooltipContext.Provider value={contextValue}>
       {children}
-      {typeof document !== 'undefined'
-        ? createPortal(
-            <Tooltip
-              isVisible={Boolean(tooltipState)}
-              message={tooltipState?.message ?? ''}
-              variant={tooltipState?.variant ?? 'success'}
-              onClose={hideTooltip}
-            />,
-            document.body,
-          )
-        : null}
+      <TooltipRenderer store={store} onClose={hideTooltip} />
     </TooltipContext.Provider>
   );
 }

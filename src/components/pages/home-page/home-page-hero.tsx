@@ -1,6 +1,6 @@
 'use client';
 
-import { QuickActionsCards } from '../common';
+import { QuickActionsCards } from '../../common';
 
 export function HomePageHero() {
   return (

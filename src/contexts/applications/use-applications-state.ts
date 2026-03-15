@@ -40,6 +40,16 @@ export function useApplicationById(applicationId: string) {
   return useApplicationsState((state) => state.applicationsById[applicationId] ?? null);
 }
 
+export function useApplicationCardDataById(applicationId: string) {
+  return useApplicationsState((state) => state.listIndexById[applicationId] ?? null);
+}
+
+export function useApplicationIsFavoriteById(applicationId: string) {
+  return useApplicationsState(
+    (state) => state.applicationsById[applicationId]?.isFavorite ?? false,
+  );
+}
+
 export function useFilteredSortedApplicationIds(query: string, sortOption: SortOption) {
   const applicationIds = useApplicationsState((state) => state.applicationIds);
   const listIndexById = useApplicationsState((state) => state.listIndexById);

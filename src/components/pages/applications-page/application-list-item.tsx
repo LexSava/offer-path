@@ -2,7 +2,7 @@
 
 import { memo, useCallback } from 'react';
 import { ApplicationCard } from '@/components/common';
-import { useApplicationById } from '@/contexts';
+import { useApplicationCardDataById } from '@/contexts';
 import type { IApplicationListItemProps } from '@/types';
 
 function ApplicationListItemComponent({
@@ -10,7 +10,7 @@ function ApplicationListItemComponent({
   highlightQuery,
   onOpenApplication,
 }: IApplicationListItemProps) {
-  const application = useApplicationById(applicationId);
+  const application = useApplicationCardDataById(applicationId);
 
   const handleOpen = useCallback(() => {
     onOpenApplication(applicationId);
@@ -22,7 +22,11 @@ function ApplicationListItemComponent({
 
   return (
     <li className="h-full">
-      <ApplicationCard application={application} highlightQuery={highlightQuery} onClick={handleOpen} />
+      <ApplicationCard
+        application={application}
+        highlightQuery={highlightQuery}
+        onClick={handleOpen}
+      />
     </li>
   );
 }

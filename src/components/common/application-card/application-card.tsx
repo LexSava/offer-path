@@ -73,10 +73,7 @@ export function ApplicationCard({
           {applicationDateMeta.label}: {formatDate(applicationDateMeta.value)}
         </p>
 
-        <FavoriteApplicationButton
-          applicationId={application.id}
-          isFavorite={application.isFavorite}
-        />
+        <FavoriteApplicationButton applicationId={application.id} />
       </div>
 
       <span className="bg-accent pointer-events-none absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 transition-transform duration-200 group-hover:scale-x-100" />

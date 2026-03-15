@@ -2,17 +2,17 @@
 
 import { Bookmark } from 'lucide-react';
 import { useCallback, useOptimistic, useTransition, type MouseEvent } from 'react';
-import { useApplications, useTooltip } from '@/contexts';
+import { useApplicationIsFavoriteById, useApplications, useTooltip } from '@/contexts';
 import type { IFavoriteApplicationButtonProps, IUpdateFavoriteResponse } from '@/types';
 import { cn } from '@/utils';
 
 export function FavoriteApplicationButton({
   applicationId,
-  isFavorite,
   className,
 }: IFavoriteApplicationButtonProps) {
   const { showTooltip } = useTooltip();
   const { setApplicationFavoriteState } = useApplications();
+  const isFavorite = useApplicationIsFavoriteById(applicationId);
   const [isPending, startTransition] = useTransition();
   const [optimisticIsFavorite, setOptimisticIsFavorite] = useOptimistic(
     isFavorite,

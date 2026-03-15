@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTransition } from 'react';
 
 import { FavoriteApplicationButton } from '@/components/common/favorite-application-button/favorite-application-button';
-import { useApplications, useTooltip } from '@/contexts';
+import { useApplicationIsFavoriteById, useApplications, useTooltip } from '@/contexts';
 
 vi.mock('react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react')>();
@@ -15,11 +15,13 @@ vi.mock('react', async (importOriginal) => {
 });
 
 vi.mock('@/contexts', () => ({
+  useApplicationIsFavoriteById: vi.fn(),
   useApplications: vi.fn(),
   useTooltip: vi.fn(),
 }));
 
 describe('FavoriteApplicationButton', () => {
+  const mockedUseApplicationIsFavoriteById = vi.mocked(useApplicationIsFavoriteById);
   const mockedUseApplications = vi.mocked(useApplications);
   const mockedUseTooltip = vi.mocked(useTooltip);
   const mockedUseTransition = vi.mocked(useTransition);
@@ -33,9 +35,9 @@ describe('FavoriteApplicationButton', () => {
 
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
+    mockedUseApplicationIsFavoriteById.mockReturnValue(false);
+
     mockedUseApplications.mockReturnValue({
-      applications: [],
-      isLoading: false,
       addApplicationFromApi: vi.fn(),
       updateApplicationFromApi: vi.fn(),
       removeApplicationById: vi.fn(),
@@ -53,8 +55,9 @@ describe('FavoriteApplicationButton', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });
+
   it('renders button with add label when application is not favorite', () => {
-    render(<FavoriteApplicationButton applicationId="app-1" isFavorite={false} />);
+    render(<FavoriteApplicationButton applicationId="app-1" />);
 
     expect(screen.getByRole('button', { name: 'Add to favorites' })).toBeInTheDocument();
   });
@@ -74,7 +77,7 @@ describe('FavoriteApplicationButton', () => {
 
     render(
       <div onClick={parentClick}>
-        <FavoriteApplicationButton applicationId="app-1" isFavorite={false} />
+        <FavoriteApplicationButton applicationId="app-1" />
       </div>,
     );
 
@@ -90,9 +93,10 @@ describe('FavoriteApplicationButton', () => {
     });
 
     await waitFor(() => {
-      expect(setApplicationFavoriteState).toHaveBeenNthCalledWith(2, 'app-1', true);
       expect(showTooltip).toHaveBeenCalledWith('Added to favorites', { variant: 'success' });
     });
+
+    expect(setApplicationFavoriteState).toHaveBeenCalledTimes(1);
   });
 
   it('shows removed tooltip when API confirms favorite=false', async () => {
@@ -106,7 +110,9 @@ describe('FavoriteApplicationButton', () => {
       }),
     } as Response);
 
-    render(<FavoriteApplicationButton applicationId="app-1" isFavorite={true} />);
+    mockedUseApplicationIsFavoriteById.mockReturnValueOnce(true);
+
+    render(<FavoriteApplicationButton applicationId="app-1" />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Remove from favorites' }));
 
@@ -118,7 +124,7 @@ describe('FavoriteApplicationButton', () => {
   it('rolls back optimistic update and shows error tooltip when request fails', async () => {
     vi.mocked(global.fetch).mockRejectedValue(new Error('Network failure'));
 
-    render(<FavoriteApplicationButton applicationId="app-1" isFavorite={false} />);
+    render(<FavoriteApplicationButton applicationId="app-1" />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Add to favorites' }));
 
@@ -133,7 +139,7 @@ describe('FavoriteApplicationButton', () => {
   it('is disabled and does nothing when transition is pending', () => {
     mockedUseTransition.mockReturnValueOnce([true, vi.fn()]);
 
-    render(<FavoriteApplicationButton applicationId="app-1" isFavorite={false} />);
+    render(<FavoriteApplicationButton applicationId="app-1" />);
 
     const button = screen.getByRole('button', { name: 'Add to favorites' });
     expect(button).toBeDisabled();

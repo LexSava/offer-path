@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { HomePageHero } from '@/components/pages/home-page-hero';
+import { HomePageHero } from '@/components/pages/home-page/home-page-hero';
 
 vi.mock('@/components/common', () => ({
   QuickActionsCards: () => <div data-testid="quick-actions-cards">quick-actions</div>,
