@@ -5,7 +5,7 @@ interface IFieldRegistration {
   onBlur: (...event: any[]) => void | Promise<boolean | void>;
   onChange: (...event: any[]) => void | Promise<boolean | void>;
   ref: (instance: any) => void;
-  value?: unknown;
+  value?: string | number | readonly string[] | undefined;
 }
 
 export interface IDropdownOption {
