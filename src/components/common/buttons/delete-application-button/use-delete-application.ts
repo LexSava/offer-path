@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useApplications, useTooltip } from '@/contexts';
+import { useApplications } from '@/contexts';
+import { TOAST_MESSAGES, showErrorToast, showInfoToast } from '@/lib/toast';
 import type { IDeleteApplicationButtonProps, IDeleteApplicationResponse } from '@/types';
-import { DELETE_APPLICATION_SUCCESS_MESSAGE, DELETE_APPLICATION_ERROR_MESSAGE } from '@/constants';
 
 type IUseDeleteApplicationParams = Pick<
   IDeleteApplicationButtonProps,
@@ -10,7 +10,6 @@ type IUseDeleteApplicationParams = Pick<
 
 export function useDeleteApplication({ applicationId, onDeleted }: IUseDeleteApplicationParams) {
   const { removeApplicationById } = useApplications();
-  const { showTooltip } = useTooltip();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -50,12 +49,12 @@ export function useDeleteApplication({ applicationId, onDeleted }: IUseDeleteApp
       const deletedId = payload.data?.id ?? applicationId;
 
       removeApplicationById(deletedId);
-      showTooltip(DELETE_APPLICATION_SUCCESS_MESSAGE, { variant: 'success' });
+      showInfoToast(TOAST_MESSAGES.APPLICATION_DELETED);
       setIsModalOpen(false);
       onDeleted?.();
     } catch (error) {
       console.error('Failed to delete application:', error);
-      showTooltip(DELETE_APPLICATION_ERROR_MESSAGE, { variant: 'error' });
+      showErrorToast(TOAST_MESSAGES.APPLICATION_DELETE_FAILED);
     } finally {
       setIsDeleting(false);
     }

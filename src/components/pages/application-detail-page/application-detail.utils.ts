@@ -27,11 +27,3 @@ export function toFormValues(application: IApplication): CreateApplicationReques
     status: application.status,
   };
 }
-
-export function formatCompensation(application: IApplication) {
-  if (!application.salary || !application.currency || !application.period) {
-    return 'Not specified';
-  }
-
-  return `${application.salary} ${application.currency} / ${application.period}`;
-}

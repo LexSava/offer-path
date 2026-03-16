@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { ApplicationDataInfo } from '@/components/pages/application-data-info';
+import { ApplicationDataInfo } from '@/components/pages/home-page/application-data-info';
 
 describe('ApplicationDataInfo', () => {
   it('renders section title', () => {

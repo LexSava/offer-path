@@ -1,0 +1,70 @@
+/* ── Kill Sonner's default border-radius via CSS variable ──────────── */
+[data-sonner-toaster] {
+  --radius: 0px;
+}
+
+[data-sonner-toast],
+[data-sonner-toast] > * {
+  border-radius: 0 !important;
+}
+
+/* ── Base toast ──────────────────────────────────────────────────────── */
+.pixel-toast {
+  border: 2px solid #1a1814;
+  border-radius: 0 !important;
+  background: rgba(255, 253, 253, 0.96);
+  color: #1a1814;
+  font-family: var(--font-logo), monospace;
+  box-shadow: 4px 4px 0 rgba(26, 24, 20, 0.75);
+}
+
+.pixel-toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.pixel-toast-description {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 12px;
+}
+
+.pixel-toast-close {
+  border-radius: 0 !important;
+  border: 1px solid #1a1814 !important;
+  background: rgba(248, 249, 246, 0.95) !important;
+  box-shadow: 1px 1px 0 #1a1814;
+}
+
+/* ── Variant: success — only for positive outcomes (created / updated / added to favorites) */
+.pixel-toast-success {
+  border-color: #3a6e3f;
+  background: rgba(200, 230, 200, 0.88);
+  color: #1a3c1e;
+  box-shadow: 4px 4px 0 rgba(58, 110, 63, 0.65);
+}
+
+/* ── Variant: error — failures and validation errors */
+.pixel-toast-error {
+  border-color: #8f2a2a;
+  background: rgba(242, 205, 205, 0.88);
+  color: #4a1212;
+  box-shadow: 4px 4px 0 rgba(143, 42, 42, 0.65);
+}
+
+/* ── Variant: info / neutral — removed from favorites, no changes made */
+.pixel-toast-info {
+  border-color: #4a6176;
+  background: rgba(210, 222, 232, 0.88);
+  color: #1c3044;
+  box-shadow: 4px 4px 0 rgba(74, 97, 118, 0.65);
+}
+
+/* ── Variant: warning — cautionary notices */
+.pixel-toast-warning {
+  border-color: #7a5c18;
+  background: rgba(248, 232, 188, 0.88);
+  color: #3e2e00;
+  box-shadow: 4px 4px 0 rgba(122, 92, 24, 0.65);
+}

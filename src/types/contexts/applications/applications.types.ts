@@ -6,9 +6,24 @@ export interface IApplicationResponseDto extends Omit<IApplication, 'createdAt' 
   updatedAt: string;
 }
 
-export interface IApplicationsContextValue {
-  applications: IApplication[];
+export interface IApplicationsStoreState {
+  applicationsById: Partial<Record<string, IApplication>>;
+  listIndexById: Partial<Record<string, IApplication>>;
+  applicationIds: string[];
   isLoading: boolean;
+}
+
+export interface IApplicationsStore {
+  getState: () => IApplicationsStoreState;
+  setState: (
+    updater:
+      | IApplicationsStoreState
+      | ((state: IApplicationsStoreState) => IApplicationsStoreState),
+  ) => void;
+  subscribe: (listener: () => void) => () => void;
+}
+
+export interface IApplicationsActionsContextValue {
   addApplicationFromApi: (application: IApplicationResponseDto) => void;
   updateApplicationFromApi: (application: IApplicationResponseDto) => void;
   setApplicationFavoriteState: (applicationId: string, isFavorite: boolean) => void;

@@ -1,8 +1,4 @@
-import type { FieldErrors, UseFormRegister } from 'react-hook-form';
-import type {
-  CreateApplicationRequestInputValues,
-  CreateApplicationRequestValues,
-} from '@/forms/create-application/create-application-validation';
+import type { CreateApplicationRequestValues } from '@/forms/create-application/create-application-validation';
 import type { IApplicationResponseDto } from '@/types/contexts/applications/applications.types';
 import type { IApplication } from '@/types/models/application.types';
 
@@ -28,6 +24,21 @@ export interface IApplicationUpdateSuccessResponse {
 export interface IApplicationDetailFormFieldsProps {
   resolvedApplication: IApplication;
   isEditing: boolean;
-  register: UseFormRegister<CreateApplicationRequestInputValues>;
-  errors: FieldErrors<CreateApplicationRequestInputValues>;
+}
+
+export interface IApplicationDetailPageFormProps {
+  resolvedApplication: IApplication;
+  isEditing: boolean;
+  submitError: string | null;
+  onSubmit: (values: CreateApplicationRequestValues) => Promise<void>;
+  onDeleted: () => void;
+  onStartEdit: () => void;
+  onCloseEdit: () => void;
+}
+
+export interface IApplicationDetailContentHeaderProps {
+  resolvedApplication: IApplication;
+  isEditing: boolean;
+  onDeleted: () => void;
+  onStartEdit: () => void;
 }

@@ -5,10 +5,7 @@ import { ApplicationCard } from '@/components/common/application-card/applicatio
 import type { IApplication } from '@/types';
 
 vi.mock('@/contexts', () => ({
-  useTooltip: () => ({
-    showTooltip: vi.fn(),
-    hideTooltip: vi.fn(),
-  }),
+  useApplicationIsFavoriteById: () => false,
   useApplications: () => ({
     setApplicationFavoriteState: vi.fn(),
   }),

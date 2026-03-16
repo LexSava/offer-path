@@ -1,36 +1,45 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Pencil } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { DeleteApplicationButton, FavoriteApplicationButton } from '@/components/common';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Container } from '@/components/layout';
-import { Button } from '@/components/common';
-import { useApplications, useTooltip } from '@/contexts';
+import {
+  ApplicationDetailPageHeader,
+  ApplicationDetailPageForm,
+  toApplicationFromApi,
+  toFormValues,
+} from '@/components/pages';
+import { useApplicationCardDataById, useApplications } from '@/contexts';
 import {
   createApplicationRequestSchema,
   type CreateApplicationRequestInputValues,
   type CreateApplicationRequestValues,
 } from '@/forms/create-application/create-application-validation';
+import { TOAST_MESSAGES, showInfoToast, showSuccessToast } from '@/lib/toast';
 import type {
   IApplication,
   IApplicationDetailApiResponse,
   IApplicationUpdateErrorResponse,
   IApplicationUpdateSuccessResponse,
 } from '@/types';
-import { ApplicationDetailFormFields } from './application-detail-form-fields';
-import { toApplicationFromApi, toFormValues } from './application-detail.utils';
-import { PageTitleHeader } from '@/components/pages';
+
+function hasFormChanges(
+  values: CreateApplicationRequestValues,
+  baseline: CreateApplicationRequestValues,
+) {
+  return (Object.keys(baseline) as Array<keyof CreateApplicationRequestValues>).some(
+    (key) => values[key] !== baseline[key],
+  );
+}
 
 export default function ApplicationDetailPage() {
   const params = useParams<{ id: string }>();
   const applicationId = params.id;
   const router = useRouter();
 
-  const { applications, setApplicationFavoriteState, updateApplicationFromApi } = useApplications();
-  const { showTooltip } = useTooltip();
+  const { setApplicationFavoriteState, updateApplicationFromApi } = useApplications();
 
   const [localApplication, setLocalApplication] = useState<IApplication | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,22 +50,17 @@ export default function ApplicationDetailPage() {
     null,
   );
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setError,
-    clearErrors,
-    formState: { errors, isSubmitting, isDirty },
-  } = useForm<CreateApplicationRequestInputValues, unknown, CreateApplicationRequestValues>({
+  const methods = useForm<
+    CreateApplicationRequestInputValues,
+    unknown,
+    CreateApplicationRequestValues
+  >({
     resolver: zodResolver(createApplicationRequestSchema),
     mode: 'onSubmit',
   });
+  const { reset, setError, clearErrors } = methods;
 
-  const contextApplication = useMemo(
-    () => applications.find((application) => application.id === applicationId) ?? null,
-    [applicationId, applications],
-  );
+  const contextApplication = useApplicationCardDataById(applicationId);
 
   const resolvedApplication = contextApplication ?? localApplication;
 
@@ -113,15 +117,7 @@ export default function ApplicationDetailPage() {
     reset(toFormValues(resolvedApplication));
   }, [isEditing, reset, resolvedApplication]);
 
-  useEffect(() => {
-    if (!resolvedApplication) {
-      return;
-    }
-
-    console.log('Application detail data:', resolvedApplication);
-  }, [resolvedApplication]);
-
-  const handleStartEdit = () => {
+  const handleStartEdit = useCallback(() => {
     if (!resolvedApplication) {
       return;
     }
@@ -132,9 +128,9 @@ export default function ApplicationDetailPage() {
     setSubmitError(null);
     clearErrors();
     setIsEditing(true);
-  };
+  }, [resolvedApplication, reset, clearErrors]);
 
-  const handleCloseEdit = () => {
+  const handleCloseEdit = useCallback(() => {
     if (initialEditValues) {
       reset(initialEditValues);
     } else if (resolvedApplication) {
@@ -144,79 +140,90 @@ export default function ApplicationDetailPage() {
     setSubmitError(null);
     clearErrors();
     setIsEditing(false);
-  };
+  }, [initialEditValues, resolvedApplication, reset, clearErrors]);
 
-  const onSubmit = async (values: CreateApplicationRequestValues) => {
-    if (!resolvedApplication) {
-      return;
-    }
+  const handleDeleted = useCallback(() => {
+    setIsRedirectingAfterDelete(true);
+    router.replace('/applications');
+  }, [router]);
 
-    if (!isDirty) {
-      showTooltip('No changes detected', { variant: 'success' });
-      return;
-    }
-
-    setSubmitError(null);
-
-    const response = await fetch(`/api/applications/${resolvedApplication.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    });
-
-    if (!response.ok) {
-      const errorResponse = (await response
-        .json()
-        .catch(() => null)) as IApplicationUpdateErrorResponse | null;
-
-      if (errorResponse?.fieldErrors) {
-        Object.entries(errorResponse.fieldErrors).forEach(([field, fieldError]) => {
-          const message = fieldError?.[0];
-
-          if (!message) {
-            return;
-          }
-
-          setError(field as keyof CreateApplicationRequestValues, {
-            type: 'server',
-            message,
-          });
-        });
+  const onSubmit = useCallback(
+    async (values: CreateApplicationRequestValues) => {
+      if (!resolvedApplication) {
+        return;
       }
 
-      setSubmitError(errorResponse?.message ?? 'Failed to update application');
-      return;
-    }
+      const baselineValues = initialEditValues ?? toFormValues(resolvedApplication);
 
-    const payload = (await response.json()) as IApplicationUpdateSuccessResponse;
+      if (!hasFormChanges(values, baselineValues)) {
+        showInfoToast(TOAST_MESSAGES.FORM_NOT_CHANGED);
+        return;
+      }
 
-    if (!payload.data) {
-      setSubmitError('Updated application data is missing');
-      return;
-    }
+      setSubmitError(null);
 
-    const normalized = toApplicationFromApi(payload.data);
+      const response = await fetch(`/api/applications/${resolvedApplication.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
 
-    setLocalApplication(normalized);
-    updateApplicationFromApi(payload.data);
-    setApplicationFavoriteState(normalized.id, normalized.isFavorite);
-    setInitialEditValues(toFormValues(normalized));
-    reset(toFormValues(normalized));
-    setIsEditing(false);
-    showTooltip('Application updated successfully', { variant: 'success' });
-  };
+      if (!response.ok) {
+        const errorResponse = (await response
+          .json()
+          .catch(() => null)) as IApplicationUpdateErrorResponse | null;
+
+        if (errorResponse?.fieldErrors) {
+          Object.entries(errorResponse.fieldErrors).forEach(([field, fieldError]) => {
+            const message = fieldError?.[0];
+
+            if (!message) {
+              return;
+            }
+
+            setError(field as keyof CreateApplicationRequestValues, {
+              type: 'server',
+              message,
+            });
+          });
+        }
+
+        setSubmitError(errorResponse?.message ?? 'Failed to update application');
+        return;
+      }
+
+      const payload = (await response.json()) as IApplicationUpdateSuccessResponse;
+
+      if (!payload.data) {
+        setSubmitError('Updated application data is missing');
+        return;
+      }
+
+      const normalized = toApplicationFromApi(payload.data);
+
+      setLocalApplication(normalized);
+      updateApplicationFromApi(payload.data);
+      setApplicationFavoriteState(normalized.id, normalized.isFavorite);
+      setInitialEditValues(toFormValues(normalized));
+      reset(toFormValues(normalized));
+      setIsEditing(false);
+      showSuccessToast(TOAST_MESSAGES.APPLICATION_UPDATED);
+    },
+    [
+      resolvedApplication,
+      initialEditValues,
+      setError,
+      updateApplicationFromApi,
+      setApplicationFavoriteState,
+      reset,
+    ],
+  );
 
   return (
     <Container className="bg-background flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <PageTitleHeader
-          backLinkUrl="/applications"
-          backLinkText="Back to My applications"
-          title="Applications Detail"
-        />
-      </div>
+      <ApplicationDetailPageHeader />
 
       {isLoading ? <p className="text-muted">Loading application detail...</p> : null}
 
@@ -225,74 +232,17 @@ export default function ApplicationDetailPage() {
       ) : null}
 
       {resolvedApplication ? (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="bg-surface flex flex-col gap-4 border border-gray-200 p-5 shadow-sm"
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <h1 className="font-logo text-primary text-3xl font-medium">
-                {resolvedApplication.position}
-              </h1>
-              <p className="text-secondary text-lg">{resolvedApplication.specialization}</p>
-              <p className="text-secondary text-lg">Company: {resolvedApplication.company}</p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <FavoriteApplicationButton
-                applicationId={resolvedApplication.id}
-                isFavorite={resolvedApplication.isFavorite}
-              />
-
-              {!isEditing ? (
-                <DeleteApplicationButton
-                  applicationId={resolvedApplication.id}
-                  onDeleted={() => {
-                    setIsRedirectingAfterDelete(true);
-                    router.replace('/applications');
-                  }}
-                />
-              ) : null}
-
-              {!isEditing ? (
-                <button
-                  type="button"
-                  onClick={handleStartEdit}
-                  className="text-secondary flex cursor-pointer items-center gap-1 border border-gray-300 px-3 py-2 text-sm font-medium transition-colors hover:border-gray-400 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  <Pencil size={16} />
-                  Edit
-                </button>
-              ) : null}
-            </div>
-          </div>
-
-          <ApplicationDetailFormFields
+        <FormProvider {...methods}>
+          <ApplicationDetailPageForm
             resolvedApplication={resolvedApplication}
             isEditing={isEditing}
-            register={register}
-            errors={errors}
+            submitError={submitError}
+            onSubmit={onSubmit}
+            onDeleted={handleDeleted}
+            onStartEdit={handleStartEdit}
+            onCloseEdit={handleCloseEdit}
           />
-
-          {submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}
-
-          {isEditing ? (
-            <div className="flex items-center justify-end gap-3">
-              <Button
-                text="Close"
-                variant="secondary"
-                onClick={handleCloseEdit}
-                disabled={isSubmitting}
-              />
-              <Button
-                text={isSubmitting ? 'Submitting...' : 'Submit'}
-                variant="primary"
-                type="submit"
-                disabled={isSubmitting}
-              />
-            </div>
-          ) : null}
-        </form>
+        </FormProvider>
       ) : null}
     </Container>
   );

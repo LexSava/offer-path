@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { IApplication } from '@/types/models/application.types';
 import type { SortOption } from '@/constants';
+import type { StatusType } from '@/types/models/application.types';
 
 export interface ICreateApplicationModalProps {
   isOpen: boolean;
@@ -23,13 +24,6 @@ export interface ILoginModalProps {
   onClose: () => void;
 }
 
-export interface ITooltipProps {
-  message: string;
-  isVisible: boolean;
-  variant: 'success' | 'error';
-  onClose: () => void;
-}
-
 export interface IApplicationCardProps {
   application: IApplication;
   onClick?: () => void;
@@ -42,6 +36,24 @@ export interface IApplicationCardDetailProps {
   value: ReactNode;
 }
 
+export interface IApplicationCardV2MetaProps {
+  status: StatusType;
+  createdAt: Date;
+  updatedAt: Date | null;
+}
+
+export interface IApplicationCardV2HeaderProps {
+  applicationId: string;
+  position: string;
+  specialization: string;
+  highlightQuery?: string;
+}
+
+export interface IApplicationCardV2ContentProps {
+  fields: Array<Pick<IApplicationCardDetailProps, 'label'> & { value: string }>;
+  highlightQuery?: string;
+}
+
 export interface IBackLinkProps {
   url: string;
   text: string;
@@ -49,7 +61,11 @@ export interface IBackLinkProps {
 
 export interface IFavoriteApplicationButtonProps {
   applicationId: string;
-  isFavorite: boolean;
+  className?: string;
+}
+
+export interface IStatusBadgeProps {
+  status: StatusType;
   className?: string;
 }
 

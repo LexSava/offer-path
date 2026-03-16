@@ -1,25 +1,25 @@
 'use client';
 
 import { Bookmark } from 'lucide-react';
-import { useOptimistic, useTransition } from 'react';
-import { useApplications, useTooltip } from '@/contexts';
+import { useCallback, useOptimistic, useTransition, type MouseEvent } from 'react';
+import { useApplicationIsFavoriteById, useApplications } from '@/contexts';
+import { TOAST_MESSAGES, showErrorToast, showInfoToast, showSuccessToast } from '@/lib/toast';
 import type { IFavoriteApplicationButtonProps, IUpdateFavoriteResponse } from '@/types';
 import { cn } from '@/utils';
 
 export function FavoriteApplicationButton({
   applicationId,
-  isFavorite,
   className,
 }: IFavoriteApplicationButtonProps) {
-  const { showTooltip } = useTooltip();
   const { setApplicationFavoriteState } = useApplications();
+  const isFavorite = useApplicationIsFavoriteById(applicationId);
   const [isPending, startTransition] = useTransition();
   const [optimisticIsFavorite, setOptimisticIsFavorite] = useOptimistic(
     isFavorite,
     (_currentState, nextState: boolean) => nextState,
   );
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = useCallback(() => {
     if (isPending) {
       return;
     }
@@ -47,14 +47,18 @@ export function FavoriteApplicationButton({
         const payload = (await response.json()) as IUpdateFavoriteResponse;
         const confirmedState = payload.data?.isFavorite ?? nextState;
 
-        startTransition(() => {
-          setOptimisticIsFavorite(confirmedState);
-          setApplicationFavoriteState(applicationId, confirmedState);
-        });
+        if (confirmedState !== nextState) {
+          startTransition(() => {
+            setOptimisticIsFavorite(confirmedState);
+            setApplicationFavoriteState(applicationId, confirmedState);
+          });
+        }
 
-        showTooltip(confirmedState ? 'Added to favorites' : 'Removed from favorites', {
-          variant: 'success',
-        });
+        if (confirmedState) {
+          showSuccessToast(TOAST_MESSAGES.APPLICATION_ADDED_TO_FAVORITE);
+        } else {
+          showInfoToast(TOAST_MESSAGES.APPLICATION_REMOVED_FROM_FAVORITE);
+        }
       } catch (error) {
         console.error('Failed to toggle favorite state:', error);
 
@@ -63,18 +67,30 @@ export function FavoriteApplicationButton({
           setApplicationFavoriteState(applicationId, !nextState);
         });
 
-        showTooltip('Failed to update favorite', { variant: 'error' });
+        showErrorToast(TOAST_MESSAGES.FAVORITE_UPDATE_FAILED);
       }
     })();
-  };
+  }, [
+    applicationId,
+    isPending,
+    optimisticIsFavorite,
+    setApplicationFavoriteState,
+    setOptimisticIsFavorite,
+    startTransition,
+  ]);
+
+  const handleButtonClick = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+      handleToggleFavorite();
+    },
+    [handleToggleFavorite],
+  );
 
   return (
     <button
       type="button"
-      onClick={(event) => {
-        event.stopPropagation();
-        handleToggleFavorite();
-      }}
+      onClick={handleButtonClick}
       disabled={isPending}
       aria-label={optimisticIsFavorite ? 'Remove from favorites' : 'Add to favorites'}
       className={cn(

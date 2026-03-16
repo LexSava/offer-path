@@ -1,7 +1,7 @@
 'use client';
 
 import { HOME_PAGE_INFO_SECTIONS } from '@/constants';
-import { InfoSection } from '../common';
+import { InfoSection } from '../../common';
 
 export function HomePageHowItWorks() {
   return (

@@ -1,9 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import type { IApplication, IApplicationResponseDto, IApplicationsProviderProps } from '@/types';
-import { ApplicationsContext } from './applications-context';
+import { ApplicationsActionsContext, ApplicationsStoreContext } from './applications-context';
+import {
+  createApplicationsStore,
+  toApplicationsList,
+  toApplicationsStoreState,
+} from './applications-store';
 
 const CACHE_KEY_PREFIX = 'applications-cache';
 
@@ -56,15 +61,46 @@ function getCacheKey(userId: string) {
 
 export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
   const { data: session, status } = useSession();
-  const [applications, setApplications] = useState<IApplication[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const storeRef = useRef(createApplicationsStore());
   const loadedUserIdRef = useRef<string | null>(null);
 
   const userId = session?.user?.id;
+  const store = storeRef.current;
+
+  const setStoreLoading = useCallback(
+    (isLoading: boolean) => {
+      store.setState((previousState) => {
+        if (previousState.isLoading === isLoading) {
+          return previousState;
+        }
+
+        return {
+          ...previousState,
+          isLoading,
+        };
+      });
+    },
+    [store],
+  );
+
+  const setStoreApplications = useCallback(
+    (nextApplications: IApplication[]) => {
+      store.setState((previousState) => ({
+        ...previousState,
+        ...toApplicationsStoreState(nextApplications),
+      }));
+    },
+    [store],
+  );
 
   const persistApplications = useCallback(
-    (nextApplications: IApplication[]) => {
+    (nextApplications: IApplication[] | null) => {
       if (!userId || typeof window === 'undefined') {
+        return;
+      }
+
+      if (!nextApplications) {
+        window.localStorage.removeItem(getCacheKey(userId));
         return;
       }
 
@@ -80,68 +116,116 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
     (application: IApplicationResponseDto) => {
       const normalized = toApplicationFromApi(application);
 
-      setApplications((previousApplications) => {
-        const nextApplications = [
-          normalized,
-          ...previousApplications.filter(
-            (existingApplication) => existingApplication.id !== normalized.id,
-          ),
-        ];
+      store.setState((previousState) => {
+        const previousApplication = previousState.applicationsById[normalized.id];
+        const nextApplicationIds = previousApplication
+          ? previousState.applicationIds
+          : [normalized.id, ...previousState.applicationIds];
 
-        persistApplications(nextApplications);
-        console.log('Applications cache updated:', nextApplications);
+        const nextState = {
+          ...previousState,
+          applicationsById: {
+            ...previousState.applicationsById,
+            [normalized.id]: normalized,
+          },
+          listIndexById: {
+            ...previousState.listIndexById,
+            [normalized.id]: normalized,
+          },
+          applicationIds: nextApplicationIds,
+        };
 
-        return nextApplications;
+        persistApplications(toApplicationsList(nextState));
+
+        return nextState;
       });
     },
-    [persistApplications],
+    [persistApplications, store],
   );
 
   const updateApplicationFromApi = useCallback(
     (application: IApplicationResponseDto) => {
       const normalized = toApplicationFromApi(application);
 
-      setApplications((previousApplications) => {
-        const nextApplications = previousApplications.map((existingApplication) =>
-          existingApplication.id === normalized.id ? normalized : existingApplication,
-        );
+      store.setState((previousState) => {
+        if (!previousState.applicationsById[normalized.id]) {
+          return previousState;
+        }
 
-        persistApplications(nextApplications);
+        const nextState = {
+          ...previousState,
+          applicationsById: {
+            ...previousState.applicationsById,
+            [normalized.id]: normalized,
+          },
+          listIndexById: {
+            ...previousState.listIndexById,
+            [normalized.id]: normalized,
+          },
+        };
 
-        return nextApplications;
+        persistApplications(toApplicationsList(nextState));
+
+        return nextState;
       });
     },
-    [persistApplications],
+    [persistApplications, store],
   );
 
   const setApplicationFavoriteState = useCallback(
     (applicationId: string, isFavorite: boolean) => {
-      setApplications((previousApplications) => {
-        const nextApplications = previousApplications.map((application) =>
-          application.id === applicationId ? { ...application, isFavorite } : application,
-        );
+      store.setState((previousState) => {
+        const existingApplication = previousState.applicationsById[applicationId];
 
-        persistApplications(nextApplications);
+        if (!existingApplication || existingApplication.isFavorite === isFavorite) {
+          return previousState;
+        }
 
-        return nextApplications;
+        const nextState = {
+          ...previousState,
+          applicationsById: {
+            ...previousState.applicationsById,
+            [applicationId]: {
+              ...existingApplication,
+              isFavorite,
+            },
+          },
+        };
+
+        persistApplications(toApplicationsList(nextState));
+
+        return nextState;
       });
     },
-    [persistApplications],
+    [persistApplications, store],
   );
 
   const removeApplicationById = useCallback(
     (applicationId: string) => {
-      setApplications((previousApplications) => {
-        const nextApplications = previousApplications.filter(
-          (application) => application.id !== applicationId,
-        );
+      store.setState((previousState) => {
+        if (!previousState.applicationsById[applicationId]) {
+          return previousState;
+        }
 
-        persistApplications(nextApplications);
+        const nextApplicationsById = { ...previousState.applicationsById };
+        delete nextApplicationsById[applicationId];
 
-        return nextApplications;
+        const nextListIndexById = { ...previousState.listIndexById };
+        delete nextListIndexById[applicationId];
+
+        const nextState = {
+          ...previousState,
+          applicationsById: nextApplicationsById,
+          listIndexById: nextListIndexById,
+          applicationIds: previousState.applicationIds.filter((id) => id !== applicationId),
+        };
+
+        persistApplications(toApplicationsList(nextState));
+
+        return nextState;
       });
     },
-    [persistApplications],
+    [persistApplications, store],
   );
 
   useEffect(() => {
@@ -151,8 +235,9 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
 
     if (!userId) {
       loadedUserIdRef.current = null;
-      setApplications([]);
-      setIsLoading(false);
+      setStoreApplications([]);
+      setStoreLoading(false);
+      persistApplications(null);
 
       return;
     }
@@ -170,9 +255,9 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
 
         if (Array.isArray(parsedCachedValue) && parsedCachedValue.every(isApplicationDto)) {
           const cachedApplications = parsedCachedValue.map(toApplicationFromApi);
-          setApplications(cachedApplications);
+          setStoreApplications(cachedApplications);
+          setStoreLoading(false);
           loadedUserIdRef.current = userId;
-          console.log('Applications loaded from cache:', cachedApplications);
 
           return;
         }
@@ -182,7 +267,7 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
     }
 
     const fetchApplications = async () => {
-      setIsLoading(true);
+      setStoreLoading(true);
 
       try {
         const response = await fetch('/api/applications', {
@@ -201,24 +286,21 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
           ? payload.data.filter(isApplicationDto).map(toApplicationFromApi)
           : [];
 
-        setApplications(receivedApplications);
+        setStoreApplications(receivedApplications);
         loadedUserIdRef.current = userId;
         persistApplications(receivedApplications);
-        console.log('Applications fetched from API:', receivedApplications);
       } catch (error) {
         console.error('Failed to fetch applications:', error);
       } finally {
-        setIsLoading(false);
+        setStoreLoading(false);
       }
     };
 
     void fetchApplications();
-  }, [persistApplications, status, userId]);
+  }, [persistApplications, setStoreApplications, setStoreLoading, status, userId]);
 
-  const contextValue = useMemo(
+  const actionsContextValue = useMemo(
     () => ({
-      applications,
-      isLoading,
       addApplicationFromApi,
       updateApplicationFromApi,
       setApplicationFavoriteState,
@@ -226,8 +308,6 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
     }),
     [
       addApplicationFromApi,
-      applications,
-      isLoading,
       removeApplicationById,
       setApplicationFavoriteState,
       updateApplicationFromApi,
@@ -235,6 +315,10 @@ export function ApplicationsProvider({ children }: IApplicationsProviderProps) {
   );
 
   return (
-    <ApplicationsContext.Provider value={contextValue}>{children}</ApplicationsContext.Provider>
+    <ApplicationsStoreContext.Provider value={store}>
+      <ApplicationsActionsContext.Provider value={actionsContextValue}>
+        {children}
+      </ApplicationsActionsContext.Provider>
+    </ApplicationsStoreContext.Provider>
   );
 }

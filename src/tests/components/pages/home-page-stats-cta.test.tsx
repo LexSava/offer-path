@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { HomePageStatsCta } from '@/components/pages/home-page-stats-cta';
+import { HomePageStatsCta } from '@/components/pages/home-page/home-page-stats-cta';
 
 describe('HomePageStatsCta', () => {
   it('renders heading', () => {
