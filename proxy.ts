@@ -6,7 +6,8 @@ export function proxy(request: NextRequest) {
 
   // Disable intermediary/browser caching for document requests so crawlers
   // fetch the latest Open Graph and other metadata on every visit.
-  if (request.headers.get('accept')?.includes('text/html')) {
+  const secFetchDest = request.headers.get('sec-fetch-dest');
+  if (!secFetchDest || secFetchDest === 'document') {
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     response.headers.set('Pragma', 'no-cache');
     response.headers.set('Expires', '0');
