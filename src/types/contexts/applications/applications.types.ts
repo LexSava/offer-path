@@ -7,8 +7,8 @@ export interface IApplicationResponseDto extends Omit<IApplication, 'createdAt' 
 }
 
 export interface IApplicationsStoreState {
-  applicationsById: Record<string, IApplication>;
-  listIndexById: Record<string, IApplication>;
+  applicationsById: Partial<Record<string, IApplication>>;
+  listIndexById: Partial<Record<string, IApplication>>;
   applicationIds: string[];
   isLoading: boolean;
 }

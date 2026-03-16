@@ -1,5 +1,9 @@
 import type { IApplication, IApplicationsStore, IApplicationsStoreState } from '@/types';
 
+function isApplication(value: IApplication | undefined): value is IApplication {
+  return Boolean(value);
+}
+
 const initialState: IApplicationsStoreState = {
   applicationsById: {},
   listIndexById: {},
@@ -57,5 +61,5 @@ export function toApplicationsStoreState(applications: IApplication[]) {
 export function toApplicationsList(state: IApplicationsStoreState) {
   return state.applicationIds
     .map((applicationId) => state.applicationsById[applicationId])
-    .filter((application) => Boolean(application));
+    .filter(isApplication);
 }
