@@ -10,3 +10,8 @@ export type ApplicationDropdownFieldName =
   | 'status';
 
 export type ApplicationTextareaFieldName = 'notes';
+
+export type ApplicationFieldName =
+  | ApplicationInputFieldName
+  | ApplicationDropdownFieldName
+  | ApplicationTextareaFieldName;

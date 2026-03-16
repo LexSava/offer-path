@@ -3,20 +3,6 @@ import type { IDropdownOption, IDropdownProps, IInputProps, ITextareaProps } fro
 
 export type FieldType = 'input' | 'dropdown' | 'textarea';
 
-export type ApplicationFieldName =
-  | 'position'
-  | 'company'
-  | 'specialization'
-  | 'grade'
-  | 'mainStack'
-  | 'salary'
-  | 'currency'
-  | 'period'
-  | 'contract'
-  | 'url'
-  | 'notes'
-  | 'status';
-
 type FormFieldBaseProps<TValues extends FieldValues, TName extends FieldPath<TValues>> = {
   name: TName;
   label: string;
