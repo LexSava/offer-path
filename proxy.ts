@@ -15,6 +15,10 @@ export function proxy(request: NextRequest) {
   return response;
 }
 
+export function middleware(request: NextRequest) {
+  return proxy(request);
+}
+
 export const config = {
   matcher: [
     // Apply to all app routes, excluding Next.js internals and static assets.
