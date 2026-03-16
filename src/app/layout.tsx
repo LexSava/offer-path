@@ -21,6 +21,9 @@ const montserrat = Montserrat({
   variable: '--font-sans',
 });
 
+// Force dynamic SSR so social crawlers always get fresh HTML metadata.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://offer-path-sigma.vercel.app'),
   title: 'OfferPath - Your Job Application Tracker',
