@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -24,6 +24,18 @@ import type {
 import { ApplicationDetailFormFields } from './application-detail-form-fields';
 import { toApplicationFromApi, toFormValues } from './application-detail.utils';
 import { PageTitleHeader } from '@/components/pages';
+
+const ApplicationDetailPageHeader = memo(function ApplicationDetailPageHeaderComponent() {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <PageTitleHeader
+        backLinkUrl="/applications"
+        backLinkText="Back to My applications"
+        title="Applications Detail"
+      />
+    </div>
+  );
+});
 
 export default function ApplicationDetailPage() {
   const params = useParams<{ id: string }>();
@@ -109,12 +121,6 @@ export default function ApplicationDetailPage() {
 
     reset(toFormValues(resolvedApplication));
   }, [isEditing, reset, resolvedApplication]);
-
-  useEffect(() => {
-    if (!resolvedApplication) {
-      return;
-    }
-  }, [resolvedApplication]);
 
   const handleStartEdit = () => {
     if (!resolvedApplication) {
@@ -205,13 +211,7 @@ export default function ApplicationDetailPage() {
 
   return (
     <Container className="bg-background flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <PageTitleHeader
-          backLinkUrl="/applications"
-          backLinkText="Back to My applications"
-          title="Applications Detail"
-        />
-      </div>
+      <ApplicationDetailPageHeader />
 
       {isLoading ? <p className="text-muted">Loading application detail...</p> : null}
 
