@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, type ChangeEvent } from 'react';
+import { useCallback } from 'react';
 import {
   useFormContext,
   type FieldPath,
@@ -20,9 +20,7 @@ export function useRegisterWithInstantErrorClear<TFieldValues extends FieldValue
 
       return {
         ...registration,
-        onChange: (
-          event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-        ) => {
+        onChange: (event: Parameters<typeof registration.onChange>[0]) => {
           const result = registration.onChange(event);
           clearErrors(name);
           return result;

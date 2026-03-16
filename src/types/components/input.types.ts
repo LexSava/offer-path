@@ -1,12 +1,5 @@
 import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
-
-interface IFieldRegistration {
-  name: string;
-  onBlur: (...event: any[]) => void | Promise<boolean | void>;
-  onChange: (...event: any[]) => void | Promise<boolean | void>;
-  ref: (instance: any) => void;
-  value?: string | number | readonly string[] | undefined;
-}
+import type { UseFormRegisterReturn } from 'react-hook-form';
 
 export interface IDropdownOption {
   label: string;
@@ -16,7 +9,7 @@ export interface IDropdownOption {
 export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
-  registration?: IFieldRegistration;
+  registration?: UseFormRegisterReturn;
 }
 
 export interface IDropdownProps extends SelectHTMLAttributes<HTMLSelectElement> {
@@ -24,12 +17,12 @@ export interface IDropdownProps extends SelectHTMLAttributes<HTMLSelectElement> 
   error?: string;
   options: IDropdownOption[];
   placeholder?: string;
-  registration?: IFieldRegistration;
+  registration?: UseFormRegisterReturn;
 }
 
 export interface ITextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   error?: string;
   maxCharacters?: number;
-  registration?: IFieldRegistration;
+  registration?: UseFormRegisterReturn;
 }

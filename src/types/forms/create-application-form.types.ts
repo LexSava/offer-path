@@ -5,11 +5,6 @@ export interface ICreateApplicationFormProps {
   onClose: () => void;
 }
 
-export interface ICreateApplicationErrorResponse {
-  message: string;
-  fieldErrors?: Record<string, string[]>;
-}
-
 export interface ICreateApplicationSuccessResponse {
   message: string;
   data: IApplicationResponseDto;
