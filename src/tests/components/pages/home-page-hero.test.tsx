@@ -11,7 +11,7 @@ describe('HomePageHero', () => {
   it('renders main heading and supporting texts', () => {
     render(<HomePageHero />);
 
-    expect(screen.getByRole('heading', { level: 1, name: 'OfferPath' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: 'OfferPath' })).toBeInTheDocument();
     expect(screen.getByText('Track your job applications easily')).toBeInTheDocument();
     expect(
       screen.getByText(/keep track of all your job applications in one place/i),

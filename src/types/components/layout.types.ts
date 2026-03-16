@@ -9,3 +9,7 @@ export interface IHeaderLink {
   label: string;
   href: string;
 }
+
+export interface IHeaderLinksProps {
+  className?: string;
+}

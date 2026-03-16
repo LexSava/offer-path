@@ -4,10 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HEADER_LINKS } from '@/constants';
 import { cn } from '@/utils';
-
-interface IHeaderLinksProps {
-  className?: string;
-}
+import { IHeaderLinksProps } from '@/types';
 
 function isHeaderLinkActive(pathname: string | null, href: string) {
   const currentPath = pathname ?? '/';
