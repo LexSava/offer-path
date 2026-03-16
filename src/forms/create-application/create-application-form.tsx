@@ -84,7 +84,7 @@ const CreateApplicationSubmitActions = memo(function CreateApplicationSubmitActi
   );
 });
 
-const PositionField = memo(function PositionFieldComponent() {
+function PositionField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'position' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -97,9 +97,9 @@ const PositionField = memo(function PositionFieldComponent() {
       error={errors.position?.message}
     />
   );
-});
+}
 
-const CompanyField = memo(function CompanyFieldComponent() {
+function CompanyField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'company' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -112,9 +112,9 @@ const CompanyField = memo(function CompanyFieldComponent() {
       error={errors.company?.message}
     />
   );
-});
+}
 
-const SpecializationField = memo(function SpecializationFieldComponent() {
+function SpecializationField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'specialization' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -128,9 +128,9 @@ const SpecializationField = memo(function SpecializationFieldComponent() {
       error={errors.specialization?.message}
     />
   );
-});
+}
 
-const GradeField = memo(function GradeFieldComponent() {
+function GradeField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'grade' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -144,9 +144,9 @@ const GradeField = memo(function GradeFieldComponent() {
       error={errors.grade?.message}
     />
   );
-});
+}
 
-const MainStackField = memo(function MainStackFieldComponent() {
+function MainStackField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'mainStack' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -160,9 +160,9 @@ const MainStackField = memo(function MainStackFieldComponent() {
       error={errors.mainStack?.message}
     />
   );
-});
+}
 
-const SalaryField = memo(function SalaryFieldComponent() {
+function SalaryField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'salary' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -178,9 +178,9 @@ const SalaryField = memo(function SalaryFieldComponent() {
       onInput={handleSalaryInput}
     />
   );
-});
+}
 
-const CurrencyField = memo(function CurrencyFieldComponent() {
+function CurrencyField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'currency' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -194,9 +194,9 @@ const CurrencyField = memo(function CurrencyFieldComponent() {
       error={errors.currency?.message}
     />
   );
-});
+}
 
-const PeriodField = memo(function PeriodFieldComponent() {
+function PeriodField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'period' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -210,9 +210,9 @@ const PeriodField = memo(function PeriodFieldComponent() {
       error={errors.period?.message}
     />
   );
-});
+}
 
-const ContractField = memo(function ContractFieldComponent() {
+function ContractField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'contract' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -226,9 +226,9 @@ const ContractField = memo(function ContractFieldComponent() {
       error={errors.contract?.message}
     />
   );
-});
+}
 
-const UrlField = memo(function UrlFieldComponent() {
+function UrlField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'url' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -241,9 +241,9 @@ const UrlField = memo(function UrlFieldComponent() {
       error={errors.url?.message}
     />
   );
-});
+}
 
-const NotesField = memo(function NotesFieldComponent() {
+function NotesField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'notes' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -258,9 +258,9 @@ const NotesField = memo(function NotesFieldComponent() {
       error={errors.notes?.message}
     />
   );
-});
+}
 
-const StatusField = memo(function StatusFieldComponent() {
+function StatusField() {
   const { control } = useFormContext<CreateApplicationFormValues>();
   const { errors } = useFormState<CreateApplicationFormValues>({ control, name: 'status' });
   const registerField = useRegisterWithInstantErrorClear();
@@ -273,7 +273,7 @@ const StatusField = memo(function StatusFieldComponent() {
       error={errors.status?.message}
     />
   );
-});
+}
 
 export function CreateApplicationForm({ isOpen, onClose }: ICreateApplicationFormProps) {
   const { methods, onSubmit } = useCreateApplicationForm({ isOpen, onClose });

@@ -26,10 +26,7 @@ export const ApplicationDetailContentHeader = memo(
           <FavoriteApplicationButton applicationId={resolvedApplication.id} />
 
           {!isEditing ? (
-            <DeleteApplicationButton
-              applicationId={resolvedApplication.id}
-              onDeleted={onDeleted}
-            />
+            <DeleteApplicationButton applicationId={resolvedApplication.id} onDeleted={onDeleted} />
           ) : null}
 
           {!isEditing ? (
