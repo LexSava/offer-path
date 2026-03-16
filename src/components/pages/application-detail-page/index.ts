@@ -4,4 +4,5 @@ export { ApplicationDetailSubmitError } from './application-detail-submit-error'
 export { ApplicationDetailFormActions } from './application-detail-form-actions';
 export { ApplicationDetailFormFields } from './application-detail-form-fields';
 export { ApplicationDetailPageForm } from './application-detail-page-form';
-export { toApplicationFromApi, toFormValues, formatCompensation } from './application-detail.utils';
+export { toApplicationFromApi, toFormValues } from './application-detail.utils';
+export { formatCompensation } from '@/utils/forms';

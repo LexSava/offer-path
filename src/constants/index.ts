@@ -1,4 +1,5 @@
 export * from './application-data-info.constants';
+export * from './application-form-fields.constants';
 export * from './application-options.constants';
 export * from './application-search.constants';
 export * from './applications-sorting.constants';

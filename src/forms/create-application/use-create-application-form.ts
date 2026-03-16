@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback, useEffect, type ChangeEvent } from 'react';
+import { useCallback, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
-import { useForm, useFormContext, type FieldPath, type RegisterOptions } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { createApplicationFormDefaultValues } from '@/constants';
 import { useApplications } from '@/contexts';
 import { TOAST_MESSAGES, showErrorToast, showSuccessToast } from '@/lib/toast';
@@ -18,31 +18,6 @@ import {
   type CreateApplicationFormValues,
   type CreateApplicationRequestValues,
 } from './create-application-validation';
-
-export function useRegisterWithInstantErrorClear() {
-  const { register, clearErrors } = useFormContext<CreateApplicationFormValues>();
-
-  return useCallback(
-    <TName extends FieldPath<CreateApplicationFormValues>>(
-      name: TName,
-      options?: RegisterOptions<CreateApplicationFormValues, TName>,
-    ) => {
-      const registration = register(name, options);
-
-      return {
-        ...registration,
-        onChange: (
-          event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-        ) => {
-          const result = registration.onChange(event);
-          clearErrors(name);
-          return result;
-        },
-      };
-    },
-    [register, clearErrors],
-  );
-}
 
 export function useCreateApplicationForm({ isOpen, onClose }: ICreateApplicationFormProps) {
   const { data: session } = useSession();
