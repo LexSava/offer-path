@@ -1,7 +1,8 @@
 import type { ComponentProps } from 'react';
-import { Toaster } from 'sonner';
 
-export const TOASTER_CONFIG: ComponentProps<typeof Toaster> = {
+type SonnerToasterComponent = (typeof import('sonner'))['Toaster'];
+
+export const TOASTER_CONFIG: ComponentProps<SonnerToasterComponent> = {
   position: 'top-right',
   duration: 3200,
   visibleToasts: 4,
