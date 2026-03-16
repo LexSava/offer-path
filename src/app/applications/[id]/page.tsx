@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { DeleteApplicationButton, FavoriteApplicationButton } from '@/components/common';
 import { Container } from '@/components/layout';
 import { Button } from '@/components/common';
-import { useApplicationById, useApplications } from '@/contexts';
+import { useApplicationCardDataById, useApplications } from '@/contexts';
 import {
   createApplicationRequestSchema,
   type CreateApplicationRequestInputValues,
@@ -53,7 +53,7 @@ export default function ApplicationDetailPage() {
     mode: 'onSubmit',
   });
 
-  const contextApplication = useApplicationById(applicationId);
+  const contextApplication = useApplicationCardDataById(applicationId);
 
   const resolvedApplication = contextApplication ?? localApplication;
 
@@ -226,9 +226,9 @@ export default function ApplicationDetailPage() {
         >
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <h1 className="font-logo text-primary text-3xl font-medium">
+              <h2 className="font-logo text-primary text-3xl font-medium">
                 {resolvedApplication.position}
-              </h1>
+              </h2>
               <p className="text-secondary text-lg">{resolvedApplication.specialization}</p>
               <p className="text-secondary text-lg">Company: {resolvedApplication.company}</p>
             </div>

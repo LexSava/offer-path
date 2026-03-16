@@ -36,10 +36,6 @@ export function useApplicationsCount() {
   return useApplicationsState((state) => state.applicationIds.length);
 }
 
-export function useApplicationById(applicationId: string) {
-  return useApplicationsState((state) => state.applicationsById[applicationId] ?? null);
-}
-
 export function useApplicationCardDataById(applicationId: string) {
   return useApplicationsState((state) => state.listIndexById[applicationId] ?? null);
 }
