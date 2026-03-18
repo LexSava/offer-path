@@ -14,7 +14,7 @@ function ApplicationsPageStateCardComponent({
 
   return (
     <section className="mt-5 flex w-full flex-col gap-4 rounded-md p-4 md:p-6">
-      <h4 className="text-muted text-center text-2xl">{message}</h4>
+      <h2 className="text-muted text-center text-2xl">{message}</h2>
 
       <div className="w-full [&_button]:w-full">
         <QuickActionCard
