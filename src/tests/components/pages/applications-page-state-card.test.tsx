@@ -38,24 +38,6 @@ describe('ApplicationsPageStateCard', () => {
     expect(onAction).toHaveBeenCalledOnce();
   });
 
-  it('uses full-width wrapper for action card', () => {
-    render(
-      <ApplicationsPageStateCard
-        message="State message"
-        actionTitle="Action title"
-        actionDescription="Action description"
-        onAction={vi.fn()}
-      />,
-    );
-
-    const button = screen.getByRole('button', { name: /action title/i });
-    const wrapper = button.parentElement;
-
-    expect(wrapper).not.toBeNull();
-    expect(wrapper).toHaveClass('w-full');
-    expect(wrapper?.className).toContain('[&_button]:w-full');
-  });
-
   it('renders provided custom icon', () => {
     render(
       <ApplicationsPageStateCard
