@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { APPLICATIONS_PAGE_LIST_TEXT } from '@/constants';
 import type { IApplicationsListProps } from '@/types';
 import {
   useApplicationsCount,
@@ -17,15 +18,15 @@ function ApplicationsListComponent({
   const sortedApplicationIds = useFilteredSortedApplicationIds(highlightQuery, selectedSortOption);
 
   if (isLoading) {
-    return <p className="text-muted">Loading applications...</p>;
+    return <p className="text-muted">{APPLICATIONS_PAGE_LIST_TEXT.loading}</p>;
   }
 
   if (applicationsCount === 0) {
-    return <p className="text-muted">No applications found.</p>;
+    return <p className="text-muted">{APPLICATIONS_PAGE_LIST_TEXT.noApplications}</p>;
   }
 
   if (sortedApplicationIds.length === 0) {
-    return <p className="text-muted">No applications match your search.</p>;
+    return <p className="text-muted">{APPLICATIONS_PAGE_LIST_TEXT.noSearchMatches}</p>;
   }
 
   return (

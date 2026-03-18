@@ -1,45 +1,77 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { CreateApplicationModal } from '@/components/common';
 import { Container } from '@/components/layout';
-import { useDebounce } from '@/hooks';
+import { APPLICATIONS_PAGE_ACTIONS, APPLICATIONS_PAGE_MESSAGES } from '@/constants';
+import { useApplicationsPageViewState } from '@/hooks';
 import {
   ApplicationsList,
   ApplicationsPageControls,
   ApplicationsPageHeader,
+  ApplicationsPageStateCard,
 } from '@/components/pages';
-import { type SortOption } from '@/constants';
 
 export default function ApplicationsPage() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSortOption, setSelectedSortOption] = useState<SortOption>('created_desc');
-  const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
-
-  const handleOpenApplication = useCallback(
-    (applicationId: string) => {
-      router.push(`/applications/${applicationId}`);
-    },
-    [router],
-  );
+  const {
+    isSignedIn,
+    shouldShowUnauthorizedState,
+    shouldShowControls,
+    shouldShowEmptyState,
+    shouldShowApplicationsList,
+    isCreateModalOpen,
+    searchQuery,
+    selectedSortOption,
+    debouncedSearchQuery,
+    handleOpenLogin,
+    handleCreateApplication,
+    handleCloseCreateModal,
+    handleOpenApplication,
+    handleSearchQueryChange,
+    handleSortOptionChange,
+  } = useApplicationsPageViewState();
 
   return (
     <Container className="bg-background flex flex-col gap-4">
-      <ApplicationsPageHeader />
+      <ApplicationsPageHeader showAddButton={isSignedIn} />
 
-      <ApplicationsPageControls
-        searchQuery={searchQuery}
-        selectedSortOption={selectedSortOption}
-        onSearchQueryChange={setSearchQuery}
-        onSortOptionChange={setSelectedSortOption}
-      />
+      {shouldShowControls ? (
+        <ApplicationsPageControls
+          searchQuery={searchQuery}
+          selectedSortOption={selectedSortOption}
+          onSearchQueryChange={handleSearchQueryChange}
+          onSortOptionChange={handleSortOptionChange}
+        />
+      ) : null}
 
-      <ApplicationsList
-        highlightQuery={debouncedSearchQuery}
-        selectedSortOption={selectedSortOption}
-        onOpenApplication={handleOpenApplication}
-      />
+      {shouldShowUnauthorizedState ? (
+        <ApplicationsPageStateCard
+          message={APPLICATIONS_PAGE_MESSAGES.unauthorized}
+          actionTitle={APPLICATIONS_PAGE_ACTIONS.login.title}
+          actionDescription={APPLICATIONS_PAGE_ACTIONS.login.description}
+          onAction={handleOpenLogin}
+        />
+      ) : null}
+
+      {shouldShowEmptyState ? (
+        <>
+          <ApplicationsPageStateCard
+            message={APPLICATIONS_PAGE_MESSAGES.empty}
+            actionTitle={APPLICATIONS_PAGE_ACTIONS.add.title}
+            actionDescription={APPLICATIONS_PAGE_ACTIONS.add.description}
+            onAction={handleCreateApplication}
+          />
+
+          <CreateApplicationModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
+        </>
+      ) : null}
+
+      {shouldShowApplicationsList ? (
+        <ApplicationsList
+          highlightQuery={debouncedSearchQuery}
+          selectedSortOption={selectedSortOption}
+          onOpenApplication={handleOpenApplication}
+        />
+      ) : null}
     </Container>
   );
 }
