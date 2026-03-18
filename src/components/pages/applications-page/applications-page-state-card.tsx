@@ -13,8 +13,8 @@ function ApplicationsPageStateCardComponent({
   const actionIcon = icon ?? <Plus size={24} />;
 
   return (
-    <section className="bg-surface flex w-full flex-col gap-4 rounded-md border border-black/5 p-4 md:p-6">
-      <p className="text-muted text-center text-base">{message}</p>
+    <section className="mt-5 flex w-full flex-col gap-4 rounded-md p-4 md:p-6">
+      <h4 className="text-muted text-center text-2xl">{message}</h4>
 
       <div className="w-full [&_button]:w-full">
         <QuickActionCard
