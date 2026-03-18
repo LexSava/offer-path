@@ -10,7 +10,7 @@ import { useDebounce } from './use-debounce';
 
 export function useApplicationsPageViewState(): IUseApplicationsPageViewStateResult {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const { openLoginModal } = useLoginModal();
   const isApplicationsLoading = useApplicationsIsLoading();
   const applicationsCount = useApplicationsCount();
@@ -23,10 +23,12 @@ export function useApplicationsPageViewState(): IUseApplicationsPageViewStateRes
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const isSignedIn = Boolean(session?.user);
-  const shouldShowUnauthorizedState = !isSignedIn;
-  const shouldShowControls = isSignedIn;
-  const shouldShowEmptyState = isSignedIn && !isApplicationsLoading && applicationsCount === 0;
-  const shouldShowApplicationsList = isSignedIn && !shouldShowEmptyState;
+  const isSessionLoading = sessionStatus === 'loading';
+  const shouldShowUnauthorizedState = !isSessionLoading && !isSignedIn;
+  const shouldShowControls = !isSessionLoading && isSignedIn;
+  const shouldShowEmptyState =
+    isSignedIn && !isSessionLoading && !isApplicationsLoading && applicationsCount === 0;
+  const shouldShowApplicationsList = isSignedIn && !isSessionLoading && !shouldShowEmptyState;
 
   const handleOpenLogin = useCallback(() => {
     openLoginModal();
