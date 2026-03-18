@@ -5,15 +5,17 @@ import { usePathname } from 'next/navigation';
 import { HEADER_LINKS } from '@/constants';
 import { cn } from '@/utils';
 import { IHeaderLinksProps } from '@/types';
+import { isCurrentRoute, normalizePath } from './header-route.utils';
 
 function isHeaderLinkActive(pathname: string | null, href: string) {
-  const currentPath = pathname ?? '/';
+  const currentPath = normalizePath(pathname ?? '/');
+  const targetPath = normalizePath(href);
 
-  if (href === '/') {
+  if (targetPath === '/') {
     return currentPath === '/';
   }
 
-  return currentPath === href || currentPath.startsWith(`${href}/`);
+  return currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
 }
 
 export function HeaderLinks({ className }: IHeaderLinksProps) {
@@ -30,6 +32,11 @@ export function HeaderLinks({ className }: IHeaderLinksProps) {
               <Link
                 href={link.href}
                 aria-current={isActive ? 'page' : undefined}
+                onClick={(event) => {
+                  if (isCurrentRoute(pathname, link.href)) {
+                    event.preventDefault();
+                  }
+                }}
                 className={cn(
                   'border-b-2 border-transparent py-1 text-sm font-semibold tracking-wide uppercase transition-colors',
                   'hover:border-accent hover:text-accent',
