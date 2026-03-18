@@ -32,7 +32,7 @@ export default function ApplicationsPage() {
 
   return (
     <Container className="bg-background flex flex-col gap-4">
-      <ApplicationsPageHeader showAddButton={isSignedIn} />
+      <ApplicationsPageHeader showAddButton={isSignedIn && !shouldShowEmptyState} />
 
       {shouldShowControls ? (
         <ApplicationsPageControls
