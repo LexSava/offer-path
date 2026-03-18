@@ -16,8 +16,9 @@ export function useApplicationsPageViewState(): IUseApplicationsPageViewStateRes
   const applicationsCount = useApplicationsCount();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSortOption, setSelectedSortOption] =
-    useState<SortOption>(APPLICATIONS_PAGE_DEFAULT_SORT_OPTION);
+  const [selectedSortOption, setSelectedSortOption] = useState<SortOption>(
+    APPLICATIONS_PAGE_DEFAULT_SORT_OPTION,
+  );
   const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 

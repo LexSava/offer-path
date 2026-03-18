@@ -9,8 +9,7 @@ export const APPLICATIONS_PAGE_HEADER_TEXT = {
 
 export const APPLICATIONS_PAGE_MESSAGES = {
   unauthorized: 'This page contains all your saved applications for tracking',
-  empty:
-    'No Applications Found. Create your first application to start tracking',
+  empty: 'No Applications Found. Create your first application to start tracking',
 } as const;
 
 export const APPLICATIONS_PAGE_ACTIONS = {
