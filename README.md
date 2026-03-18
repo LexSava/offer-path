@@ -31,6 +31,7 @@ This project is intended for:
 - Form validation with Zod + React Hook Form
 - Reusable UI primitives (inputs, dropdowns, buttons, modals, tooltips)
 - Local cache for applications (per user) to improve perceived responsiveness
+- Toast notifications for key user actions (create/update/delete/favorite)
 
 ## 4. Technologies Used
 
@@ -49,12 +50,14 @@ Why:
 
 ### State Management and Logic
 
-- React Context API (`ApplicationsProvider`, modal/tooltip providers)
-- React Hooks (`useMemo`, custom `useDebounce`, `useApplications`)
+- React Context API (`ApplicationsProvider`, login modal provider)
+- React Hooks (`useMemo`, custom `useDebounce`)
+- Selector-based state access with `useSyncExternalStore`
 
 Why:
 
 - Context + hooks keep shared state explicit and localized.
+- Selector hooks reduce unnecessary component updates for derived state.
 - `useMemo` and debouncing reduce unnecessary work during search/sort operations.
 
 ### Data and Auth
@@ -74,6 +77,7 @@ Why:
 - ESLint
 - Prettier
 - Vitest + Testing Library
+- Sonner (toast notifications)
 
 Why:
 
@@ -108,6 +112,7 @@ Core technical decisions:
 
 - API routes handle authorization, validation, and persistence
 - Context provider manages client-side list state/caching and exposes update actions
+- Selector hooks read isolated slices of application state for predictable rendering
 - Utility functions handle deterministic transformations (`searchApplications`, `sortApplications`, string normalization)
 
 ### Readability, Scalability, Performance
@@ -115,6 +120,12 @@ Core technical decisions:
 - Readability: strict typing, domain-oriented folders, predictable naming
 - Scalability: modular utilities + provider pattern enable extension without large rewrites
 - Performance: debounce + memoization + stable sorting + minimal recomputation of list output
+
+Additional architecture notes:
+
+- The applications page uses a view-state hook (`useApplicationsPageViewState`) to keep page orchestration logic outside presentational components.
+- The state layer exposes focused hooks (for loading, count, favorite, and filtered IDs) instead of forcing broad context reads.
+- Global feedback is centralized through Sonner toasts configured in the root layout.
 
 ## 6. Project Structure
 
@@ -139,6 +150,7 @@ Core technical decisions:
 │   ├── forms/                # Form logic and validation schemas
 │   ├── hooks/                # Custom hooks (e.g. useDebounce)
 │   ├── lib/                  # Prisma and auth setup
+│   │   └── toast/            # Toast helpers, config, and styles
 │   ├── tests/                # Component/unit tests
 │   ├── types/                # Shared TypeScript contracts
 │   └── utils/                # Search, sort, normalization, helpers
@@ -217,13 +229,14 @@ Key performance techniques used in this project:
 - `useMemo` for filtered and sorted application lists
 - Stable sorting to avoid unstable UI order when values are equal
 - Local per-user cache in `ApplicationsProvider` for faster initial experience
+- Selector-based subscriptions with `useSyncExternalStore` to keep re-renders scoped
 - UI composition with focused, reusable components to limit unnecessary re-renders
 
 ## 9. Getting Started
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 20.19.x
 - npm
 - PostgreSQL-compatible database URL (Neon recommended)
 - Google OAuth credentials (for sign-in)
@@ -231,7 +244,7 @@ Key performance techniques used in this project:
 ### 1. Clone the repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/LexSava/offer-path
 cd offer-path
 ```
 
@@ -287,6 +300,7 @@ npm run lint        # Lint source files
 npm run test        # Run tests once
 npm run test:watch  # Run tests in watch mode
 npm run format      # Format codebase with Prettier
+npm run format:check # Verify formatting
 ```
 
 ## 10. Development Approach
