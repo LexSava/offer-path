@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTransition } from 'react';
 
-import { FavoriteApplicationButton } from '@/components/common/favorite-application-button/favorite-application-button';
+import { FavoriteApplicationButton } from '@/components/common/buttons/favorite-application-button';
 import { useApplicationIsFavoriteById, useApplications } from '@/contexts';
 import { showErrorToast, showInfoToast, showSuccessToast } from '@/lib/toast';
 

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import type { IApplicationCardV2HeaderProps } from '@/types';
-import { FavoriteApplicationButton } from '../favorite-application-button/favorite-application-button';
+import { FavoriteApplicationButton } from '../buttons/favorite-application-button';
 import { HighlightMatch } from '../highlight-match/highlight-match';
 
 function ApplicationCardV2HeaderComponent({

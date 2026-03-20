@@ -7,7 +7,7 @@ export { ApplicationSortDropdown } from './application-sort-dropdown/application
 export { BackLink } from './back-link/back-link';
 export { DataCategoryCard } from './data-category-card/data-category-card';
 export { Dropdown } from './dropdown/dropdown';
-export { FavoriteApplicationButton } from './favorite-application-button/favorite-application-button';
+export { FavoriteApplicationButton } from './buttons/favorite-application-button';
 export { FormField } from './form-field';
 export { HighlightMatch } from './highlight-match/highlight-match';
 export { InfoSection } from './info-section/info-section';

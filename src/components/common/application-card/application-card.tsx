@@ -1,6 +1,6 @@
 import type { IApplicationCardProps } from '@/types';
 import { cn, formatDate } from '@/utils';
-import { FavoriteApplicationButton } from '../favorite-application-button/favorite-application-button';
+import { FavoriteApplicationButton } from '../buttons/favorite-application-button';
 import { HighlightMatch } from '../highlight-match/highlight-match';
 import { ApplicationCardDetail } from './application-card-detail';
 import { getApplicationDateMeta, getCompensationLabel } from './application-card.utils';
